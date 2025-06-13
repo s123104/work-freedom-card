@@ -854,6 +854,27 @@
         0% { transform: scale(0); opacity: 1; }
         100% { transform: scale(2); opacity: 0; }
       }
+
+      .mood-error {
+        border: 2px solid #ef4444;
+        border-radius: 8px;
+        animation: pulse-error 1.5s infinite;
+      }
+      
+      @keyframes pulse-error {
+        0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+        70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+      }
+      
+      .mood-error-message {
+        color: #ef4444;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+      }
     </style>
   </head>
 
@@ -1090,12 +1111,13 @@
             <p class="text-sm text-neutral-600 mb-2 font-semibold">
               主要厭世來源：
             </p>
-            <ul
+            <div
               id="topAnnoyanceKeywords"
-              class="text-sm text-neutral-500 space-y-1"
+              class="text-sm text-neutral-500 mb-3"
             >
-              <li>尚無數據</li>
-            </ul>
+              <div class="text-center py-4 text-neutral-500">尚無數據</div>
+            </div>
+            <div id="keywordsPagination" class="flex justify-center mt-2"></div>
           </div>
 
           <!-- 關鍵字雲區塊 -->
@@ -1141,8 +1163,13 @@
       <p class="text-sm sm:text-base mb-3 font-handwrite-4">
         人生苦短，別浪費在不喜歡的地方。
       </p>
-      <p class="text-xs opacity-75 mb-4">
+      <p class="text-xs opacity-75 mb-2">
         © 2025 離職集點卡. All Rights Reserved.
+      </p>
+      <p class="text-xs opacity-75 mb-4">
+        <a href="https://github.com/s123104/work-freedom-card" class="underline hover:text-primary-700" target="_blank">
+          MIT License 開源專案 by @s123104
+        </a>
       </p>
     </footer>
 
@@ -1240,6 +1267,10 @@
             >
             <div id="moodSelector" class="space-y-2">
               <!-- 由 JavaScript 動態生成 -->
+            </div>
+            <div id="mood-error-message" class="mood-error-message hidden">
+              <i class="fas fa-exclamation-circle mr-1"></i>
+              請選擇一種心情分類！
             </div>
             <input type="hidden" id="selectedMood" value="" />
           </div>
@@ -2045,9 +2076,16 @@
         // 檢查是否選擇了心情
         const selectedMood = document.getElementById("selectedMood").value;
         if (!selectedMood) {
-          alert("請選擇一種心情分類！");
+          // 顯示紅色框框提示，不使用系統提示窗
+          const moodSelector = document.getElementById("moodSelector");
+          moodSelector.classList.add("mood-error");
+          document.getElementById("mood-error-message").classList.remove("hidden");
           return;
         }
+        
+        // 移除錯誤提示
+        document.getElementById("moodSelector").classList.remove("mood-error");
+        document.getElementById("mood-error-message").classList.add("hidden");
         
         const description = document.getElementById("eventDescription").value.trim();
         const score = calculateAnnoyanceIndex(description);
@@ -2136,6 +2174,132 @@
       
       function endLongPress() {
         if (longPressTimer) clearTimeout(longPressTimer);
+      }
+
+      function updateAnnoyanceStats() {
+        let total = 0;
+        const counts = new Map();
+        const allWords = new Map(); // 用於關鍵字雲
+        
+        filledDates.forEach((d) => {
+          total += d.annoyanceIndex || 0;
+          if (d.description) {
+            // 分析每個字詞是否在厭世關鍵字庫中
+            const words = d.description.toLowerCase().split(/\s+/);
+            words.forEach((word) => {
+              if (word.length >= 2) { // 忽略單字符
+                // 更新所有字詞頻率 (關鍵字雲用)
+                allWords.set(word, (allWords.get(word) || 0) + 1);
+                
+                // 更新厭世關鍵字頻率
+                if (annoyanceKeywords.has(word)) {
+                  counts.set(word, (counts.get(word) || 0) + 1);
+                }
+              }
+            });
+            
+            // 分析多字詞關鍵字
+            Array.from(annoyanceKeywords.keys()).forEach((keyword) => {
+              if (keyword.includes(" ") && d.description.toLowerCase().includes(keyword)) {
+                counts.set(keyword, (counts.get(keyword) || 0) + 1);
+              }
+            });
+          }
+        });
+        
+        document.getElementById("annoyanceIndexTotal").textContent = total;
+        document.getElementById("annoyanceLevel").textContent =
+          total > 200 ? "地獄級厭世" :
+          total > 100 ? "重度厭世" :
+          total > 50 ? "中度厭世" : "輕度厭世";
+        
+        // 更新厭世來源列表 - 分頁式顯示
+        const allKeywords = Array.from(counts.entries())
+          .sort((a, b) => b[1] - a[1]);
+        
+        const keywordsContainer = document.getElementById("topAnnoyanceKeywords");
+        const paginationContainer = document.getElementById("keywordsPagination");
+        
+        if (allKeywords.length > 0) {
+          renderKeywordsPage(keywordsContainer, allKeywords, 0);
+          renderKeywordsPagination(paginationContainer, allKeywords);
+        } else {
+          keywordsContainer.innerHTML = `<div class="text-center py-4 text-neutral-500">尚無數據</div>`;
+          paginationContainer.innerHTML = '';
+        }
+        
+        // 生成關鍵字雲
+        generateKeywordCloud(allWords);
+      }
+      
+      function renderKeywordsPage(container, keywords, page) {
+        const itemsPerPage = 15; // 每頁顯示15個關鍵字
+        const startIndex = page * itemsPerPage;
+        const endIndex = Math.min(startIndex + itemsPerPage, keywords.length);
+        const pageKeywords = keywords.slice(startIndex, endIndex);
+        
+        container.innerHTML = '';
+        
+        if (pageKeywords.length === 0) {
+          container.innerHTML = `<div class="text-center py-4 text-neutral-500">尚無數據</div>`;
+          return;
+        }
+        
+        // 創建3列5行的網格
+        const grid = document.createElement('div');
+        grid.className = 'grid grid-cols-3 gap-2';
+        
+        pageKeywords.forEach(([keyword, count]) => {
+          const item = document.createElement('div');
+          item.className = 'bg-white/50 rounded-lg p-2 flex justify-between items-center';
+          item.innerHTML = `
+            <span class="text-xs text-neutral-700 truncate flex-1">${keyword}</span>
+            <span class="bg-red-100 text-red-700 px-2 py-0.5 rounded-full text-xs font-medium">${count}</span>
+          `;
+          grid.appendChild(item);
+        });
+        
+        container.appendChild(grid);
+      }
+      
+      function renderKeywordsPagination(container, keywords) {
+        const itemsPerPage = 15;
+        const pageCount = Math.ceil(keywords.length / itemsPerPage);
+        
+        if (pageCount <= 1) {
+          container.innerHTML = '';
+          return;
+        }
+        
+        container.innerHTML = '';
+        
+        for (let i = 0; i < pageCount; i++) {
+          const pageBtn = document.createElement('button');
+          pageBtn.className = 'w-8 h-8 rounded-full bg-neutral-200 hover:bg-neutral-300 mx-1';
+          pageBtn.textContent = i + 1;
+          pageBtn.onclick = () => {
+            // 移除所有活躍狀態
+            document.querySelectorAll('#keywordsPagination button').forEach(btn => {
+              btn.classList.remove('bg-accent-500', 'text-white');
+              btn.classList.add('bg-neutral-200');
+            });
+            
+            // 設置當前頁為活躍狀態
+            pageBtn.classList.remove('bg-neutral-200');
+            pageBtn.classList.add('bg-accent-500', 'text-white');
+            
+            // 渲染對應頁面
+            renderKeywordsPage(document.getElementById('topAnnoyanceKeywords'), keywords, i);
+          };
+          
+          // 設置第一頁為默認活躍狀態
+          if (i === 0) {
+            pageBtn.classList.remove('bg-neutral-200');
+            pageBtn.classList.add('bg-accent-500', 'text-white');
+          }
+          
+          container.appendChild(pageBtn);
+        }
       }
     </script>
 </html>
