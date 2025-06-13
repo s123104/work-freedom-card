@@ -11,6 +11,8 @@ const ASSETS_TO_CACHE = [
   "./",
   "./index.html",
   "./manifest.json",
+  "./icon-192.png",
+  "./icon-512.png",
   // 不使用外部資源，避免跨域問題
   // 以下資源將由瀏覽器自動快取
   // 'https://cdn.tailwindcss.com',
@@ -31,6 +33,11 @@ self.addEventListener("install", (event) => {
 
 // 攔截請求，優先使用快取
 self.addEventListener("fetch", (event) => {
+  // 忽略 chrome-extension 和其他非 http/https 請求
+  if (!event.request.url.startsWith("http")) {
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       // 如果快取中有資源，則返回快取的資源

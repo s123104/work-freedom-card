@@ -67,15 +67,8 @@
       content="black-translucent"
     />
     <meta name="apple-mobile-web-app-title" content="社畜解放卡" />
-    <link
-      rel="apple-touch-icon"
-      href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiByeD0iMjQiIGZpbGw9IiMzZGEzNWQiLz4KPHN2ZyB4PSI0OCIgeT0iNDgiIHdpZHRoPSI5NiIgaGVpZ2HQPSI5NiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJ3aGl0ZSI+CjxwYXRoIGQ9Ik05IDEyTDExIDE0TDE1IDEwTTIxIDEyQzIxIDE2Ljk3MDYgMTYuOTcwNiAyMSAxMiAyMUM3LjAyOTQ0IDIxIDMgMTYuOTcwNiAzIDEyQzMgNy4wMjk0NCA3LjAyOTQ0IDMgMTIgM0MxNi45NzA2IDMgMjEgNy4wMjk0NCAyMSAxMloiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4KPC9zdmc+"
-    />
-    <link
-      rel="icon"
-      type="image/svg+xml"
-      href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNCIgZmlsbD0iIzNkYTM1ZCIvPgo8cGF0aCBkPSJNOSAxMkwxMSAxNEwxNSAxME0yMSAxMkMyMSAxNi45NzA2IDE2Ljk3MDYgMjEgMTIgMjFDNy4wMjk0NCAyMSAzIDE2Ljk3MDYgMyAxMkMzIDcuMDI5NDQgNy4wMjk0NCAzIDEyIDNDMTYuOTcwNiAzIDIxIDcuMDI5NDQgMjEgMTJaIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K"
-    />
+    <link rel="apple-touch-icon" href="icon-192.png" />
+    <link rel="icon" type="image/png" href="icon-192.png" />
     <link rel="manifest" href="./manifest.json" />
 
     <!-- SEO: JSON-LD Structured Data -->
@@ -97,8 +90,8 @@
       }
     </script>
 
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
     <!-- Google Fonts & Font Awesome Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -111,7 +104,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
     <!-- Chart.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
 
     <!-- Tailwind Config -->
     <script>
@@ -881,8 +874,8 @@
           </h3>
           <div class="relative h-64"><canvas id="dailyChart"></canvas></div>
           <p class="mt-4 text-center text-primary-600 text-xs sm:text-sm">
-            <i class="fas fa-sync-alt fa-spin mr-1"></i>圖表將於每日 00:00
-            自動更新
+            <i class="fas fa-sync-alt fa-spin mr-1"></i
+            >圖表即時更新，反映最新集點狀態
           </p>
         </div>
       </div>
@@ -920,6 +913,23 @@
             >
               <li>尚無數據</li>
             </ul>
+          </div>
+
+          <!-- 關鍵字雲區塊 -->
+          <div class="mt-6">
+            <p
+              class="text-sm text-neutral-600 mb-2 font-semibold flex items-center"
+            >
+              <i class="fas fa-cloud mr-2 text-blue-400"></i>厭世關鍵字雲
+            </p>
+            <div
+              id="keywordCloud"
+              class="bg-blue-50 p-4 rounded-xl min-h-[120px] flex items-center justify-center flex-wrap"
+            >
+              <p class="text-neutral-500 text-center">
+                尚無足夠數據生成關鍵字雲
+              </p>
+            </div>
           </div>
         </div>
         <div
@@ -1922,18 +1932,26 @@
       function updateAnnoyanceStats() {
         let total = 0;
         const counts = new Map();
+        const allWords = new Map(); // 用於關鍵字雲
+
         filledDates.forEach((d) => {
           total += d.annoyanceIndex || 0;
           if (d.description) {
             // 分析每個字詞是否在厭世關鍵字庫中
-            d.description
-              .toLowerCase()
-              .split(/\s+/)
-              .forEach((word) => {
+            const words = d.description.toLowerCase().split(/\s+/);
+            words.forEach((word) => {
+              if (word.length >= 2) {
+                // 忽略單字符
+                // 更新所有字詞頻率 (關鍵字雲用)
+                allWords.set(word, (allWords.get(word) || 0) + 1);
+
+                // 更新厭世關鍵字頻率
                 if (annoyanceKeywords.has(word)) {
                   counts.set(word, (counts.get(word) || 0) + 1);
                 }
-              });
+              }
+            });
+
             // 分析多字詞關鍵字
             Array.from(annoyanceKeywords.keys()).forEach((keyword) => {
               if (
@@ -1945,6 +1963,7 @@
             });
           }
         });
+
         document.getElementById("annoyanceIndexTotal").textContent = total;
         document.getElementById("annoyanceLevel").textContent =
           total > 200
@@ -1954,6 +1973,8 @@
             : total > 50
             ? "中度厭世"
             : "輕度厭世";
+
+        // 更新厭世來源列表
         const topKeywords = Array.from(counts.entries())
           .sort((a, b) => b[1] - a[1])
           .slice(0, 5);
@@ -1973,6 +1994,63 @@
         } else {
           keywordsContainer.innerHTML = `<li>尚無數據</li>`;
         }
+
+        // 生成關鍵字雲
+        generateKeywordCloud(allWords);
+      }
+
+      // 生成關鍵字雲
+      function generateKeywordCloud(wordMap) {
+        const cloudContainer = document.getElementById("keywordCloud");
+
+        // 如果沒有足夠的字詞，顯示提示訊息
+        if (wordMap.size < 5) {
+          cloudContainer.innerHTML =
+            '<p class="text-neutral-500 text-center">尚無足夠數據生成關鍵字雲</p>';
+          return;
+        }
+
+        // 排序字詞並取前 30 個最常出現的
+        const sortedWords = Array.from(wordMap.entries())
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 30);
+
+        // 找出最大和最小頻率，用於計算字體大小
+        const maxFreq = sortedWords[0][1];
+        const minFreq = sortedWords[sortedWords.length - 1][1];
+
+        // 生成關鍵字雲 HTML
+        cloudContainer.innerHTML = sortedWords
+          .map(([word, freq]) => {
+            // 計算字體大小 (範圍從 12px 到 32px)
+            const fontSize =
+              12 + ((freq - minFreq) / (maxFreq - minFreq || 1)) * 20;
+
+            // 隨機顏色
+            const colors = [
+              "text-red-500",
+              "text-blue-500",
+              "text-green-500",
+              "text-yellow-600",
+              "text-purple-500",
+              "text-pink-500",
+              "text-indigo-500",
+              "text-orange-500",
+              "text-teal-500",
+            ];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+
+            // 隨機旋轉
+            const rotation =
+              Math.random() > 0.5
+                ? `rotate-${Math.floor(Math.random() * 6) - 3}`
+                : "";
+
+            return `<span class="inline-block m-1 ${color} ${rotation}" style="font-size: ${fontSize}px; font-weight: ${
+              300 + Math.floor((freq / maxFreq) * 400)
+            };">${word}</span>`;
+          })
+          .join(" ");
       }
 
       function initChart() {
