@@ -24,10 +24,7 @@
       name="keywords"
       content="社畜解放卡, 離職, 集點卡, 職場壓力, 工作心情, 厭世, 加班, 慣老闆, PWA, 前端工具, AI分析"
     />
-    <link
-      rel="canonical"
-      href="https://s123104.github.io/web/Resignation.html"
-    />
+    <link rel="canonical" href="https://github.com/s123104/work-freedom-card" />
 
     <!-- SEO: Open Graph (for Facebook, LinkedIn, etc.) -->
     <meta property="og:title" content="社畜解放卡 - 你的職場生存壓力計" />
@@ -38,7 +35,7 @@
     <meta property="og:type" content="website" />
     <meta
       property="og:url"
-      content="https://s123104.github.io/web/Resignation.html"
+      content="https://github.com/s123104/work-freedom-card"
     />
     <meta
       property="og:image"
@@ -89,7 +86,7 @@
         "description": "記錄每日職場心情與鳥事，集滿離職點數，邁向自由！提供厭世指數分析、數據匯出與 AI 洞察，是你最佳的職場壓力管理工具。",
         "applicationCategory": "ProductivityApplication",
         "operatingSystem": "Web",
-        "url": "https://s123104.github.io/web/Resignation.html",
+        "url": "https://github.com/s123104/work-freedom-card",
         "offers": { "@type": "Offer", "price": "0" },
         "aggregateRating": {
           "@type": "AggregateRating",
@@ -657,8 +654,11 @@
             <i class="fas fa-calendar-check mr-2"></i>我的離職集點進度
           </h2>
           <p class="text-primary-600 text-xs sm:text-sm">
-            <i class="fas fa-info-circle mr-1"></i
-            >短按標記日期，長按記錄詳細事件
+            <i class="fas fa-info-circle mr-1"></i>短按標記日期，
+            <span
+              class="bg-primary-100 px-2 py-1 rounded-full font-bold animate-pulse"
+              >長按記錄詳細事件</span
+            >
           </p>
         </div>
         <div
@@ -989,18 +989,21 @@
               id="presetButtonsContainer"
               class="flex flex-wrap gap-2 mb-2"
             ></div>
-            <div class="flex gap-2">
-              <input
-                type="text"
-                id="customPresetInput"
-                placeholder="新增自訂爛事"
-                class="flex-grow border-gray-300 rounded-lg"
-              /><button
-                onclick="addCustomPreset()"
-                class="bg-primary-500 text-white px-4 rounded-lg"
-              >
-                新增
-              </button>
+            <div class="flex items-center gap-2">
+              <div class="flex-grow relative">
+                <input
+                  type="text"
+                  id="customPresetInput"
+                  placeholder="新增自訂爛事"
+                  class="w-full border-gray-300 rounded-lg pr-16"
+                />
+                <button
+                  onclick="addCustomPreset()"
+                  class="absolute right-0 top-0 bottom-0 bg-primary-500 text-white px-4 rounded-r-lg"
+                >
+                  新增
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -1062,10 +1065,18 @@
         >
           ×
         </button>
-        <h3 class="text-xl font-bold">安裝到主畫面</h3>
+        <h3 class="text-xl font-bold">加入主畫面</h3>
         <p class="mt-2 text-gray-600">
-          將「離職集點卡」加到主畫面，隨時快速記錄！
+          將「社畜解放卡」加到主畫面，像 App 一樣體驗！
         </p>
+        <div class="mt-4 bg-blue-50 p-4 rounded-lg">
+          <h4 class="font-bold text-blue-700 mb-2">🧠 為什麼要加入主畫面？</h4>
+          <ul class="text-sm text-blue-800 space-y-1 list-disc pl-5">
+            <li>像原生 App 一樣運行（沒網址列、獨立介面）</li>
+            <li>支援離線瀏覽（已設定好 service worker）</li>
+            <li>變成可一鍵開啟的捷徑，加強回訪率 🚀</li>
+          </ul>
+        </div>
         <div class="instruction-step">
           <div class="instruction-icon">
             <i class="fas fa-share-square"></i>
@@ -1077,6 +1088,12 @@
           <div>
             <strong>步驟二：</strong>在選單中，向上滑動並點選「加入主畫面」。
           </div>
+        </div>
+        <div class="instruction-step">
+          <div class="instruction-icon">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <div><strong>步驟三：</strong>可修改名稱 → 點右上「加入」完成。</div>
         </div>
         <div class="mt-4 flex items-center justify-center gap-2">
           <input type="checkbox" id="iosPwaDontShow" class="w-4 h-4" />
@@ -1284,7 +1301,7 @@
           const savedPresets = localStorage.getItem(PRESETS_KEY);
           customPresets = savedPresets
             ? JSON.parse(savedPresets)
-            : ["開不完的會", "慣老闆", "豬隊友", "臨時插件"];
+            : ["開不完的會", "慣老闆", "豬隊友", "突發任務"];
         } catch (e) {
           console.error("載入資料失敗:", e);
         }
@@ -1342,9 +1359,30 @@
         isLongPress = false;
         currentCell = cell;
         cell.classList.add("long-pressing");
+
+        // 添加視覺提示元素
+        const ripple = document.createElement("div");
+        ripple.className =
+          "absolute inset-0 bg-primary-300 rounded-md opacity-0 scale-0 transition-all duration-800";
+        ripple.style.transform = "scale(0)";
+        ripple.style.opacity = "0";
+        cell.appendChild(ripple);
+
+        // 動畫效果
+        setTimeout(() => {
+          ripple.style.transform = "scale(0.8)";
+          ripple.style.opacity = "0.3";
+        }, 10);
+
         longPressTimer = setTimeout(() => {
           isLongPress = true;
           cell.classList.remove("long-pressing");
+          // 長按完成後移除視覺提示
+          if (ripple && ripple.parentNode) {
+            ripple.style.transform = "scale(1)";
+            ripple.style.opacity = "0";
+            setTimeout(() => ripple.remove(), 300);
+          }
           openEventModal(index);
           if (navigator.vibrate) navigator.vibrate(50);
         }, 800);
@@ -1356,13 +1394,23 @@
         const index = parseInt(currentCell.dataset.index, 10);
         clearTimeout(longPressTimer);
         currentCell.classList.remove("long-pressing");
+
+        // 移除所有視覺提示元素
+        const ripples = currentCell.querySelectorAll(".bg-primary-300");
+        ripples.forEach((r) => r.remove());
+
         if (!isLongPress) handleQuickMark(index, currentCell);
         currentCell = null;
       }
 
       function cancelLongPress() {
         clearTimeout(longPressTimer);
-        if (currentCell) currentCell.classList.remove("long-pressing");
+        if (currentCell) {
+          currentCell.classList.remove("long-pressing");
+          // 移除所有視覺提示元素
+          const ripples = currentCell.querySelectorAll(".bg-primary-300");
+          ripples.forEach((r) => r.remove());
+        }
         currentCell = null;
       }
 
@@ -1457,6 +1505,15 @@
           return;
         }
 
+        // 檢查是否選擇了心情
+        const selectedMood = document.querySelector(
+          '.mood-btn[data-selected="true"]'
+        );
+        if (!selectedMood) {
+          alert("請選擇一種心情分類！");
+          return;
+        }
+
         const description = document
           .getElementById("eventDescription")
           .value.trim();
@@ -1469,8 +1526,7 @@
           displayDate: `${new Date(dateInput).getMonth() + 1}/${new Date(
             dateInput
           ).getDate()}`,
-          mood: document.querySelector('.mood-btn[data-selected="true"]')
-            .dataset.mood,
+          mood: selectedMood.dataset.mood,
           description,
           timestamp: new Date().toISOString(),
           fontStyle:
@@ -1589,13 +1645,26 @@
         const counts = new Map();
         filledDates.forEach((d) => {
           total += d.annoyanceIndex || 0;
-          (d.description || "")
-            .toLowerCase()
-            .split(/\s+/)
-            .forEach((word) => {
-              if (annoyanceKeywords.has(word))
-                counts.set(word, (counts.get(word) || 0) + 1);
+          if (d.description) {
+            // 分析每個字詞是否在厭世關鍵字庫中
+            d.description
+              .toLowerCase()
+              .split(/\s+/)
+              .forEach((word) => {
+                if (annoyanceKeywords.has(word)) {
+                  counts.set(word, (counts.get(word) || 0) + 1);
+                }
+              });
+            // 分析多字詞關鍵字
+            Array.from(annoyanceKeywords.keys()).forEach((keyword) => {
+              if (
+                keyword.includes(" ") &&
+                d.description.toLowerCase().includes(keyword)
+              ) {
+                counts.set(keyword, (counts.get(keyword) || 0) + 1);
+              }
             });
+          }
         });
         document.getElementById("annoyanceIndexTotal").textContent = total;
         document.getElementById("annoyanceLevel").textContent =
@@ -1608,11 +1677,23 @@
             : "輕度厭世";
         const topKeywords = Array.from(counts.entries())
           .sort((a, b) => b[1] - a[1])
-          .slice(0, 3);
-        document.getElementById("topAnnoyanceKeywords").innerHTML =
-          topKeywords.length > 0
-            ? topKeywords.map(([k, c]) => `<li>- ${k} (${c}次)</li>`).join("")
-            : `<li>尚無數據</li>`;
+          .slice(0, 5);
+
+        const keywordsContainer = document.getElementById(
+          "topAnnoyanceKeywords"
+        );
+        if (topKeywords.length > 0) {
+          keywordsContainer.innerHTML = topKeywords
+            .map(
+              ([k, c]) => `<li class="flex justify-between items-center py-1">
+              <span class="text-neutral-700">${k}</span>
+              <span class="bg-red-100 text-red-700 px-2 py-0.5 rounded-full text-xs font-medium">${c}次</span>
+            </li>`
+            )
+            .join("");
+        } else {
+          keywordsContainer.innerHTML = `<li>尚無數據</li>`;
+        }
       }
 
       function initChart() {

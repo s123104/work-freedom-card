@@ -6,12 +6,24 @@
   📝 摘要：更新 PWA 支援與離線功能
 -->
 
+<div align="center">
+
 # 🪪 社畜解放卡 | Work Freedom Card
 
-![社畜解放卡預覽](https://s123104.github.io/web/og-image.png)
+[![GitHub license](https://img.shields.io/github/license/s123104/work-freedom-card)](https://github.com/s123104/work-freedom-card/blob/master/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/s123104/work-freedom-card)](https://github.com/s123104/work-freedom-card/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/s123104/work-freedom-card)](https://github.com/s123104/work-freedom-card/network)
+[![PWA Ready](https://img.shields.io/badge/PWA-ready-brightgreen.svg)](https://github.com/s123104/work-freedom-card)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/s123104/work-freedom-card/pulls)
+
+<img src="https://s123104.github.io/web/og-image.png" alt="社畜解放卡預覽" width="600px">
 
 > 一張卡，記下你的每一次職場厭世  
 > 一個 App，為你紀錄通往自由的 100 步
+
+[🚀 立即體驗](https://s123104.github.io/web/Resignation.html) | [📱 安裝教學](#-pwa-安裝教學) | [📖 說明文件](#-專案簡介) | [🤝 貢獻指南](#-貢獻指南)
+
+</div>
 
 ---
 
@@ -19,13 +31,13 @@
 
 **《社畜解放卡》**是一款支援 PWA 的開源前端工具，結合每日心情紀錄、離職點數收集、厭世指數分析與 AI 洞察建議，幫助你掌握職場情緒、倒數自由之日。
 
-> 📈 支援圖表統計｜ 📅 一鍵打卡｜ 🧠 厭世詞彙自動加分｜ 🤖 AI Prompt 匯出分析｜ 📱 安裝至主畫面（PWA）
+### ✨ 主要特色
 
----
-
-## 🚀 Demo 連結
-
-👉 [立即體驗社畜解放卡](https://s123104.github.io/web/Resignation.html)
+- 🔄 **無需後端**：純前端實現，一個 HTML 檔案即可運行
+- 🔒 **隱私至上**：所有資料存於本地，不上傳任何資訊
+- 📊 **數據視覺化**：直觀圖表展示你的職場情緒趨勢
+- 🤖 **AI 整合**：一鍵匯出資料至 AI 助手進行職涯分析
+- 📱 **跨平台 PWA**：可安裝於各種裝置，支援離線使用
 
 ---
 
@@ -60,21 +72,30 @@
 
 ## 📦 安裝與使用
 
-### 方式一：GitHub Pages（推薦）
+### 方式一：直接使用線上版
 
-1. Fork 本專案
-2. 將內容放入你的 GitHub Pages 資料夾，如 `username.github.io/resignation-card`
+訪問 [https://s123104.github.io/web/Resignation.html](https://s123104.github.io/web/Resignation.html) 即可開始使用。
+
+### 方式二：部署到自己的 GitHub Pages
+
+1. Fork [本專案](https://github.com/s123104/work-freedom-card)
+2. 將內容放入你的 GitHub Pages 資料夾，如 `username.github.io/work-freedom-card`
 3. 開啟 GitHub Pages（Settings → Pages → 選取分支）
 
-### 方式二：本機使用
+### 方式三：本機使用
 
 ```bash
+# 克隆專案
 git clone https://github.com/s123104/work-freedom-card.git
-cd work-freedom-card
-open index.html
-```
 
-````
+# 進入專案目錄
+cd work-freedom-card
+
+# 直接在瀏覽器中打開
+open index.html  # macOS
+# 或
+start index.html  # Windows
+```
 
 > 無需任何建置工具，打開 `index.html` 即可使用。
 
@@ -82,9 +103,18 @@ open index.html
 
 ## 📱 PWA 安裝教學
 
-- **Android / Chrome**：點選右上角「⋮」→「加到主畫面」
-- **iOS / Safari**：點選「分享」→「加入主畫面」
-- 自動提示將於首次訪問後出現，也可手動開啟 iOS Modal 提示
+### iOS (Safari) 安裝步驟
+
+1. 使用 Safari 開啟 [社畜解放卡](https://s123104.github.io/web/Resignation.html)
+2. 點擊底部「分享」按鈕 <img src="https://developer.apple.com/design/human-interface-guidelines/foundations/app-icons/images/app-icon-main_2x.png" width="20">
+3. 向上滑動，選擇「加入主畫面」
+4. 點擊右上角「加入」完成安裝
+
+### Android (Chrome) 安裝步驟
+
+1. 使用 Chrome 開啟 [社畜解放卡](https://s123104.github.io/web/Resignation.html)
+2. 等待系統提示或點擊右上角「⋮」→「安裝應用程式」
+3. 點擊「安裝」確認
 
 **離線使用**：安裝 PWA 後，即使在沒有網路的情況下也能正常使用所有功能！
 
@@ -92,26 +122,27 @@ open index.html
 
 ## 📤 匯出分析用 AI Prompt
 
-內建 GPT / Claude 分析格式，點擊「匯出至 AI」即可生成如下 Prompt 👇
-
-你是一位資深的職涯教練與心理諮詢師。請根據以下 JSON 格式的職場心情日誌，進行深入分析。
-...
-```
-
-🔍 包含分析模式、壓力來源、趨勢與是否建議離職，適用於：
+內建 GPT / Claude 分析格式，點擊「匯出至 AI」即可生成完整 Prompt，適用於：
 
 - ChatGPT
 - Claude.ai
 - Gemini
-- Any LLM supporting JSON Input
+- 任何支援 JSON 輸入的 LLM
+
+生成的 Prompt 包含：
+
+- 完整的職場心情記錄（JSON 格式）
+- 分析指引（模式識別、壓力源分析、趨勢洞察等）
+- 離職建議與職涯改善方向
 
 ---
 
-## 🔒 本地資料安全性
+## 🔒 資料安全與隱私
 
-- 本專案 **不收集任何資料**
-- 所有紀錄皆存於瀏覽器 `localStorage`
-- 可隨時手動刪除（清除按鈕已提供）
+- **本地儲存**：所有資料僅存於瀏覽器的 `localStorage`，不會上傳至任何伺服器
+- **無追蹤**：不包含任何分析或追蹤程式碼
+- **資料控制**：提供一鍵清除功能，使用者完全掌控自己的資料
+- **開源透明**：程式碼完全開源，歡迎檢視與貢獻
 
 ---
 
@@ -128,14 +159,32 @@ open index.html
 
 ## 🧑‍🎨 設計理念
 
-- 無需登入，匿名使用
-- 單一檔案架構，方便部署
-- 不靠後端，也能有完整互動與 AI 整合
-- 用數據轉化情緒，用幽默記錄痛苦
+- **無需登入**：匿名使用，降低使用門檻
+- **單一檔案**：極簡架構，方便部署與分享
+- **數據驅動**：用數據轉化情緒，用幽默記錄痛苦
+- **實用主義**：不靠後端，也能有完整互動與 AI 整合
 
 ---
 
-## 📚 License
+## 🤝 貢獻指南
+
+歡迎貢獻程式碼、提出建議或回報問題！
+
+1. Fork 本專案
+2. 創建你的功能分支 (`git checkout -b feature/amazing-feature`)
+3. 提交你的更改 (`git commit -m 'Add some amazing feature'`)
+4. 推送到分支 (`git push origin feature/amazing-feature`)
+5. 開啟 Pull Request
+
+---
+
+## 📜 版本歷史
+
+查看 [CHANGELOG.md](https://github.com/s123104/work-freedom-card/blob/master/CHANGELOG.md) 了解完整版本歷史。
+
+---
+
+## 📚 授權條款
 
 MIT License. 歡迎自由使用、改作、部署與分享，只需保留作者資訊。
 
@@ -148,12 +197,15 @@ MIT License. 歡迎自由使用、改作、部署與分享，只需保留作者�
 
 ---
 
-## 🧙‍♂️ 作者資訊
+## 🧙‍♂️ 關於作者
 
-由 [@s123104](https://github.com/s123104) 精神燃燒製作
+由 [@s123104](https://github.com/s123104) 精神燃燒製作  
 如果你也在倒數離職，我們就是朋友 ☕💼🧠
 
 ---
 
+<div align="center">
+
 > 社畜解放卡 —— 紀錄你的厭世日常，分析你的職涯趨勢，找到屬於你的自由之路。
-````
+
+</div>
