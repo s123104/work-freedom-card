@@ -21,7 +21,7 @@
 > 一張卡，記下你的每一次職場厭世  
 > 一個 App，為你紀錄通往自由的 100 步
 
-[🚀 立即體驗](https://s123104.github.io/web/Resignation.html) | [📱 安裝教學](#-pwa-安裝教學) | [📖 說明文件](#-專案簡介) | [🤝 貢獻指南](#-貢獻指南)
+[🚀 立即體驗](https://s123104.github.io/work-freedom-card) | [📱 安裝教學](#-pwa-安裝教學) | [📖 說明文件](#-專案簡介) | [🤝 貢獻指南](#-貢獻指南)
 
 </div>
 
@@ -74,7 +74,7 @@
 
 ### 方式一：直接使用線上版
 
-訪問 [https://s123104.github.io/web/Resignation.html](https://s123104.github.io/web/Resignation.html) 即可開始使用。
+訪問 [https://s123104.github.io/work-freedom-card](https://s123104.github.io/work-freedom-card) 即可開始使用。
 
 ### 方式二：部署到自己的 GitHub Pages
 
@@ -105,14 +105,14 @@ start index.html  # Windows
 
 ### iOS (Safari) 安裝步驟
 
-1. 使用 Safari 開啟 [社畜解放卡](https://s123104.github.io/web/Resignation.html)
+1. 使用 Safari 開啟 [社畜解放卡](https://s123104.github.io/work-freedom-card)
 2. 點擊底部「分享」按鈕 <img src="https://developer.apple.com/design/human-interface-guidelines/foundations/app-icons/images/app-icon-main_2x.png" width="20">
 3. 向上滑動，選擇「加入主畫面」
 4. 點擊右上角「加入」完成安裝
 
 ### Android (Chrome) 安裝步驟
 
-1. 使用 Chrome 開啟 [社畜解放卡](https://s123104.github.io/web/Resignation.html)
+1. 使用 Chrome 開啟 [社畜解放卡](https://s123104.github.io/work-freedom-card)
 2. 等待系統提示或點擊右上角「⋮」→「安裝應用程式」
 3. 點擊「安裝」確認
 
