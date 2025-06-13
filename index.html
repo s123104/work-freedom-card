@@ -61,6 +61,7 @@
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#3da35d" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta
       name="apple-mobile-web-app-status-bar-style"
       content="black-translucent"
@@ -308,6 +309,99 @@
           opacity: 0;
           transform: translate(-50%, -250%) scale(1.5);
         }
+      }
+
+      /* 粒子動畫 */
+      @keyframes particleFade {
+        0% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        100% {
+          opacity: 0;
+          transform: scale(0);
+        }
+      }
+
+      @keyframes collectPoint {
+        0% {
+          transform: translate(0, 0) scale(1);
+        }
+        50% {
+          transform: translate(0, -100px) scale(1.5);
+        }
+        100% {
+          transform: translate(0, 0) scale(1);
+        }
+      }
+
+      /* 煙火動畫 */
+      @keyframes firework {
+        0% {
+          transform: translate(-50%, 100vh);
+          opacity: 1;
+        }
+        50% {
+          transform: translate(-50%, 40vh);
+          opacity: 1;
+        }
+        75% {
+          transform: translate(-50%, 30vh);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(-50%, 30vh);
+          opacity: 0;
+        }
+      }
+
+      @keyframes explosion {
+        0% {
+          width: 4px;
+          height: 4px;
+          opacity: 1;
+        }
+        100% {
+          width: 300px;
+          height: 300px;
+          opacity: 0;
+        }
+      }
+
+      .firework {
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        animation: firework 1.5s ease-out forwards;
+        z-index: 9999;
+      }
+
+      .explosion {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translate(-50%, -50%);
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        animation: explosion 1.5s ease-out forwards;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 1) 0%,
+          rgba(255, 200, 0, 0.8) 100%
+        );
+        z-index: 9999;
+      }
+
+      .particle {
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+        animation: particleFade 1s ease-out forwards;
+        z-index: 100;
       }
 
       .grid-cell {
@@ -667,7 +761,9 @@
         ></div>
         <!-- Quote Display (Moved here) -->
         <div id="quoteDisplay" class="hidden">
-          <div class="quote-container text-center">
+          <div
+            class="quote-container text-center fixed bottom-4 left-4 right-4 z-10 bg-gradient-to-r from-green-700/90 to-green-600/90 p-4 rounded-lg shadow-lg transform transition-all duration-300 max-w-md mx-auto"
+          >
             <i class="fas fa-quote-left text-2xl mb-4 opacity-70"></i>
             <p
               class="text-lg sm:text-xl font-handwrite-3 leading-relaxed mb-4"
@@ -850,7 +946,7 @@
       style="animation-delay: 1s"
     >
       <p class="text-sm sm:text-base mb-3 font-handwrite-4">
-        真的做不了，沒有一天是適合上班的。
+        人生苦短，別浪費在不喜歡的地方。
       </p>
       <p class="text-xs opacity-75 mb-4">
         © 2025 離職集點卡. All Rights Reserved.
@@ -1070,30 +1166,37 @@
           將「社畜解放卡」加到主畫面，像 App 一樣體驗！
         </p>
         <div class="mt-4 bg-blue-50 p-4 rounded-lg">
-          <h4 class="font-bold text-blue-700 mb-2">🧠 為什麼要加入主畫面？</h4>
+          <h4 class="font-bold text-blue-700 mb-2">🚀 安裝好處</h4>
           <ul class="text-sm text-blue-800 space-y-1 list-disc pl-5">
-            <li>像原生 App 一樣運行（沒網址列、獨立介面）</li>
-            <li>支援離線瀏覽（已設定好 service worker）</li>
-            <li>變成可一鍵開啟的捷徑，加強回訪率 🚀</li>
+            <li>無廣告、全螢幕使用體驗</li>
+            <li>離線也能記錄心情</li>
+            <li>一鍵開啟，方便快速</li>
           </ul>
         </div>
-        <div class="instruction-step">
-          <div class="instruction-icon">
-            <i class="fas fa-share-square"></i>
+        <div class="mt-4 bg-yellow-50 p-4 rounded-lg">
+          <h4 class="font-bold text-yellow-700 mb-2">📱 簡易安裝步驟</h4>
+          <div class="flex items-center gap-3 mb-2">
+            <div class="text-2xl text-yellow-600">1</div>
+            <div>
+              點擊分享按鈕 <i class="fas fa-share-square text-blue-500"></i>
+            </div>
           </div>
-          <div><strong>步驟一：</strong>點擊下方工具列的「分享」按鈕。</div>
-        </div>
-        <div class="instruction-step">
-          <div class="instruction-icon"><i class="fas fa-plus-square"></i></div>
-          <div>
-            <strong>步驟二：</strong>在選單中，向上滑動並點選「加入主畫面」。
+          <div class="flex items-center gap-3 mb-2">
+            <div class="text-2xl text-yellow-600">2</div>
+            <div>
+              選擇「加入主畫面」<i
+                class="fas fa-plus-square text-blue-500 ml-1"
+              ></i>
+            </div>
           </div>
-        </div>
-        <div class="instruction-step">
-          <div class="instruction-icon">
-            <i class="fas fa-check-circle"></i>
+          <div class="flex items-center gap-3">
+            <div class="text-2xl text-yellow-600">3</div>
+            <div>
+              點擊「新增」完成！<i
+                class="fas fa-check-circle text-green-500 ml-1"
+              ></i>
+            </div>
           </div>
-          <div><strong>步驟三：</strong>可修改名稱 → 點右上「加入」完成。</div>
         </div>
         <div class="mt-4 flex items-center justify-center gap-2">
           <input type="checkbox" id="iosPwaDontShow" class="w-4 h-4" />
@@ -1121,6 +1224,14 @@
       let currentCell = null;
       let dailyChart = null;
       let quoteTimer = null;
+      let handwriteFonts = [
+        "font-handwrite-1",
+        "font-handwrite-2",
+        "font-handwrite-3",
+        "font-handwrite-4",
+        "font-handwrite-5",
+        "font-handwrite-6",
+      ];
 
       const STORAGE_KEY = "resignationCard_v5";
       const PRESETS_KEY = "resignationCard_presets_v2";
@@ -1399,8 +1510,53 @@
         const ripples = currentCell.querySelectorAll(".bg-primary-300");
         ripples.forEach((r) => r.remove());
 
+        // 添加點擊粒子效果
+        createParticles(e.clientX, e.clientY);
+
         if (!isLongPress) handleQuickMark(index, currentCell);
         currentCell = null;
+      }
+
+      // 創建粒子效果
+      function createParticles(x, y) {
+        const colors = ["#3da35d", "#eab308", "#ec4899", "#6366f1", "#ef4444"];
+        const particlesCount = 15;
+
+        for (let i = 0; i < particlesCount; i++) {
+          const particle = document.createElement("div");
+          particle.className = "particle";
+
+          // 隨機大小
+          const size = Math.floor(Math.random() * 8) + 4;
+          particle.style.width = `${size}px`;
+          particle.style.height = `${size}px`;
+
+          // 隨機顏色
+          particle.style.backgroundColor =
+            colors[Math.floor(Math.random() * colors.length)];
+
+          // 初始位置
+          particle.style.left = `${x}px`;
+          particle.style.top = `${y}px`;
+
+          // 隨機方向和距離
+          const angle = Math.random() * Math.PI * 2;
+          const distance = Math.random() * 80 + 20;
+          const velocityX = Math.cos(angle) * distance;
+          const velocityY = Math.sin(angle) * distance;
+
+          // 設定動畫
+          particle.style.transform = `translate(${velocityX}px, ${velocityY}px)`;
+
+          document.body.appendChild(particle);
+
+          // 移除粒子
+          setTimeout(() => {
+            if (particle.parentNode) {
+              particle.parentNode.removeChild(particle);
+            }
+          }, 1000);
+        }
       }
 
       function cancelLongPress() {
@@ -1426,13 +1582,19 @@
             mood: "good",
             description: "",
             timestamp: today.toISOString(),
-            fontStyle: `date-text-${(index % 6) + 1}`,
+            fontStyle:
+              handwriteFonts[Math.floor(Math.random() * handwriteFonts.length)],
             annoyanceIndex: 0,
           };
           fillCell(cell, data);
           filledDates.set(index, data);
           animateCell(cell);
           showRandomQuote();
+
+          // 檢查是否集滿100點
+          if (filledDates.size === TOTAL_CELLS) {
+            setTimeout(() => createFireworks(), 500);
+          }
         }
         saveData();
         updateAllStats();
@@ -1441,17 +1603,133 @@
       function animateCell(cell) {
         cell.style.animation = "bounceIn 0.8s";
         setTimeout(() => (cell.style.animation = ""), 800);
+
+        // 添加集點飛回效果
+        const point = document.createElement("div");
+        point.className =
+          "absolute w-6 h-6 bg-primary-500 text-white rounded-full flex items-center justify-center";
+        point.textContent = "+1";
+        point.style.animation = "collectPoint 1s ease-out forwards";
+        cell.appendChild(point);
+
+        setTimeout(() => {
+          if (point.parentNode) {
+            point.parentNode.removeChild(point);
+          }
+        }, 1000);
       }
+
       function fillCell(cell, data) {
         cell.className =
           "grid-cell aspect-square cursor-pointer flex items-center justify-center text-center relative filled";
         if (data.mood !== "good") cell.classList.add(`mood-${data.mood}`);
-        cell.innerHTML = `<span class="date-text ${data.fontStyle} text-xs sm:text-sm">${data.displayDate}</span>`;
+        cell.innerHTML = `<span class="date-text ${
+          data.fontStyle ||
+          handwriteFonts[Math.floor(Math.random() * handwriteFonts.length)]
+        } text-xs sm:text-sm">${data.displayDate}</span>`;
       }
+
       function clearCell(cell) {
         cell.className =
           "grid-cell aspect-square cursor-pointer flex items-center justify-center text-center relative";
         cell.innerHTML = "";
+      }
+
+      // 煙火特效
+      function createFireworks() {
+        const colors = [
+          "#ff0000",
+          "#00ff00",
+          "#0000ff",
+          "#ffff00",
+          "#ff00ff",
+          "#00ffff",
+          "#ffffff",
+        ];
+        const fireworksCount = 5;
+
+        for (let i = 0; i < fireworksCount; i++) {
+          setTimeout(() => {
+            const firework = document.createElement("div");
+            firework.className = "firework";
+            firework.style.backgroundColor =
+              colors[Math.floor(Math.random() * colors.length)];
+            firework.style.left = `${Math.random() * 80 + 10}%`;
+
+            document.body.appendChild(firework);
+
+            setTimeout(() => {
+              const explosion = document.createElement("div");
+              explosion.className = "explosion";
+              explosion.style.top = firework.getBoundingClientRect().top + "px";
+              explosion.style.left =
+                firework.getBoundingClientRect().left + "px";
+              document.body.appendChild(explosion);
+
+              // 煙火粒子
+              createFireworkParticles(
+                explosion.getBoundingClientRect().left,
+                explosion.getBoundingClientRect().top
+              );
+
+              setTimeout(() => {
+                if (firework.parentNode)
+                  firework.parentNode.removeChild(firework);
+                if (explosion.parentNode)
+                  explosion.parentNode.removeChild(explosion);
+              }, 1500);
+            }, 1000);
+          }, i * 300);
+        }
+      }
+
+      function createFireworkParticles(x, y) {
+        const colors = [
+          "#ff0000",
+          "#ffa500",
+          "#ffff00",
+          "#00ff00",
+          "#0000ff",
+          "#4b0082",
+          "#ee82ee",
+        ];
+        const particlesCount = 30;
+
+        for (let i = 0; i < particlesCount; i++) {
+          const particle = document.createElement("div");
+          particle.className = "particle";
+
+          // 隨機大小
+          const size = Math.floor(Math.random() * 6) + 2;
+          particle.style.width = `${size}px`;
+          particle.style.height = `${size}px`;
+
+          // 隨機顏色
+          particle.style.backgroundColor =
+            colors[Math.floor(Math.random() * colors.length)];
+
+          // 初始位置
+          particle.style.left = `${x}px`;
+          particle.style.top = `${y}px`;
+
+          // 隨機方向和距離
+          const angle = Math.random() * Math.PI * 2;
+          const distance = Math.random() * 150 + 50;
+          const velocityX = Math.cos(angle) * distance;
+          const velocityY = Math.sin(angle) * distance;
+
+          // 設定動畫
+          particle.style.transform = `translate(${velocityX}px, ${velocityY}px)`;
+
+          document.body.appendChild(particle);
+
+          // 移除粒子
+          setTimeout(() => {
+            if (particle.parentNode) {
+              particle.parentNode.removeChild(particle);
+            }
+          }, 1500);
+        }
       }
 
       // --- 事件模態窗 ---
@@ -1530,7 +1808,8 @@
           description,
           timestamp: new Date().toISOString(),
           fontStyle:
-            filledDates.get(index)?.fontStyle || `date-text-${(index % 6) + 1}`,
+            filledDates.get(index)?.fontStyle ||
+            handwriteFonts[Math.floor(Math.random() * handwriteFonts.length)],
           annoyanceIndex: score,
         };
 
@@ -1822,7 +2101,7 @@
 
       function setupShareButtons() {
         const text = getShareText();
-        const url = "https://s123104.github.io/web/Resignation.html";
+        const url = "https://s123104.github.io/work-freedom-card";
         const encodedText = encodeURIComponent(text + "\n" + url);
         const totalAnnoy = Array.from(filledDates.values()).reduce(
           (s, d) => s + (d.annoyanceIndex || 0),
