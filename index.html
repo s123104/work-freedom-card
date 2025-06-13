@@ -91,6 +91,15 @@
     </script>
 
     <!-- Tailwind CSS -->
+    <script>
+      // 內嵌 Tailwind CSS 以避免 CDN 警告
+      (function() {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://cdn.tailwindcss.com/3.3.3/tailwind.min.css';
+        document.head.appendChild(link);
+      })();
+    </script>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
     <!-- Google Fonts & Font Awesome Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -2331,7 +2340,7 @@
       // 註冊 Service Worker
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
+          navigator.serviceWorker.register('./sw.js')
             .then(registration => {
               console.log('SW registered: ', registration);
             })
@@ -2339,6 +2348,732 @@
               console.log('SW registration failed: ', error);
             });
         });
+      }
+
+      function loadAchievements() {
+        try {
+          const savedAchievements = localStorage.getItem(ACHIEVEMENTS_KEY);
+          if (savedAchievements) {
+            achievements = new Map(JSON.parse(savedAchievements));
+          }
+        } catch (e) {
+          console.error("載入成就失敗:", e);
+          achievements = new Map();
+        }
+      }
+      
+      function saveAchievements() {
+        try {
+          localStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(Array.from(achievements.entries())));
+        } catch (e) {
+          console.error("儲存成就失敗:", e);
+        }
+      }
+      
+      function unlockAchievement(id) {
+        if (achievements.has(id)) return; // 已解鎖
+        
+        const achievementData = {
+          id,
+          unlockedAt: new Date().toISOString()
+        };
+        
+        achievements.set(id, achievementData);
+        saveAchievements();
+        
+        // 顯示成就通知
+        showAchievementNotification(id);
+      }
+      
+      function showAchievementNotification(id) {
+        const achievementInfo = getAchievementInfo(id);
+        if (!achievementInfo) return;
+        
+        const notification = document.createElement('div');
+        notification.className = 'achievement-notification';
+        notification.innerHTML = `
+          <div class="achievement-notification-icon">🏆</div>
+          <div class="achievement-notification-content">
+            <h4>成就解鎖！</h4>
+            <p>${achievementInfo.title}</p>
+          </div>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // 5秒後自動移除
+        setTimeout(() => {
+          if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+          }
+        }, 5000);
+      }
+      
+      function getAchievementInfo(id) {
+        const achievementsInfo = {
+          "first_record": {
+            title: "初次紀錄",
+            description: "記錄第一個厭世事件",
+            icon: "fa-pencil-alt",
+            color: "#3b82f6"
+          },
+          "first_burnout": {
+            title: "身心俱疲",
+            description: "第一次記錄身心俱疲",
+            icon: "fa-tired",
+            color: "#ef4444"
+          },
+          "first_money": {
+            title: "錢途茫茫",
+            description: "第一次記錄錢途茫茫",
+            icon: "fa-coins",
+            color: "#eab308"
+          },
+          "first_annoying": {
+            title: "鳥事一堆",
+            description: "第一次記錄鳥事一堆",
+            icon: "fa-angry",
+            color: "#6366f1"
+          },
+          "first_stuck": {
+            title: "缺乏成長",
+            description: "第一次記錄缺乏成長",
+            icon: "fa-minus-circle",
+            color: "#737373"
+          },
+          "high_annoyance": {
+            title: "極度厭世",
+            description: "單次厭世指數超過 15 分",
+            icon: "fa-fire",
+            color: "#dc2626"
+          },
+          "collector": {
+            title: "收集控",
+            description: "收集超過 30 個厭世點數",
+            icon: "fa-trophy",
+            color: "#8b5cf6"
+          },
+          "half_way": {
+            title: "半路離職",
+            description: "收集超過 50 個厭世點數",
+            icon: "fa-flag-checkered",
+            color: "#f59e0b"
+          },
+          "almost_there": {
+            title: "即將解脫",
+            description: "收集超過 90 個厭世點數",
+            icon: "fa-door-open",
+            color: "#10b981"
+          },
+          "complete_all": {
+            title: "社畜解放",
+            description: "收集滿 100 個厭世點數",
+            icon: "fa-crown",
+            color: "#f97316"
+          }
+        };
+        
+        return achievementsInfo[id];
+      }
+      
+      function checkAchievements() {
+        const filledCount = filledDates.size;
+        
+        // 檢查首次記錄
+        if (filledCount > 0) {
+          unlockAchievement("first_record");
+        }
+        
+        // 檢查收集相關成就
+        if (filledCount >= 30) unlockAchievement("collector");
+        if (filledCount >= 50) unlockAchievement("half_way");
+        if (filledCount >= 90) unlockAchievement("almost_there");
+        if (filledCount >= 100) unlockAchievement("complete_all");
+        
+        // 檢查各種心情類型
+        let hasMoney = false;
+        let hasBurnout = false;
+        let hasAnnoying = false;
+        let hasStuck = false;
+        let highAnnoyance = false;
+        
+        filledDates.forEach(data => {
+          if (data.mood === "money") hasMoney = true;
+          if (data.mood === "burnout") hasBurnout = true;
+          if (data.mood === "annoying") hasAnnoying = true;
+          if (data.mood === "stuck") hasStuck = true;
+          if (data.annoyanceIndex && data.annoyanceIndex >= 15) highAnnoyance = true;
+        });
+        
+        if (hasMoney) unlockAchievement("first_money");
+        if (hasBurnout) unlockAchievement("first_burnout");
+        if (hasAnnoying) unlockAchievement("first_annoying");
+        if (hasStuck) unlockAchievement("first_stuck");
+        if (highAnnoyance) unlockAchievement("high_annoyance");
+      }
+      
+      function renderAchievements() {
+        const container = document.getElementById("achievementsList");
+        if (!container) return;
+        
+        container.innerHTML = "";
+        
+        // 獲取所有成就信息
+        const allAchievements = [
+          "first_record", "first_money", "first_burnout", 
+          "first_annoying", "first_stuck", "high_annoyance",
+          "collector", "half_way", "almost_there", "complete_all"
+        ];
+        
+        allAchievements.forEach(id => {
+          const info = getAchievementInfo(id);
+          const isUnlocked = achievements.has(id);
+          const unlockedData = isUnlocked ? achievements.get(id) : null;
+          
+          const achievementEl = document.createElement("div");
+          achievementEl.className = `achievement ${isUnlocked ? "" : "achievement-locked"}`;
+          
+          achievementEl.innerHTML = `
+            <div class="achievement-icon" style="background-color: ${info.color}">
+              <i class="fas ${info.icon}"></i>
+            </div>
+            <div class="achievement-content">
+              <div class="achievement-title">${info.title}</div>
+              <div class="achievement-description">${info.description}</div>
+              ${isUnlocked ? `<div class="achievement-unlocked-date">解鎖於 ${new Date(unlockedData.unlockedAt).toLocaleDateString()}</div>` : ""}
+            </div>
+          `;
+          
+          container.appendChild(achievementEl);
+        });
+      }
+
+      function setupListeners() {
+        document
+          .getElementById("shareBtnTrigger")
+          .addEventListener("click", () => openModal("shareModal"));
+      }
+
+      function setupRipple() {
+        // 添加漣漪效果
+        document.addEventListener('click', function(e) {
+          if (e.target.closest('.grid-cell')) {
+            const cell = e.target.closest('.grid-cell');
+            const ripple = document.createElement('span');
+            ripple.className = 'ripple';
+            cell.appendChild(ripple);
+            
+            setTimeout(() => {
+              if (ripple.parentNode) ripple.parentNode.removeChild(ripple);
+            }, 1000);
+          }
+        });
+      }
+      
+      function setupPWA() {
+        checkAndShowPwaPrompt();
+      }
+      
+      function updateAllStats() {
+        const filledCount = filledDates.size;
+        document.getElementById("filledCount").textContent = filledCount;
+        document.getElementById("completionRate").textContent = `${Math.round(
+          (filledCount / TOTAL_CELLS) * 100
+        )}%`;
+        
+        // 更新進度環
+        const progressCircle = document.getElementById("progressCircle");
+        const circumference = 2 * Math.PI * 54; // 圓的周長
+        const offset = circumference - (filledCount / TOTAL_CELLS) * circumference;
+        progressCircle.style.strokeDasharray = `${circumference - offset} ${offset}`;
+        
+        // 更新各種心情數量
+        let moodMoney = 0;
+        let moodBurnout = 0;
+        let moodAnnoying = 0;
+        let moodStuck = 0;
+        
+        filledDates.forEach((data) => {
+          if (data.mood === "money") moodMoney++;
+          else if (data.mood === "burnout") moodBurnout++;
+          else if (data.mood === "annoying") moodAnnoying++;
+          else if (data.mood === "stuck") moodStuck++;
+        });
+        
+        document.getElementById("moodMoneyCount").textContent = moodMoney;
+        document.getElementById("moodBurnoutCount").textContent = moodBurnout;
+        document.getElementById("moodAnnoyingCount").textContent = moodAnnoying;
+        document.getElementById("moodStuckCount").textContent = moodStuck;
+        
+        // 更新圖表
+        if (dailyChart) updateChart();
+        
+        // 更新厭世指數統計
+        updateAnnoyanceStats();
+        
+        // 更新近期記錄
+        updateRecentRecords();
+      }
+
+      function updateChart() {
+        if (!dailyChart) return;
+        
+        // 獲取最近 30 天的數據
+        const today = new Date();
+        const dates = [];
+        const datasets = [
+          { label: "錢途茫茫", data: [], backgroundColor: "#eab308" },
+          { label: "身心俱疲", data: [], backgroundColor: "#ef4444" },
+          { label: "鳥事一堆", data: [], backgroundColor: "#6366f1" },
+          { label: "缺乏成長", data: [], backgroundColor: "#737373" },
+        ];
+        
+        // 生成最近 30 天的日期
+        for (let i = 29; i >= 0; i--) {
+          const d = new Date(today);
+          d.setDate(d.getDate() - i);
+          dates.push(d.toLocaleDateString("zh-TW", { month: "short", day: "numeric" }));
+          
+          // 初始化每天的數據為 0
+          datasets.forEach(ds => ds.data.push(0));
+        }
+        
+        // 計算每天的心情數量
+        filledDates.forEach(data => {
+          const recordDate = new Date(data.date);
+          const diffTime = today.getTime() - recordDate.getTime();
+          const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+          
+          if (diffDays <= 29) {
+            const index = 29 - diffDays;
+            
+            if (data.mood === "money") datasets[0].data[index]++;
+            else if (data.mood === "burnout") datasets[1].data[index]++;
+            else if (data.mood === "annoying") datasets[2].data[index]++;
+            else if (data.mood === "stuck") datasets[3].data[index]++;
+          }
+        });
+        
+        // 更新圖表數據
+        dailyChart.data.labels = dates;
+        dailyChart.data.datasets = datasets;
+        dailyChart.update();
+      }
+      
+      function updateRecentRecords() {
+        const container = document.getElementById("recentRecords");
+        if (!container) return;
+        
+        // 獲取最近的記錄
+        const records = Array.from(filledDates.entries())
+          .map(([index, data]) => ({ index, ...data }))
+          .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+          .slice(0, 5);
+        
+        if (records.length === 0) {
+          container.innerHTML = `
+            <p class="text-neutral-500 text-center py-8">
+              <i class="fas fa-inbox text-3xl mb-2 block"></i>尚無記錄
+            </p>
+          `;
+          return;
+        }
+        
+        container.innerHTML = "";
+        
+        records.forEach(record => {
+          const date = new Date(record.date);
+          const formattedDate = date.toLocaleDateString("zh-TW", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            weekday: "short"
+          });
+          
+          const moodEmoji = {
+            money: '<i class="fas fa-coins text-yellow-500"></i>',
+            burnout: '<i class="fas fa-tired text-red-500"></i>',
+            annoying: '<i class="fas fa-angry text-indigo-500"></i>',
+            stuck: '<i class="fas fa-minus-circle text-gray-500"></i>'
+          };
+          
+          const moodNames = {
+            money: "錢途茫茫",
+            burnout: "身心俱疲",
+            annoying: "鳥事一堆",
+            stuck: "缺乏成長"
+          };
+          
+          const recordEl = document.createElement("div");
+          recordEl.className = "bg-white/50 rounded-lg p-3 shadow-sm";
+          recordEl.innerHTML = `
+            <div class="flex items-center justify-between mb-1">
+              <div class="text-sm font-semibold text-neutral-700">${formattedDate}</div>
+              <div class="text-xs text-neutral-500">#${record.index + 1}</div>
+            </div>
+            <div class="flex items-center gap-2">
+              ${moodEmoji[record.mood]}
+              <span class="text-sm">${moodNames[record.mood]}</span>
+            </div>
+            ${record.description ? `<p class="text-xs text-neutral-600 mt-1">${record.description}</p>` : ''}
+          `;
+          
+          container.appendChild(recordEl);
+        });
+      }
+      
+      function initChart() {
+        const ctx = document.getElementById("dailyChart").getContext("2d");
+        dailyChart = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: [],
+            datasets: []
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "top",
+                labels: {
+                  boxWidth: 12,
+                  usePointStyle: true,
+                  pointStyle: "circle"
+                }
+              },
+              tooltip: {
+                mode: "index",
+                intersect: false
+              }
+            },
+            scales: {
+              x: {
+                stacked: true,
+                grid: {
+                  display: false
+                }
+              },
+              y: {
+                stacked: true,
+                beginAtZero: true,
+                ticks: {
+                  stepSize: 1
+                }
+              }
+            }
+          }
+        });
+      }
+
+      function generateKeywordCloud(words) {
+        const container = document.getElementById("keywordCloud");
+        if (!container) return;
+        
+        // 只取出現頻率最高的前 20 個詞
+        const topWords = Array.from(words.entries())
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 20);
+        
+        if (topWords.length < 5) {
+          container.innerHTML = `<p class="text-neutral-500 text-center">尚無足夠數據生成關鍵字雲</p>`;
+          return;
+        }
+        
+        container.innerHTML = "";
+        
+        // 找出最高頻率，用於計算字體大小
+        const maxCount = topWords[0][1];
+        
+        topWords.forEach(([word, count]) => {
+          // 計算相對大小 (1-5)
+          const size = 1 + Math.floor((count / maxCount) * 4);
+          const fontSize = 0.7 + (size * 0.15); // 0.85 - 1.45rem
+          
+          // 隨機顏色
+          const colors = ["#3b82f6", "#ef4444", "#10b981", "#f59e0b", "#8b5cf6", "#ec4899"];
+          const color = colors[Math.floor(Math.random() * colors.length)];
+          
+          const wordSpan = document.createElement("span");
+          wordSpan.className = "inline-block m-1 px-2 py-1 rounded-lg";
+          wordSpan.style.fontSize = `${fontSize}rem`;
+          wordSpan.style.color = color;
+          wordSpan.style.backgroundColor = `${color}10`;
+          wordSpan.style.border = `1px solid ${color}30`;
+          wordSpan.textContent = word;
+          
+          container.appendChild(wordSpan);
+        });
+      }
+      
+      function calculateAnnoyanceIndex(text) {
+        if (!text) return 0;
+        
+        let score = 0;
+        const lowerText = text.toLowerCase();
+        
+        // 檢查每個關鍵字
+        annoyanceKeywords.forEach((value, keyword) => {
+          if (lowerText.includes(keyword.toLowerCase())) {
+            score += value;
+          }
+        });
+        
+        // 檢查句子長度和標點符號
+        const exclamationCount = (text.match(/!/g) || []).length;
+        score += exclamationCount * 0.5;
+        
+        // 檢查全大寫單詞 (表示憤怒)
+        const upperCaseWords = text.match(/\b[A-Z]{3,}\b/g) || [];
+        score += upperCaseWords.length * 1.5;
+        
+        return Math.round(score);
+      }
+      
+      function showAnnoyanceFeedback(score) {
+        const feedback = document.getElementById("annoyanceFeedback");
+        feedback.textContent = `+${score}`;
+        feedback.classList.remove("hidden");
+        
+        // 重置動畫
+        feedback.style.animation = 'none';
+        feedback.offsetHeight; // 觸發重繪
+        feedback.style.animation = 'feedbackPop 2s ease-out forwards';
+        
+        // 5秒後隱藏
+        setTimeout(() => {
+          feedback.classList.add("hidden");
+        }, 2000);
+      }
+      
+      function showRandomQuote() {
+        const quotes = [
+          "人生太短暫，別浪費在不喜歡的地方。",
+          "離職不是結束，而是新生活的開始。",
+          "如果你不喜歡現在的工作，那就離開吧，世界很大。",
+          "每一次的離職，都是為了更好的相遇。",
+          "當工作不再帶給你快樂，離開是最好的選擇。",
+          "勇敢說不，為自己的人生負責。",
+          "離職是一種勇氣，也是一種智慧。",
+          "不要害怕改變，最糟糕的是一成不變的生活。",
+          "生命太過短暫，不要浪費在委屈上。",
+          "你的價值遠不止於此，去尋找真正欣賞你的地方。",
+        ];
+        
+        const quoteDisplay = document.getElementById("quoteDisplay");
+        const quoteText = document.getElementById("quoteText");
+        
+        // 隨機選擇一句話
+        const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+        quoteText.textContent = randomQuote;
+        
+        // 顯示引言
+        quoteDisplay.classList.remove("hidden");
+        
+        // 設置定時器，10秒後隱藏
+        if (quoteTimer) clearTimeout(quoteTimer);
+        quoteTimer = setTimeout(hideQuote, 10000);
+      }
+      
+      function hideQuote() {
+        document.getElementById("quoteDisplay").classList.add("hidden");
+        if (quoteTimer) clearTimeout(quoteTimer);
+      }
+      
+      function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+          modal.classList.add("show");
+          
+          // 如果是分享模態窗，設置分享內容
+          if (modalId === "shareModal") {
+            setupShareContent();
+          } else if (modalId === "aiExportModal") {
+            generateAIPrompt();
+          }
+        }
+      }
+      
+      function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+          modal.classList.remove("show");
+        }
+      }
+      
+      function setupShareContent() {
+        const filledCount = filledDates.size;
+        const shareText = `我已在「離職集點卡」集滿 ${filledCount}/100 點！厭世指數：${document.getElementById("annoyanceIndexTotal").textContent}，離職進度：${Math.round((filledCount / TOTAL_CELLS) * 100)}%。一起來記錄職場心情吧！`;
+        
+        document.getElementById("shareAnnoyanceIndex").textContent = `厭世指數：${document.getElementById("annoyanceIndexTotal").textContent}`;
+        
+        // 設置複製按鈕
+        document.getElementById("copyLinkBtn").onclick = () => {
+          navigator.clipboard.writeText(shareText)
+            .then(() => {
+              alert("已複製到剪貼簿！");
+            })
+            .catch(err => {
+              console.error('無法複製: ', err);
+            });
+        };
+        
+        // 設置社交媒體分享
+        document.getElementById("shareToTwitterBtn").onclick = () => {
+          window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`);
+        };
+        
+        document.getElementById("shareToLineBtn").onclick = () => {
+          window.open(`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(shareText)}`);
+        };
+        
+        document.getElementById("shareToThreadsBtn").onclick = () => {
+          // Threads 目前沒有官方分享 API，所以只能複製文本
+          navigator.clipboard.writeText(shareText)
+            .then(() => {
+              alert("已複製到剪貼簿！請手動貼到 Threads。");
+            })
+            .catch(err => {
+              console.error('無法複製: ', err);
+            });
+        };
+      }
+      
+      function generateAIPrompt() {
+        const filledCount = filledDates.size;
+        const annoyanceIndex = document.getElementById("annoyanceIndexTotal").textContent;
+        
+        // 收集心情統計
+        const moodMoney = document.getElementById("moodMoneyCount").textContent;
+        const moodBurnout = document.getElementById("moodBurnoutCount").textContent;
+        const moodAnnoying = document.getElementById("moodAnnoyingCount").textContent;
+        const moodStuck = document.getElementById("moodStuckCount").textContent;
+        
+        // 收集最近的記錄
+        const recentRecords = Array.from(filledDates.entries())
+          .map(([index, data]) => ({ index, ...data }))
+          .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+          .slice(0, 10)
+          .map(record => {
+            const moodNames = {
+              money: "錢途茫茫",
+              burnout: "身心俱疲",
+              annoying: "鳥事一堆",
+              stuck: "缺乏成長"
+            };
+            return `- ${record.date} (${moodNames[record.mood]}): ${record.description || "無描述"}`;
+          })
+          .join("\n");
+        
+        // 生成 AI Prompt
+        const prompt = `# 職場厭世分析請求
+
+我在使用「離職集點卡」記錄我的職場心情，目前已收集了 ${filledCount}/100 點，總厭世指數為 ${annoyanceIndex}。
+
+## 心情分類統計
+- 錢途茫茫: ${moodMoney} 次
+- 身心俱疲: ${moodBurnout} 次
+- 鳥事一堆: ${moodAnnoying} 次
+- 缺乏成長: ${moodStuck} 次
+
+## 最近的記錄
+${recentRecords}
+
+請根據以上資料，幫我分析：
+1. 我目前的職場壓力程度如何？
+2. 我最主要的職場困擾是什麼？
+3. 我是否應該考慮尋找新工作？
+4. 有哪些建議可以改善我目前的職場狀況？
+5. 如果我決定離職，應該如何準備？
+
+謝謝你的分析與建議！`;
+
+        document.getElementById("ai-prompt-output").value = prompt;
+        
+        // 設置複製按鈕
+        document.getElementById("copyAIPromptBtn").onclick = () => {
+          const promptText = document.getElementById("ai-prompt-output");
+          promptText.select();
+          navigator.clipboard.writeText(promptText.value)
+            .then(() => {
+              alert("已複製到剪貼簿！可直接貼到 ChatGPT 等 AI 工具中。");
+            })
+            .catch(err => {
+              console.error('無法複製: ', err);
+            });
+        };
+      }
+      
+      function showClearConfirm() {
+        openModal("confirmModal");
+      }
+      
+      function confirmClearAll() {
+        filledDates.clear();
+        saveData();
+        generateGrid();
+        updateAllStats();
+        closeModal("confirmModal");
+      }
+      
+      function addCustomPreset() {
+        const input = document.getElementById("customPresetInput");
+        const value = input.value.trim();
+        
+        if (value && !customPresets.includes(value)) {
+          customPresets.push(value);
+          savePresets();
+          renderPresetButtons();
+          input.value = "";
+        }
+      }
+      
+      function renderPresetButtons() {
+        const container = document.getElementById("presetButtonsContainer");
+        if (!container) return;
+        
+        container.innerHTML = "";
+        
+        customPresets.forEach((preset) => {
+          const btn = document.createElement("button");
+          btn.className = "bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs px-3 py-1 rounded-full";
+          btn.textContent = preset;
+          btn.onclick = () => {
+            const textarea = document.getElementById("eventDescription");
+            textarea.value += (textarea.value ? " " : "") + preset;
+          };
+          
+          container.appendChild(btn);
+        });
+      }
+      
+      function openEventModal(index) {
+        const modal = document.getElementById("eventModal");
+        modal.dataset.currentIndex = index;
+        
+        const data = filledDates.get(index);
+        document.getElementById("eventDate").value = data
+          ? data.date
+          : toLocalDateStr(new Date());
+        document.getElementById("eventDescription").value = data
+          ? data.description || ""
+          : "";
+        
+        // 設置心情
+        document.getElementById("selectedMood").value = data ? data.mood : "";
+        document.querySelectorAll(".mood-option").forEach(option => {
+          option.classList.toggle("selected", option.dataset.mood === (data ? data.mood : ""));
+        });
+        
+        // 移除錯誤提示
+        document.getElementById("moodSelector").classList.remove("mood-error");
+        document.getElementById("mood-error-message").classList.add("hidden");
+        
+        // 渲染預設按鈕
+        renderPresetButtons();
+        
+        modal.classList.remove("hidden");
+        modal.classList.add("flex", "modal-open");
       }
     </script>
 </html>
