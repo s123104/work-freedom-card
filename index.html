@@ -1592,6 +1592,8 @@
         setupListeners();
         setupPWA();
         setupRipple();
+        generateGrid();
+        renderMoodIcons();
 
         // 初始檢查成就
         checkAchievements();
@@ -2300,6 +2302,43 @@
           
           container.appendChild(pageBtn);
         }
+      }
+
+      function loadPresets() {
+        try {
+          const savedPresets = localStorage.getItem(PRESETS_KEY);
+          if (savedPresets) {
+            customPresets = JSON.parse(savedPresets);
+          } else {
+            // 預設標籤
+            customPresets = ["加班", "開不完的會議", "突發任務", "無意義的報告", "主管亂來"];
+            savePresets();
+          }
+        } catch (e) {
+          console.error("載入預設標籤失敗:", e);
+          customPresets = ["加班", "開不完的會議", "突發任務", "無意義的報告", "主管亂來"];
+        }
+      }
+      
+      function savePresets() {
+        try {
+          localStorage.setItem(PRESETS_KEY, JSON.stringify(customPresets));
+        } catch (e) {
+          console.error("儲存預設標籤失敗:", e);
+        }
+      }
+
+      // 註冊 Service Worker
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+              console.log('SW registered: ', registration);
+            })
+            .catch(error => {
+              console.log('SW registration failed: ', error);
+            });
+        });
       }
     </script>
 </html>
