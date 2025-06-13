@@ -8,6 +8,21 @@
 
 # 離職集點卡 CHANGELOG
 
+## v1.5.1 (2024-06-14)
+
+### 修復
+
+- 修復 loadAchievements 未定義的錯誤
+- 修復網格容器顯示問題
+- 修復 Service Worker 註冊失敗問題
+- 修復 Tailwind CSS CDN 警告問題
+- 修復圖表和統計功能
+- 修復心情選擇功能
+
+### 新增
+
+- 添加 MIT License 檔案
+
 ## v1.5.0 (2024-06-14)
 
 ### 新功能
