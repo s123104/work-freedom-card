@@ -1,0 +1,35 @@
+# OS 相關檔案
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 編輯器/IDE 設定檔
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# 暫存檔案
+*.log
+*.tmp
+*.temp
+*.swp
+*~
+
+# 本地環境設定
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 依賴與建置產出
+node_modules/
+dist/
+build/
+coverage/
+
+# 個人筆記與臨時文件
+TODO.md
+NOTES.md
+*.bak 
