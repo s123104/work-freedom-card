@@ -1799,12 +1799,23 @@ function showRandomQuote() {
     "夢想是用來辭職的藉口。",
     "職場沒有公正，只有利益。",
   ];
+
+  // 檢查是否有其他模態窗或彈窗正在顯示
+  const activeModals = document.querySelectorAll(
+    ".modal-backdrop:not(.hidden)"
+  );
+  if (activeModals.length > 0) {
+    return; // 如果有其他彈窗，不顯示引言
+  }
+
   document.getElementById("quoteText").textContent =
     quotes[Math.floor(Math.random() * quotes.length)];
   qd.classList.remove("hidden");
   qd.classList.add("show");
   clearTimeout(quoteTimer);
-  quoteTimer = setTimeout(hideQuote, 10000);
+
+  // 縮短顯示時間避免干擾用戶操作
+  quoteTimer = setTimeout(hideQuote, 6000); // 從10秒縮短到6秒
 }
 
 function hideQuote() {

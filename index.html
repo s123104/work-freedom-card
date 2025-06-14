@@ -226,21 +226,21 @@
           class="grid grid-cols-8 md:grid-cols-10 gap-1 sm:gap-2 max-w-4xl mx-auto"
           id="gridContainer"
         ></div>
-        <!-- Quote Display (Moved here) -->
+        <!-- Quote Display (優化位置避免遮蔽) -->
         <div id="quoteDisplay" class="hidden">
           <div
-            class="quote-container text-center fixed bottom-4 left-4 right-4 z-10 bg-gradient-to-r from-green-700/90 to-green-600/90 p-4 rounded-lg shadow-lg transform transition-all duration-300 max-w-md mx-auto"
+            class="quote-container text-center fixed top-4 left-4 right-4 z-20 bg-gradient-to-r from-green-700/95 to-green-600/95 p-3 sm:p-4 rounded-lg shadow-lg transform transition-all duration-300 max-w-sm mx-auto backdrop-blur-sm"
           >
-            <i class="fas fa-quote-left text-2xl mb-4 opacity-70"></i>
+            <i class="fas fa-quote-left text-lg sm:text-xl mb-2 opacity-70"></i>
             <p
-              class="text-lg sm:text-xl font-handwrite-3 leading-relaxed mb-4"
+              class="text-sm sm:text-base font-handwrite-3 leading-relaxed mb-3"
               id="quoteText"
             ></p>
             <button
               onclick="hideQuote()"
-              class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-full text-sm transition-all duration-300"
+              class="bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-full text-xs sm:text-sm transition-all duration-300 flex items-center mx-auto"
             >
-              <i class="fas fa-times mr-2"></i>收起
+              <i class="fas fa-times mr-1"></i>收起
             </button>
           </div>
         </div>
