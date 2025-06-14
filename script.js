@@ -228,7 +228,7 @@ const ACHIEVEMENT_DEFINITIONS = {
     icon: '<i class="fas fa-running text-green-500"></i>',
     category: "入門",
     condition: (data) => data.totalFilled >= 1,
-    animation: "bounceIn",
+    animation: "sparkle",
     rarity: "common",
   },
   money_lover: {
@@ -238,11 +238,11 @@ const ACHIEVEMENT_DEFINITIONS = {
     category: "心情",
     condition: (data) => data.consecutiveMoney >= 5,
     animation: "goldShimmer",
-    rarity: "uncommon",
+    rarity: "rare",
   },
   burnout_master: {
     name: "燃燒殆盡",
-    description: "單日燃盡心情達到10次",
+    description: "單日身心俱疲心情達到10次",
     icon: '<i class="fas fa-fire text-red-500"></i>',
     category: "心情",
     condition: (data) => data.dailyBurnout >= 10,
@@ -255,7 +255,7 @@ const ACHIEVEMENT_DEFINITIONS = {
     icon: '<i class="fas fa-crown text-purple-500"></i>',
     category: "厭世",
     condition: (data) => data.totalAnnoyance >= 500,
-    animation: "crownFloat",
+    animation: "sparkle",
     rarity: "epic",
   },
   speed_demon: {
@@ -265,7 +265,7 @@ const ACHIEVEMENT_DEFINITIONS = {
     category: "操作",
     condition: (data) => data.speedFills >= 5,
     animation: "lightningStrike",
-    rarity: "uncommon",
+    rarity: "rare",
   },
   weekend_warrior: {
     name: "週末戰士",
@@ -273,7 +273,7 @@ const ACHIEVEMENT_DEFINITIONS = {
     icon: '<i class="fas fa-umbrella-beach text-cyan-500"></i>',
     category: "堅持",
     condition: (data) => data.weekendStreak >= 4,
-    animation: "beachWave",
+    animation: "sparkle",
     rarity: "rare",
   },
   midnight_worker: {
@@ -282,8 +282,8 @@ const ACHIEVEMENT_DEFINITIONS = {
     icon: '<i class="fas fa-moon text-indigo-500"></i>',
     category: "時間",
     condition: (data) => data.midnightFills >= 1,
-    animation: "moonGlow",
-    rarity: "uncommon",
+    animation: "sparkle",
+    rarity: "rare",
   },
   rainbow_collector: {
     name: "彩虹收集者",
@@ -300,7 +300,7 @@ const ACHIEVEMENT_DEFINITIONS = {
     icon: '<i class="fas fa-trophy text-yellow-600"></i>',
     category: "堅持",
     condition: (data) => data.consecutiveDays >= 30,
-    animation: "trophyGlow",
+    animation: "goldShimmer",
     rarity: "legendary",
   },
   freedom_seeker: {
@@ -321,7 +321,7 @@ function toLocalDateStr(date) {
 // --- 心情圖示 SVG ---
 const moodIcons = {
   money: `<svg viewBox="0 0 24 24" class="w-8 h-8 mx-auto stroke-current text-yellow-600"><path d="M9 10a1 1 0 11-2 0 1 1 0 012 0zm6 0a1 1 0 11-2 0 1 1 0 012 0zm-4 5a4 4 0 01-4-4h8a4 4 0 01-4 4zm4.5-8.5a1.5 1.5 0 00-3 0h3zm-4-3a.5.5 0 001 0h-1zM12 2a10 10 0 100 20 10 10 0 000-20z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
-  burnout: `<svg viewBox="0 0 24 24" class="w-8 h-8 mx-auto stroke-current text-red-600"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM9 15s1.5-2 3-2 3 2 3 2M9 9h.01M15 9h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
+  burnout: `<svg viewBox="0 0 24 24" class="w-8 h-8 mx-auto stroke-current text-red-600"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM9 15s1.5-2 3-2 3 2 3 2M9 9h.01M15 9h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg>`,
   annoying: `<svg viewBox="0 0 24 24" class="w-8 h-8 mx-auto stroke-current text-indigo-600"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM8 9l8 6M8 15L16 9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
   stuck: `<svg viewBox="0 0 24 24" class="w-8 h-8 mx-auto stroke-current text-gray-600"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM9 12h6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
 };
@@ -728,6 +728,9 @@ function createAchievementPopup(achievement) {
 
 function playAchievementAnimation(animationType) {
   switch (animationType) {
+    case "sparkle":
+      createSparkleEffect();
+      break;
     case "goldShimmer":
       createGoldShimmerEffect();
       break;
@@ -2043,7 +2046,7 @@ ${jsonData}
 
 function getMoodDisplayName(mood) {
   const moodNames = {
-    money: "薪資福利困擾",
+    money: "錢途茫茫",
     burnout: "身心俱疲",
     annoying: "鳥事一堆",
     stuck: "缺乏成長",

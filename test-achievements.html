@@ -3,362 +3,462 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>成就系統測試</title>
+    <title>🏆 成就系統測試中心</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
     <style>
       body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: #333;
         min-height: 100vh;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       }
 
       .test-container {
-        background: white;
-        border-radius: 15px;
-        padding: 30px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        margin-bottom: 20px;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
       }
 
-      .test-header {
-        text-align: center;
-        margin-bottom: 30px;
+      .achievement-card {
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
       }
 
-      .test-header h1 {
-        color: #667eea;
-        margin: 0;
-        font-size: 2.5em;
+      .achievement-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        border-color: #3b82f6;
+      }
+
+      .rarity-common {
+        border-left: 4px solid #6b7280;
+      }
+      .rarity-rare {
+        border-left: 4px solid #3b82f6;
+      }
+      .rarity-epic {
+        border-left: 4px solid #8b5cf6;
+      }
+      .rarity-legendary {
+        border-left: 4px solid #f59e0b;
       }
 
       .test-button {
-        background: linear-gradient(45deg, #667eea, #764ba2);
-        color: white;
-        border: none;
-        padding: 15px 30px;
-        border-radius: 10px;
-        font-size: 16px;
-        cursor: pointer;
-        margin: 10px;
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
         transition: all 0.3s ease;
       }
 
       .test-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
       }
 
-      .test-results {
-        margin-top: 20px;
-        padding: 20px;
-        background: #f8f9fa;
-        border-radius: 10px;
-        border-left: 5px solid #667eea;
-      }
-
-      .achievement-item {
-        display: flex;
-        align-items: center;
-        padding: 10px;
-        margin: 5px 0;
-        border-radius: 8px;
-        transition: all 0.3s ease;
-      }
-
-      .achievement-item.unlocked {
-        background: #d4edda;
-        border-left: 4px solid #28a745;
-      }
-
-      .achievement-item.locked {
-        background: #f8d7da;
-        border-left: 4px solid #dc3545;
-      }
-
-      .achievement-icon {
-        font-size: 24px;
-        margin-right: 15px;
-      }
-
-      .achievement-details {
-        flex: 1;
-      }
-
-      .achievement-name {
-        font-weight: bold;
-        font-size: 16px;
-      }
-
-      .achievement-description {
-        color: #666;
-        font-size: 14px;
-      }
-
-      .achievement-rarity {
-        padding: 2px 8px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: bold;
-        margin-left: 10px;
-      }
-
-      .rarity-common {
-        background: #6c757d;
-        color: white;
-      }
-      .rarity-rare {
-        background: #007bff;
-        color: white;
-      }
-      .rarity-epic {
-        background: #6f42c1;
-        color: white;
-      }
-      .rarity-legendary {
-        background: #fd7e14;
+      .stats-card {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
         color: white;
       }
 
-      .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 15px;
-        margin: 20px 0;
+      /* 動畫效果 CSS */
+      @keyframes sparkle-float {
+        0% {
+          transform: translateY(0) scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: translateY(-20px) scale(1.2);
+          opacity: 0.8;
+        }
+        100% {
+          transform: translateY(-40px) scale(0);
+          opacity: 0;
+        }
       }
 
-      .stat-card {
-        background: white;
-        padding: 15px;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        text-align: center;
+      @keyframes gold-sweep {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
       }
 
-      .stat-value {
-        font-size: 28px;
-        font-weight: bold;
-        color: #667eea;
+      @keyframes fire-rise {
+        0% {
+          transform: translateY(0) scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-100px) scale(0.5);
+          opacity: 0;
+        }
       }
 
-      .stat-label {
-        font-size: 14px;
-        color: #666;
-        margin-top: 5px;
+      @keyframes lightning-flash {
+        0%,
+        100% {
+          opacity: 0;
+        }
+        50% {
+          opacity: 1;
+        }
       }
 
-      .console-output {
-        background: #1a1a1a;
-        color: #00ff00;
-        padding: 20px;
-        border-radius: 10px;
+      @keyframes rainbow-wave {
+        0% {
+          transform: translateX(-100%) rotate(0deg);
+          opacity: 0;
+        }
+        50% {
+          opacity: 0.6;
+        }
+        100% {
+          transform: translateX(100%) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      @keyframes dove-fly-0 {
+        0% {
+          transform: translate(-50%, -50%) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(200px, -100px) rotate(45deg);
+          opacity: 0;
+        }
+      }
+
+      @keyframes dove-fly-1 {
+        0% {
+          transform: translate(-50%, -50%) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(-200px, -150px) rotate(-45deg);
+          opacity: 0;
+        }
+      }
+
+      @keyframes dove-fly-2 {
+        0% {
+          transform: translate(-50%, -50%) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(150px, -200px) rotate(30deg);
+          opacity: 0;
+        }
+      }
+
+      @keyframes dove-fly-3 {
+        0% {
+          transform: translate(-50%, -50%) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(-150px, -80px) rotate(-30deg);
+          opacity: 0;
+        }
+      }
+
+      @keyframes dove-fly-4 {
+        0% {
+          transform: translate(-50%, -50%) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(100px, -250px) rotate(60deg);
+          opacity: 0;
+        }
+      }
+
+      @keyframes dove-fly-5 {
+        0% {
+          transform: translate(-50%, -50%) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(-100px, -120px) rotate(-60deg);
+          opacity: 0;
+        }
+      }
+
+      @keyframes dove-fly-6 {
+        0% {
+          transform: translate(-50%, -50%) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(250px, -180px) rotate(15deg);
+          opacity: 0;
+        }
+      }
+
+      @keyframes dove-fly-7 {
+        0% {
+          transform: translate(-50%, -50%) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(-250px, -220px) rotate(-15deg);
+          opacity: 0;
+        }
+      }
+
+      .particle {
+        position: fixed;
+        pointer-events: none;
+        z-index: 1000;
+        border-radius: 50%;
+        animation: sparkle-float 1s ease-out forwards;
+      }
+
+      .log-container {
+        background: #1f2937;
+        color: #f3f4f6;
         font-family: "Courier New", monospace;
-        font-size: 14px;
-        max-height: 400px;
+        max-height: 300px;
         overflow-y: auto;
-        margin-top: 20px;
-      }
-
-      .progress-bar {
-        width: 100%;
-        height: 20px;
-        background: #e9ecef;
-        border-radius: 10px;
-        overflow: hidden;
-        margin: 10px 0;
-      }
-
-      .progress-fill {
-        height: 100%;
-        background: linear-gradient(45deg, #667eea, #764ba2);
-        transition: width 0.5s ease;
       }
     </style>
   </head>
-  <body>
-    <div class="test-container">
-      <div class="test-header">
-        <h1>🏆 成就系統測試</h1>
-        <p>測試社畜解放卡的完整成就系統與動畫效果</p>
+  <body class="p-4">
+    <div class="max-w-7xl mx-auto">
+      <!-- 標題區域 -->
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-white mb-4">
+          <i class="fas fa-trophy text-yellow-400 mr-3"></i>
+          成就系統測試中心
+          <i class="fas fa-trophy text-yellow-400 ml-3"></i>
+        </h1>
+        <p class="text-xl text-blue-100">完整測試所有成就動畫效果與解鎖邏輯</p>
       </div>
 
-      <div class="test-controls">
-        <button class="test-button" onclick="runFullTest()">
-          🚀 運行完整測試
-        </button>
-        <button class="test-button" onclick="generateTestData()">
-          📊 生成測試數據
-        </button>
-        <button class="test-button" onclick="testAchievementLogic()">
-          🎯 測試成就邏輯
-        </button>
-        <button class="test-button" onclick="testAnimations()">
-          ✨ 測試動畫效果
-        </button>
-        <button class="test-button" onclick="clearTestData()">
-          🧹 清空測試數據
-        </button>
-      </div>
-
-      <div id="testResults" class="test-results" style="display: none">
-        <h3>📈 測試統計</h3>
-        <div class="stats-grid" id="statsGrid"></div>
-
-        <h3>🏆 成就狀態</h3>
-        <div class="progress-bar">
-          <div
-            class="progress-fill"
-            id="achievementProgress"
-            style="width: 0%"
-          ></div>
+      <!-- 控制面板 -->
+      <div class="test-container p-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <button
+            onclick="generateTestData()"
+            class="test-button text-white px-6 py-3 rounded-lg font-semibold"
+          >
+            <i class="fas fa-database mr-2"></i>生成測試數據
+          </button>
+          <button
+            onclick="runFullTest()"
+            class="test-button text-white px-6 py-3 rounded-lg font-semibold"
+          >
+            <i class="fas fa-play mr-2"></i>運行完整測試
+          </button>
+          <button
+            onclick="clearTestData()"
+            class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-semibold transition-all"
+          >
+            <i class="fas fa-trash mr-2"></i>清空數據
+          </button>
+          <button
+            onclick="showStats()"
+            class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold transition-all"
+          >
+            <i class="fas fa-chart-bar mr-2"></i>顯示統計
+          </button>
         </div>
-        <div id="achievementsList"></div>
 
-        <h3>💻 控制台輸出</h3>
-        <div class="console-output" id="consoleOutput"></div>
+        <!-- 統計顯示區域 -->
+        <div id="statsDisplay" class="hidden">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+            <div class="stats-card p-4 rounded-lg text-center">
+              <div class="text-2xl font-bold" id="totalFilledStat">0</div>
+              <div class="text-sm opacity-90">總填寫數</div>
+            </div>
+            <div class="stats-card p-4 rounded-lg text-center">
+              <div class="text-2xl font-bold" id="totalAnnoyanceStat">0</div>
+              <div class="text-sm opacity-90">厭世指數</div>
+            </div>
+            <div class="stats-card p-4 rounded-lg text-center">
+              <div class="text-2xl font-bold" id="consecutiveDaysStat">0</div>
+              <div class="text-sm opacity-90">連續天數</div>
+            </div>
+            <div class="stats-card p-4 rounded-lg text-center">
+              <div class="text-2xl font-bold" id="achievementsStat">0</div>
+              <div class="text-sm opacity-90">解鎖成就</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 成就測試區域 -->
+      <div class="test-container p-6 mb-8">
+        <h2 class="text-2xl font-bold mb-6 text-gray-800">
+          <i class="fas fa-star text-yellow-500 mr-2"></i>
+          成就測試列表
+        </h2>
+        <div
+          id="achievementsList"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+        >
+          <!-- 成就卡片將在這裡動態生成 -->
+        </div>
+      </div>
+
+      <!-- 測試日誌 -->
+      <div class="test-container p-6">
+        <h2 class="text-2xl font-bold mb-4 text-gray-800">
+          <i class="fas fa-terminal text-green-500 mr-2"></i>
+          測試日誌
+        </h2>
+        <div id="testLog" class="log-container p-4 rounded-lg text-sm">
+          <div class="text-green-400">🚀 成就系統測試中心已就緒...</div>
+          <div class="text-blue-400">💡 點擊上方按鈕開始測試</div>
+        </div>
       </div>
     </div>
 
-    <!-- 載入主要腳本 -->
+    <!-- 引入主要腳本 -->
     <script src="script.js"></script>
     <script src="test-achievements.js"></script>
 
     <script>
-      // 重寫console.log以顯示在頁面上
-      const originalConsoleLog = console.log;
-      const consoleOutput = document.getElementById("consoleOutput");
+      // 初始化測試介面
+      document.addEventListener("DOMContentLoaded", function () {
+        initTestInterface();
+        logMessage("✅ 測試介面初始化完成");
+      });
 
-      console.log = function (...args) {
-        originalConsoleLog.apply(console, args);
-        if (consoleOutput) {
-          const message = args
-            .map((arg) =>
-              typeof arg === "object"
-                ? JSON.stringify(arg, null, 2)
-                : String(arg)
-            )
-            .join(" ");
-          consoleOutput.innerHTML += message + "\n";
-          consoleOutput.scrollTop = consoleOutput.scrollHeight;
-        }
-      };
-
-      function runFullTest() {
-        document.getElementById("testResults").style.display = "block";
-        consoleOutput.innerHTML = "";
-
-        console.log("🚀 開始完整成就系統測試...\n");
-
-        // 運行測試
-        generateTestData();
-        const results = testAchievementLogic();
-        testAnimations();
-
-        // 顯示結果
-        displayTestResults(results);
-
-        console.log("\n✅ 完整測試完成！");
+      function initTestInterface() {
+        renderAchievementCards();
       }
 
-      function displayTestResults(results) {
-        const statsGrid = document.getElementById("statsGrid");
-        const achievementsList = document.getElementById("achievementsList");
+      function renderAchievementCards() {
+        const container = document.getElementById("achievementsList");
+        container.innerHTML = "";
 
-        // 顯示統計數據
-        const stats = calculateTestUserStats();
-        statsGrid.innerHTML = `
-                <div class="stat-card">
-                    <div class="stat-value">${stats.totalFilled}</div>
-                    <div class="stat-label">總填寫數</div>
+        Object.entries(ACHIEVEMENT_DEFINITIONS).forEach(
+          ([key, achievement]) => {
+            const card = document.createElement("div");
+            card.className = `achievement-card p-4 rounded-lg rarity-${achievement.rarity}`;
+
+            card.innerHTML = `
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center">
+                ${achievement.icon}
+                <div class="ml-3">
+                  <h3 class="font-bold text-gray-800">${achievement.name}</h3>
+                  <p class="text-sm text-gray-600">${achievement.description}</p>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-value">${stats.totalAnnoyance}</div>
-                    <div class="stat-label">總厭世指數</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">${stats.consecutiveDays}</div>
-                    <div class="stat-label">連續天數</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">${stats.weekendStreak}</div>
-                    <div class="stat-label">週末連擊</div>
-                </div>
-            `;
+              </div>
+              <span class="px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full">${achievement.rarity}</span>
+            </div>
+            <div class="flex space-x-2">
+              <button onclick="testSingleAchievement('${key}')" 
+                      class="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded text-sm transition-all">
+                <i class="fas fa-test-tube mr-1"></i>測試邏輯
+              </button>
+              <button onclick="previewAnimation('${achievement.animation}')" 
+                      class="flex-1 bg-purple-500 hover:bg-purple-600 text-white px-3 py-2 rounded text-sm transition-all">
+                <i class="fas fa-magic mr-1"></i>預覽動畫
+              </button>
+            </div>
+          `;
 
-        // 顯示成就結果
-        const unlockedCount = Object.values(results).filter(
-          (r) => r.shouldUnlock
-        ).length;
-        const totalCount = Object.keys(results).length;
-        const progressPercent = (unlockedCount / totalCount) * 100;
-
-        document.getElementById("achievementProgress").style.width =
-          progressPercent + "%";
-
-        achievementsList.innerHTML = Object.entries(results)
-          .map(
-            ([key, result]) => `
-                <div class="achievement-item ${
-                  result.shouldUnlock ? "unlocked" : "locked"
-                }">
-                    <div class="achievement-icon">
-                        ${result.shouldUnlock ? "🏆" : "🔒"}
-                    </div>
-                    <div class="achievement-details">
-                        <div class="achievement-name">${result.name}</div>
-                        <div class="achievement-description">${
-                          result.description
-                        }</div>
-                    </div>
-                    <span class="achievement-rarity rarity-${result.rarity}">
-                        ${result.rarity}
-                    </span>
-                </div>
-            `
-          )
-          .join("");
-      }
-
-      function testAnimations() {
-        console.log("✨ 測試動畫效果...");
-
-        // 測試各種動畫
-        const animations = ["sparkle", "gold", "fire", "lightning", "rainbow"];
-        animations.forEach((animation, index) => {
-          setTimeout(() => {
-            console.log(`🎬 測試 ${animation} 動畫`);
-            if (window.playAchievementAnimation) {
-              playAchievementAnimation(animation);
-            }
-          }, index * 1000);
-        });
-
-        // 測試自由爆發效果
-        setTimeout(() => {
-          console.log("🎆 測試自由爆發效果");
-          if (window.createFreedomBurst) {
-            createFreedomBurst();
+            container.appendChild(card);
           }
-        }, 6000);
+        );
+      }
+
+      function testSingleAchievement(achievementKey) {
+        logMessage(
+          `🎯 測試成就: ${ACHIEVEMENT_DEFINITIONS[achievementKey].name}`
+        );
+
+        // 生成測試數據
+        generateTestData();
+
+        // 計算統計數據
+        const stats = calculateTestUserStats();
+
+        // 檢查成就條件
+        const achievement = ACHIEVEMENT_DEFINITIONS[achievementKey];
+        const shouldUnlock = achievement.condition(stats);
+
+        if (shouldUnlock) {
+          logMessage(`✅ ${achievement.name} - 條件滿足，成就解鎖！`);
+          // 顯示成就通知
+          createAchievementPopup(achievement);
+          playAchievementAnimation(achievement.animation);
+        } else {
+          logMessage(`❌ ${achievement.name} - 條件不滿足`);
+          logMessage(`📊 當前統計: ${JSON.stringify(stats, null, 2)}`);
+        }
+      }
+
+      function previewAnimation(animationType) {
+        logMessage(`🎨 預覽動畫: ${animationType}`);
+        playAchievementAnimation(animationType);
       }
 
       function clearTestData() {
         testFilledDates.clear();
-        testAchievements.clear();
         localStorage.removeItem("speedFills");
         localStorage.removeItem("midnightFills");
-        console.log("🧹 測試數據已清空");
-        document.getElementById("testResults").style.display = "none";
+        logMessage("🗑️ 測試數據已清空");
+        updateStatsDisplay();
       }
 
-      // 頁面載入時顯示說明
-      document.addEventListener("DOMContentLoaded", function () {
-        console.log("🎮 成就系統測試器已就緒！");
-        console.log("點擊上方按鈕開始測試各項功能。");
-        console.log("");
-      });
+      function showStats() {
+        const statsDisplay = document.getElementById("statsDisplay");
+        statsDisplay.classList.toggle("hidden");
+        updateStatsDisplay();
+      }
+
+      function updateStatsDisplay() {
+        const stats = calculateTestUserStats();
+        document.getElementById("totalFilledStat").textContent =
+          stats.totalFilled;
+        document.getElementById("totalAnnoyanceStat").textContent =
+          stats.totalAnnoyance;
+        document.getElementById("consecutiveDaysStat").textContent =
+          stats.consecutiveDays;
+
+        // 計算已解鎖成就數量
+        let unlockedCount = 0;
+        Object.entries(ACHIEVEMENT_DEFINITIONS).forEach(
+          ([key, achievement]) => {
+            if (achievement.condition(stats)) {
+              unlockedCount++;
+            }
+          }
+        );
+        document.getElementById("achievementsStat").textContent = unlockedCount;
+      }
+
+      function logMessage(message) {
+        const log = document.getElementById("testLog");
+        const timestamp = new Date().toLocaleTimeString();
+        const logEntry = document.createElement("div");
+        logEntry.innerHTML = `<span class="text-gray-400">[${timestamp}]</span> ${message}`;
+        log.appendChild(logEntry);
+        log.scrollTop = log.scrollHeight;
+      }
+
+      // 重寫 console.log 以顯示在測試日誌中
+      const originalConsoleLog = console.log;
+      console.log = function (...args) {
+        originalConsoleLog.apply(console, args);
+        logMessage(args.join(" "));
+      };
     </script>
   </body>
 </html>

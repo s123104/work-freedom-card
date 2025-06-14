@@ -9,23 +9,21 @@ const testAchievements = new Map();
 
 // 測試數據生成器
 function generateTestData() {
-  console.log("🧪 開始生成測試數據...");
+  console.log("🎯 開始生成測試數據...");
 
   // 清空現有數據
   testFilledDates.clear();
-  testAchievements.clear();
 
-  // 1. 測試數據遷移：舊的「爛日子」轉換為「身心俱疲」
-  console.log("📦 測試數據遷移...");
+  // 1. 測試數據遷移（移除爛日子相關）
   const oldData = [
     { index: 1, mood: "bad", date: "2025-01-01", text: "老闆很機車" },
-    { index: 2, mood: "爛日子", date: "2025-01-02", text: "加班到很晚" },
+    { index: 2, mood: "burnout", date: "2025-01-02", text: "加班到很晚" },
     { index: 3, mood: "burnout", date: "2025-01-03", text: "身心俱疲" },
   ];
 
   oldData.forEach((data) => {
     // 模擬數據遷移邏輯
-    if (data.mood === "bad" || data.mood === "爛日子") {
+    if (data.mood === "bad") {
       data.mood = "burnout";
     }
     testFilledDates.set(data.index, data);
