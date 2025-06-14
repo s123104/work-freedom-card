@@ -1,27 +1,52 @@
 /**
  * 📦 模組：Service Worker
- * 🕒 最後更新：2025-06-14T04:08:54+08:00
+ * 🕒 最後更新：2025-01-14T10:30:00+08:00
  * 🧑‍💻 作者/更新者：@s123104
  * 🔢 版本：v1.0.0
- * 📝 摘要：社畜解放卡 PWA 的離線功能支援
+ * 📝 摘要：社畜解放卡 PWA Service Worker
  */
 
-// 社畜解放卡 Service Worker
-const CACHE_NAME = "work-freedom-card-v1.5.0";
-const ASSETS = [
-  "/",
-  "/index.html",
-  "/manifest.json",
-  "/icon-192.png",
-  "/icon-512.png",
+const CACHE_NAME = "work-freedom-card-v7";
+const urlsToCache = [
+  "./",
+  "./index.html",
+  "./script.js",
+  "./styles.css",
+  "./manifest.json",
+  "./tailwind.config.js",
+  "./icon.png",
+  "./icon-192.png",
+  "./icon-512.png",
+  "./og-image.png",
 ];
 
-// 安裝 Service Worker
+// 安裝事件
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log("Opened cache");
-      return cache.addAll(ASSETS);
+    caches
+      .open(CACHE_NAME)
+      .then((cache) => {
+        console.log("Service Worker: 緩存文件");
+        return cache.addAll(urlsToCache);
+      })
+      .catch((error) => {
+        console.log("Service Worker: 緩存失敗", error);
+      })
+  );
+});
+
+// 激活事件
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheName !== CACHE_NAME) {
+            console.log("Service Worker: 清除舊緩存", cacheName);
+            return caches.delete(cacheName);
+          }
+        })
+      );
     })
   );
 });
@@ -30,44 +55,18 @@ self.addEventListener("install", (event) => {
 self.addEventListener("fetch", (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
-      // 如果在快取中找到，則返回快取的版本
+      // 如果緩存中有，直接返回
       if (response) {
         return response;
       }
 
-      // 否則發送網路請求
-      return fetch(event.request).then((response) => {
-        // 檢查是否有效的回應
-        if (!response || response.status !== 200 || response.type !== "basic") {
-          return response;
+      // 否則從網路獲取
+      return fetch(event.request).catch(() => {
+        // 網路失敗時，對於導航請求返回離線頁面
+        if (event.request.destination === "document") {
+          return caches.match("./index.html");
         }
-
-        // 複製回應以便快取和返回
-        const responseToCache = response.clone();
-
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, responseToCache);
-        });
-
-        return response;
       });
-    })
-  );
-});
-
-// 清理舊版快取
-self.addEventListener("activate", (event) => {
-  const cacheWhitelist = [CACHE_NAME];
-
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
     })
   );
 });

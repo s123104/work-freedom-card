@@ -1,11 +1,15 @@
 {
-  "name": "社畜解放卡",
-  "short_name": "解放卡",
-  "description": "記錄每日職場心情與鳥事，集滿離職點數，邁向自由！提供厭世指數分析與 AI 洞察。",
-  "start_url": "./index.html",
+  "name": "社畜解放卡 - 你的職場生存壓力計",
+  "short_name": "社畜解放卡",
+  "description": "記錄每日職場心情與鳥事，集滿離職點數，邁向自由！提供厭世指數分析、數據匯出與 AI 洞察，是你最佳的職場壓力管理工具。",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#3da35d",
+  "orientation": "portrait",
+  "scope": "./",
+  "lang": "zh-TW",
+  "categories": ["productivity", "lifestyle", "utilities"],
   "icons": [
     {
       "src": "icon-192.png",
@@ -22,15 +26,35 @@
   ],
   "screenshots": [
     {
-      "src": "https://s123104.github.io/web/og-image.png",
+      "src": "./og-image.png",
       "sizes": "1200x630",
       "type": "image/png",
       "form_factor": "wide",
       "label": "社畜解放卡主畫面"
     }
   ],
-  "categories": ["productivity", "lifestyle", "utilities"],
-  "lang": "zh-TW",
-  "orientation": "portrait",
+  "shortcuts": [
+    {
+      "name": "快速記錄",
+      "short_name": "記錄",
+      "description": "快速記錄今日職場心情",
+      "url": "./?action=quick-record",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "share_target": {
+    "action": "./",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
   "prefer_related_applications": false
 }

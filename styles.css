@@ -1,0 +1,1113 @@
+/*
+ * 📦 模組：社畜解放卡 - 樣式表
+ * 🕒 最後更新：2025-01-14T15:30:00+08:00
+ * 🧑‍💻 作者/更新者：@s123104
+ * 🔢 版本：v1.4.0
+ * 📝 摘要：從 index.html 拆分出的樣式表
+ */
+
+* {
+  touch-action: pan-y pinch-zoom;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* 特別針對模態窗和滑動區域 */
+.modal-backdrop,
+.modal-content,
+.modal-backdrop *,
+.modal-content * {
+  touch-action: pan-y pinch-zoom !important;
+}
+
+/* 確保滑動優化 */
+html {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* 允許特定元素正常滑動 */
+body,
+html {
+  touch-action: pan-y pinch-zoom;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+body {
+  overflow-y: auto;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 模態窗內容允許滑動 */
+.modal-content {
+  touch-action: pan-y pinch-zoom;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 確保模態窗背景允許滑動 */
+.modal-backdrop {
+  touch-action: pan-y pinch-zoom;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 文字區域允許滑動和選取 */
+textarea,
+input[type="text"],
+input[type="date"] {
+  touch-action: pan-y pinch-zoom;
+}
+
+input,
+textarea {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* 確保模態窗隱藏時完全不可見 */
+#eventModal.hidden {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) translateY(50px);
+  }
+  30% {
+    opacity: 0.9;
+    transform: scale(1.1);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(0.89);
+  }
+  80% {
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes wiggle {
+  0%,
+  7% {
+    transform: rotateZ(0);
+  }
+  15% {
+    transform: rotateZ(-15deg);
+  }
+  20% {
+    transform: rotateZ(10deg);
+  }
+  25% {
+    transform: rotateZ(-10deg);
+  }
+  30% {
+    transform: rotateZ(6deg);
+  }
+  35% {
+    transform: rotateZ(-4deg);
+  }
+  40%,
+  100% {
+    transform: rotateZ(0);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes bounce-slow {
+  0%,
+  20%,
+  53%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40%,
+  43% {
+    transform: translateY(-10px);
+  }
+  70% {
+    transform: translateY(-5px);
+  }
+  90% {
+    transform: translateY(-2px);
+  }
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 3s ease-in-out infinite;
+}
+
+@keyframes quoteSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes feedbackPop {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  50% {
+    transform: translate(-50%, -150%) scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -250%) scale(1.5);
+  }
+}
+
+@keyframes bounce-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 2s ease-in-out infinite;
+}
+
+/* 粒子動畫 */
+@keyframes particleFade {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+@keyframes collectPoint {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(0, -100px) scale(1.5);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+/* 煙火動畫 */
+@keyframes firework {
+  0% {
+    transform: translate(-50%, 100vh);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, 40vh);
+    opacity: 1;
+  }
+  75% {
+    transform: translate(-50%, 30vh);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, 30vh);
+    opacity: 0;
+  }
+}
+
+@keyframes explosion {
+  0% {
+    width: 4px;
+    height: 4px;
+    opacity: 1;
+  }
+  100% {
+    width: 300px;
+    height: 300px;
+    opacity: 0;
+  }
+}
+
+.firework {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  animation: firework 1.5s ease-out forwards;
+  z-index: 9999;
+}
+
+.explosion {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  animation: explosion 1.5s ease-out forwards;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 200, 0, 0.8) 100%
+  );
+  z-index: 9999;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: particleFade 1s ease-out forwards;
+  z-index: 100;
+}
+
+.grid-cell {
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+  border: 2px solid #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  min-height: 40px;
+}
+
+.grid-cell:hover {
+  transform: scale(1.08) translateY(-3px);
+  box-shadow: 0 12px 35px rgba(61, 163, 93, 0.2);
+  border-color: #3da35d;
+  z-index: 10;
+}
+
+.grid-cell.filled {
+  background: linear-gradient(145deg, #dcf4e4 0%, #bbe8cc 100%);
+  border-color: #3da35d;
+  box-shadow: 0 4px 15px rgba(61, 163, 93, 0.15);
+}
+
+.grid-cell.mood-money {
+  background: linear-gradient(145deg, #fef9c3, #fde047);
+  border-color: #ca8a04;
+}
+
+.grid-cell.mood-burnout {
+  background: linear-gradient(145deg, #fecaca, #fca5a5);
+  border-color: #ef4444;
+}
+
+.grid-cell.mood-annoying {
+  background: linear-gradient(145deg, #e0e7ff, #c7d2fe);
+  border-color: #6366f1;
+}
+
+.grid-cell.mood-stuck {
+  background: linear-gradient(145deg, #e5e5e5, #d4d4d4);
+  border-color: #737373;
+}
+
+.grid-cell.long-pressing {
+  transform: scale(0.95);
+  box-shadow: inset 0 4px 12px rgba(61, 163, 93, 0.2);
+}
+
+.date-text {
+  color: #2d8049;
+  font-weight: 700;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  transform: rotate(-2deg);
+}
+
+.grid-cell.mood-money .date-text {
+  color: #a16207;
+}
+
+.grid-cell.mood-burnout .date-text {
+  color: #b91c1c;
+}
+
+.grid-cell.mood-annoying .date-text {
+  color: #4338ca;
+}
+
+.grid-cell.mood-stuck .date-text {
+  color: #525252;
+}
+
+.glass-effect {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.quote-container {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 20px;
+  padding: 24px;
+  margin-top: 1.5rem;
+  box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+  pointer-events: auto;
+  touch-action: manipulation;
+}
+
+#quoteDisplay {
+  display: none;
+}
+
+#quoteDisplay.show {
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  #quoteDisplay {
+    position: fixed;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    justify-content: center;
+    z-index: 1100;
+  }
+  #quoteDisplay .quote-container {
+    margin-top: 0;
+    width: calc(100% - 2rem);
+  }
+}
+
+.progress-ring {
+  transform: rotate(-90deg);
+}
+
+.progress-ring-circle {
+  transition: stroke-dasharray 0.5s ease-in-out;
+}
+
+.modal-backdrop {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+}
+
+.modal-content {
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  transform: scale(0.9) translateY(20px);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  touch-action: pan-y pinch-zoom;
+  -webkit-overflow-scrolling: touch;
+}
+
+.modal-open .modal-content {
+  transform: scale(1) translateY(0);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3da35d;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2d8049;
+}
+
+@media (max-width: 768px) {
+  .stats-container,
+  .analysis-container {
+    display: block !important;
+  }
+  .stats-container > div,
+  .analysis-container > div {
+    margin-bottom: 1.5rem;
+  }
+  .grid-cell {
+    min-height: 35px;
+  }
+}
+
+/* Share & AI Modal Styles */
+.share-trigger {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  background-color: #3da35d;
+  color: white;
+  border-radius: 50%;
+  border: none;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.share-trigger:hover {
+  transform: scale(1.1);
+  background-color: #2d8049;
+}
+
+.generic-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.generic-modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.generic-modal .modal-box {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  position: relative;
+  text-align: center;
+  transform: scale(0.95);
+  transition: transform 0.3s;
+}
+
+.generic-modal.show .modal-box {
+  transform: scale(1);
+}
+
+.generic-modal .close-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: transparent;
+  border: none;
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #aaa;
+}
+
+#shareModal .share-options {
+  margin: 1.5rem 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+#shareModal .share-btn {
+  padding: 0.75rem;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+#shareModal .share-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+#shareModal .share-btn--copy {
+  background: #f3f3f3;
+  color: #333;
+}
+
+#shareModal .share-btn--threads {
+  background: #1c1c1c;
+  color: #fff;
+}
+
+#shareModal .share-btn--twitter {
+  background: #1da1f2;
+  color: #fff;
+}
+
+#shareModal .share-btn--line {
+  background: #00c300;
+  color: #fff;
+}
+
+/* Share Modal Enhancements */
+#shareModal .modal-box {
+  max-width: 28rem;
+}
+
+#shareModal img {
+  transition: transform 0.3s ease;
+}
+
+#shareModal img:hover {
+  transform: scale(1.02);
+}
+
+#shareModal .bg-gray-50 a:hover {
+  text-decoration: none;
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+}
+
+#aiExportModal #ai-prompt-output {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 1rem;
+  width: 100%;
+  min-height: 250px;
+  font-family: monospace;
+  font-size: 0.8rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Annoyance Score Feedback */
+#annoyanceFeedback {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ef4444;
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  z-index: 9999;
+  animation: feedbackPop 2s ease-out forwards;
+}
+
+/* iOS PWA Install Prompt */
+#iosPwaModal .instruction-step {
+  display: flex;
+  align-items: center;
+  text-align: left;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: #f3f4f6;
+  border-radius: 8px;
+}
+
+#iosPwaModal .instruction-icon {
+  font-size: 1.5rem;
+  margin-right: 1rem;
+  color: #3b82f6;
+  width: 30px;
+  text-align: center;
+}
+
+/* 成就系統動畫效果 */
+@keyframes sparkle-float {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-50px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100px) scale(0);
+  }
+}
+
+@keyframes gold-sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes fire-rise {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-200px) scale(0.5);
+  }
+}
+
+@keyframes lightning-flash {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes rainbow-wave {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+@keyframes dove-fly-0 {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(300px, -200px) rotate(45deg);
+    opacity: 0;
+  }
+}
+
+@keyframes dove-fly-1 {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(-300px, -200px) rotate(-45deg);
+    opacity: 0;
+  }
+}
+
+@keyframes dove-fly-2 {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(200px, -300px) rotate(30deg);
+    opacity: 0;
+  }
+}
+
+@keyframes dove-fly-3 {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(-200px, -300px) rotate(-30deg);
+    opacity: 0;
+  }
+}
+
+/* 成就通知滑入動畫 */
+@keyframes slide-in-right {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.5s ease-out;
+}
+
+.animate-fade-out {
+  animation: fade-out 0.5s ease-out;
+}
+
+/* 成就稀有度光效 */
+.achievement-popup {
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.achievement-popup::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  border-radius: inherit;
+  z-index: -1;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* 彩蛋動畫 */
+.easter-egg {
+  animation: easter-bounce 1s ease-in-out infinite alternate;
+}
+
+@keyframes easter-bounce {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+}
+
+/* 心情圖表美化 */
+.chartjs-tooltip {
+  opacity: 1;
+  position: absolute;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  border-radius: 6px;
+  padding: 8px 12px;
+  pointer-events: none;
+  font-size: 12px;
+  z-index: 1000;
+}
+
+/* 改進的動畫效果 */
+@keyframes crownFloat {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes trophyGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.8);
+  }
+}
+
+@keyframes moonGlow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.8));
+  }
+}
+
+@keyframes beachWave {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* 響應式改進 */
+@media (max-width: 768px) {
+  .achievement-popup {
+    max-width: 90vw;
+    margin: 0 1rem;
+  }
+
+  .freedom-text .text-6xl {
+    font-size: 2rem;
+  }
+
+  .easter-egg {
+    max-width: 90vw;
+    margin: 0 1rem;
+  }
+}
+
+/* AI Export Modal 專用樣式 */
+#aiExportModal .modal-content {
+  animation: slideInUp 0.4s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 統計卡片動畫 */
+#aiExportModal .grid > div {
+  animation: fadeInScale 0.5s ease-out;
+  animation-fill-mode: both;
+}
+
+#aiExportModal .grid > div:nth-child(1) {
+  animation-delay: 0.1s;
+}
+#aiExportModal .grid > div:nth-child(2) {
+  animation-delay: 0.2s;
+}
+#aiExportModal .grid > div:nth-child(3) {
+  animation-delay: 0.3s;
+}
+#aiExportModal .grid > div:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 按鈕hover效果增強 */
+#aiExportModal button {
+  transition: all 0.2s ease;
+}
+
+#aiExportModal button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* AI Export Modal 響應式優化 */
+@media (max-width: 768px) {
+  #aiExportModal .modal-content {
+    margin: 0.5rem;
+    max-height: calc(100vh - 1rem);
+    max-width: calc(100vw - 1rem);
+    touch-action: pan-y pinch-zoom;
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+  }
+
+  #aiExportModal .grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  #aiExportModal .text-2xl {
+    font-size: 1.25rem;
+  }
+
+  #aiExportModal .p-6 {
+    padding: 1rem;
+  }
+
+  /* 確保模態窗內容區域可以滑動 */
+  #aiExportModal .space-y-6 {
+    touch-action: pan-y pinch-zoom;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* 文字區域樣式優化 */
+#ai-prompt-output {
+  background: linear-gradient(145deg, #f8fafc, #f1f5f9);
+  border: 2px solid #e2e8f0;
+  transition: border-color 0.2s ease;
+}
+
+#ai-prompt-output:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* 徽章動畫 */
+#promptCharCount {
+  animation: badgePulse 2s infinite;
+}
+
+@keyframes badgePulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* 漸層卡片美化 */
+#aiExportModal .bg-gradient-to-br {
+  position: relative;
+  overflow: hidden;
+}
+
+#aiExportModal .bg-gradient-to-br::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transform: rotate(45deg);
+  animation: cardShimmer 3s infinite;
+}
+
+@keyframes cardShimmer {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  50% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+}
+
+/* 確保AI模態窗正確顯示 */
+#aiExportModal.flex {
+  display: flex !important;
+}
+
+#aiExportModal.hidden {
+  display: none !important;
+}
+
+/* 修正近期記錄區塊的排版 */
+#recentRecords {
+  line-height: normal;
+}
+
+#recentRecords .flex {
+  margin-bottom: 0.75rem;
+}
+
+#recentRecords .flex:last-child {
+  margin-bottom: 0;
+}
+
+/* 確保模態窗背景覆蓋整個螢幕 */
+.modal-backdrop.flex {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 確保主要內容區域不被底部元素遮擋 */
+main.container {
+  padding-bottom: 120px; /* 為底部固定元素預留空間 */
+}
+
+/* 針對 iOS Safari 的滑動優化 */
+* {
+  -webkit-overflow-scrolling: touch;
+}
