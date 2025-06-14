@@ -1,9 +1,15 @@
 /*
  * 📦 模組：社畜解放卡 - 主要腳本
- * 🕒 最後更新：2025-01-14T19:45:00+08:00
+ * 🕒 最後更新：2025-06-15T02:50:46+08:00
  * 🧑‍💻 作者/更新者：@s123104
- * 🔢 版本：v1.6.0
- * 📝 摘要：修正儲存功能問題，加入防護機制和錯誤處理
+ * 🔢 版本：v2.3.0
+ * 📝 摘要：恢復爛日子為bad狀態，添加破爛心情統計顯示
+ *
+ * 🎯 影響範圍：心情系統、統計顯示、圖表配置
+ * ✅ 測試狀態：已完成功能測試
+ * 🔒 安全考量：移除數據遷移邏輯，保持原始數據格式
+ * 📊 效能影響：新增第5種心情狀態統計
+ * 🏛️ 架構決策：保持向後兼容，支援舊版bad數據
  */
 "use strict";
 
@@ -112,43 +118,8 @@ function checkForceUpdate() {
 
 // --- 數據遷移函數 ---
 function performDataMigration() {
-  console.log("執行數據遷移...");
-
-  try {
-    const savedData = localStorage.getItem(STORAGE_KEY);
-    if (savedData) {
-      const parsedData = JSON.parse(savedData);
-      let migrationCount = 0;
-
-      if (parsedData.dates && Array.isArray(parsedData.dates)) {
-        parsedData.dates.forEach(([index, data]) => {
-          // 數據遷移：將舊的心情格式轉換
-          if (
-            data.mood === "bad" ||
-            data.mood === "爛日子" ||
-            data.mood === "good"
-          ) {
-            const oldMood = data.mood;
-            if (data.mood === "good") {
-              data.mood = "burnout"; // 將綠色格子改為紅色身心俱疲
-            } else {
-              data.mood = "burnout"; // 將爛日子改為身心俱疲
-            }
-            migrationCount++;
-            console.log(`遷移數據: ${oldMood} → ${data.mood}`);
-          }
-        });
-
-        // 保存遷移後的數據
-        if (migrationCount > 0) {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(parsedData));
-          console.log(`完成 ${migrationCount} 筆數據遷移`);
-        }
-      }
-    }
-  } catch (error) {
-    console.error("數據遷移失敗:", error);
-  }
+  console.log("數據遷移已停用，保持原始數據格式");
+  // 移除所有遷移邏輯，保持數據原樣
 }
 
 // --- 顯示更新通知 ---
@@ -180,10 +151,7 @@ function loadExistingData() {
       const parsedData = JSON.parse(savedData);
       if (parsedData.dates && Array.isArray(parsedData.dates)) {
         parsedData.dates.forEach(([index, data]) => {
-          // 數據遷移：將舊的「爛日子」轉換為「身心俱疲」
-          if (data.mood === "bad" || data.mood === "爛日子") {
-            data.mood = "burnout";
-          }
+          // 直接載入數據，不進行任何遷移
           filledDates.set(index, data);
         });
       }
@@ -287,7 +255,7 @@ const ACHIEVEMENT_DEFINITIONS = {
   },
   rainbow_collector: {
     name: "彩虹收集者",
-    description: "一天內體驗所有4種心情",
+    description: "一天內體驗所有5種心情",
     icon: '<i class="ri-rainbow-line text-pink-500"></i>',
     category: "心情",
     condition: (data) => data.rainbowDay,
@@ -324,6 +292,7 @@ const moodIcons = {
   burnout: `<svg viewBox="0 0 24 24" class="w-8 h-8 mx-auto stroke-current text-red-600"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM9 15s1.5-2 3-2 3 2 3 2M9 9h.01M15 9h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg>`,
   annoying: `<svg viewBox="0 0 24 24" class="w-8 h-8 mx-auto stroke-current text-indigo-600"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM8 9l8 6M8 15L16 9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
   stuck: `<svg viewBox="0 0 24 24" class="w-8 h-8 mx-auto stroke-current text-gray-600"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM9 12h6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
+  bad: `<svg viewBox="0 0 24 24" class="w-8 h-8 mx-auto stroke-current text-green-600"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM8 14s2-3 4-3 4 3 4 3M9 9h.01M15 9h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg>`,
 };
 
 // --- 心情顏色配置 ---
@@ -332,6 +301,7 @@ const moodColors = {
   burnout: { bg: "rgba(239, 68, 68, 0.2)", border: "#ef4444" },
   annoying: { bg: "rgba(99, 102, 241, 0.2)", border: "#6366f1" },
   stuck: { bg: "rgba(107, 114, 128, 0.2)", border: "#6b7280" },
+  bad: { bg: "rgba(34, 197, 94, 0.2)", border: "#22c55e" },
 };
 
 // --- 擴充後的厭世指數關鍵字庫 ---
@@ -672,7 +642,7 @@ function checkRainbowDay(date) {
       moods.add(data.mood);
     }
   });
-  return moods.size >= 4;
+  return moods.size >= 5; // 需要包含所有5種心情：money, burnout, annoying, stuck, bad
 }
 
 function showAchievementNotification(achievements) {
@@ -1363,6 +1333,7 @@ function updateProgress() {
     burnout: 0,
     annoying: 0,
     stuck: 0,
+    bad: 0,
   };
 
   Array.from(filledDates.values()).forEach((d) => {
@@ -1379,12 +1350,13 @@ function updateProgress() {
     1
   )}%`;
 
-  // 更新四種心情的統計
+  // 更新五種心情的統計
   document.getElementById("moneyMoodCount").textContent = moodCounts.money;
   document.getElementById("burnoutMoodCount").textContent = moodCounts.burnout;
   document.getElementById("annoyingMoodCount").textContent =
     moodCounts.annoying;
   document.getElementById("stuckMoodCount").textContent = moodCounts.stuck;
+  document.getElementById("badMoodCount").textContent = moodCounts.bad;
 
   document.getElementById("progressCircle").style.strokeDasharray = `${
     percentage * 3.39292
@@ -1424,6 +1396,8 @@ function updateRecentRecords() {
         return '<svg viewBox="0 0 24 24" class="w-8 h-8 mx-auto stroke-current text-purple-600"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM10 8l4 4m0-4l-4 4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg>';
       case "stuck":
         return '<svg viewBox="0 0 24 24" class="w-8 h-8 mx-auto stroke-current text-gray-600"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM8 12h8M12 8v8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg>';
+      case "bad":
+        return '<svg viewBox="0 0 24 24" class="w-8 h-8 mx-auto stroke-current text-green-600"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM8 14s2-3 4-3 4 3 4 3M9 9h.01M15 9h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg>';
       case "good":
         return '<i class="fas fa-smile text-primary-500"></i>';
       default:
@@ -1605,6 +1579,13 @@ function initChart() {
           fill: true,
           tension: 0.4,
         },
+        {
+          label: "破爛心情",
+          borderColor: moodColors.bad.border,
+          backgroundColor: moodColors.bad.bg,
+          fill: true,
+          tension: 0.4,
+        },
       ],
     },
     options: {
@@ -1659,6 +1640,7 @@ function updateChart() {
   const burnoutData = [];
   const annoyingData = [];
   const stuckData = [];
+  const badData = [];
 
   for (let i = 13; i >= 0; i--) {
     const d = new Date();
@@ -1669,7 +1651,8 @@ function updateChart() {
     let money = 0,
       burnout = 0,
       annoying = 0,
-      stuck = 0;
+      stuck = 0,
+      bad = 0;
 
     filledDates.forEach((data) => {
       if (data.date === ds) {
@@ -1686,6 +1669,9 @@ function updateChart() {
           case "stuck":
             stuck++;
             break;
+          case "bad":
+            bad++;
+            break;
         }
       }
     });
@@ -1694,6 +1680,7 @@ function updateChart() {
     burnoutData.push(burnout);
     annoyingData.push(annoying);
     stuckData.push(stuck);
+    badData.push(bad);
   }
 
   dailyChart.data.labels = labels;
@@ -1701,6 +1688,7 @@ function updateChart() {
   dailyChart.data.datasets[1].data = burnoutData;
   dailyChart.data.datasets[2].data = annoyingData;
   dailyChart.data.datasets[3].data = stuckData;
+  dailyChart.data.datasets[4].data = badData;
   dailyChart.update();
 }
 
@@ -2050,6 +2038,7 @@ function getMoodDisplayName(mood) {
     burnout: "身心俱疲",
     annoying: "鳥事一堆",
     stuck: "缺乏成長",
+    bad: "破爛心情",
   };
   return moodNames[mood] || mood;
 }

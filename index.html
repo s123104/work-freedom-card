@@ -329,6 +329,14 @@
               </span>
               <span class="font-semibold text-gray-600" id="stuckMoodCount">0</span>
             </div>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-neutral-600">
+                <svg viewBox="0 0 24 24" class="w-4 h-4 inline mr-2 stroke-current text-green-600">
+                  <path d="M12 2a10 10 0 100 20 10 10 0 000-20zM8 14s2-3 4-3 4 3 4 3M9 9h.01M15 9h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+                </svg>破爛心情
+              </span>
+              <span class="font-semibold text-green-600" id="badMoodCount">0</span>
+            </div>
             <div class="flex justify-between items-center pt-2 border-t border-gray-200">
               <span class="text-sm text-neutral-600"
                 ><i class="fas fa-percentage mr-2 text-accent-500"></i
@@ -722,6 +730,10 @@
               <button class="mood-btn" data-mood="stuck">
                 <div id="moodIconStuck"></div>
                 <span class="text-xs mt-1">缺乏成長</span>
+              </button>
+              <button class="mood-btn" data-mood="bad">
+                <div id="moodIconBad"></div>
+                <span class="text-xs mt-1">破爛心情</span>
               </button>
             </div>
           </div>
