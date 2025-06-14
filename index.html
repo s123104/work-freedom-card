@@ -18,7 +18,7 @@
     <title>社畜解放卡 - 職場壓力管理工具 | 離職集點卡 | 厭世指數分析</title>
     <meta
       name="description"
-      content="社畜解放卡是免費開源的職場壓力管理工具！記錄每日職場心情與鳥事，集滿100點離職點數邁向自由。提供厭世指數分析、AI洞察建議、成就系統，支援PWA離線使用。幫助上班族管理工作壓力，追蹤職涯發展。"
+      content="社畜解放卡是免費開源的職場壓力管理工具！支援六大心情分類記錄每日職場心情與鳥事，集滿100點離職點數邁向自由。提供厭世指數分析、AI洞察建議、成就系統，支援PWA離線使用。幫助上班族管理工作壓力，追蹤職涯發展。"
     />
     <meta
       name="keywords"
@@ -30,7 +30,7 @@
     <meta property="og:title" content="社畜解放卡 - 職場壓力管理工具 | 離職集點卡" />
     <meta
       property="og:description"
-      content="免費開源的職場壓力管理工具！記錄每日職場心情與鳥事，集滿100點離職點數邁向自由。提供厭世指數分析、AI洞察建議、成就系統，支援PWA離線使用。"
+      content="免費開源的職場壓力管理工具！支援六大心情分類記錄每日職場心情與鳥事，集滿100點離職點數邁向自由。提供厭世指數分析、AI洞察建議、成就系統，支援PWA離線使用。"
     />
     <meta property="og:type" content="website" />
     <meta
@@ -52,7 +52,7 @@
     <meta name="twitter:title" content="社畜解放卡 - 職場壓力管理工具 | 離職集點卡" />
     <meta
       name="twitter:description"
-      content="免費開源的職場壓力管理工具！記錄每日職場心情與鳥事，集滿100點離職點數邁向自由。提供厭世指數分析、AI洞察建議、成就系統，支援PWA離線使用。"
+      content="免費開源的職場壓力管理工具！支援六大心情分類記錄每日職場心情與鳥事，集滿100點離職點數邁向自由。提供厭世指數分析、AI洞察建議、成就系統，支援PWA離線使用。"
     />
     <meta
       name="twitter:image"
@@ -82,7 +82,7 @@
         "@type": "WebApplication",
         "name": "社畜解放卡",
         "alternateName": ["離職集點卡", "職場壓力管理工具", "Work Freedom Card"],
-        "description": "免費開源的職場壓力管理工具！記錄每日職場心情與鳥事，集滿100點離職點數邁向自由。提供厭世指數分析、AI洞察建議、成就系統，支援PWA離線使用。幫助上班族管理工作壓力，追蹤職涯發展。",
+        "description": "免費開源的職場壓力管理工具！支援六大心情分類記錄每日職場心情與鳥事，集滿100點離職點數邁向自由。提供厭世指數分析、AI洞察建議、成就系統，支援PWA離線使用。幫助上班族管理工作壓力，追蹤職涯發展。",
         "applicationCategory": ["ProductivityApplication", "HealthApplication", "UtilitiesApplication"],
         "operatingSystem": ["Web", "iOS", "Android", "Windows", "macOS", "Linux"],
         "url": "https://s123104.github.io/work-freedom-card/",
@@ -112,7 +112,7 @@
           "availability": "https://schema.org/InStock"
         },
         "license": "https://opensource.org/licenses/MIT",
-        "softwareVersion": "1.7.0",
+        "softwareVersion": "2.4.0",
         "datePublished": "2025-01-01",
         "dateModified": "2025-06-14T20:40:26+08:00",
         "keywords": "社畜解放卡, 離職集點卡, 職場壓力管理, 工作心情記錄, 厭世指數, 上班族工具, 職場生存, 離職計畫, PWA應用, 免費工具, 開源專案",
@@ -124,7 +124,7 @@
         "storageRequirements": "5MB",
         "featureList": [
           "離職集點系統",
-          "心情記錄分類", 
+          "六大心情分類記錄", 
           "厭世指數分析",
           "成就系統",
           "AI分析匯出",
@@ -336,6 +336,14 @@
                 </svg>破爛心情
               </span>
               <span class="font-semibold text-green-600" id="badMoodCount">0</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-neutral-600">
+                <svg viewBox="0 0 24 24" class="w-4 h-4 inline mr-2 stroke-current text-orange-600">
+                  <path d="M12 2a10 10 0 100 20 10 10 0 000-20zM8 8h8M8 12h8M8 16h8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M16 8l2-2M16 16l2 2M8 8l-2-2M8 16l-2 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>職場霸凌
+              </span>
+              <span class="font-semibold text-orange-600" id="bullyingMoodCount">0</span>
             </div>
             <div class="flex justify-between items-center pt-2 border-t border-gray-200">
               <span class="text-sm text-neutral-600"
@@ -617,12 +625,12 @@
               <h3 class="text-2xl font-semibold mb-2 flex items-center gap-2">
                 <i class="fas fa-magic text-lg"></i>
                 生成 AI 分析提示詞
-              </h3>
+        </h3>
               <p class="text-sm text-gray-600 mb-4">將您的職場心情數據轉換為專業的 AI 分析提示詞</p>
               <button onclick="generateAIPrompt()" class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center gap-2">
                 <i class="fas fa-magic-wand-sparkles"></i>
                 生成 AI 分析提示詞
-              </button>
+        </button>
             </div>
           </div>
 
@@ -712,9 +720,9 @@
           </div>
           <div>
             <label class="block text-sm font-medium text-neutral-700 mb-2"
-              >心情 (離職四大原因)</label
+              >心情 (離職六大原因)</label
             >
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
               <button class="mood-btn" data-mood="money">
                 <div id="moodIconMoney"></div>
                 <span class="text-xs mt-1">錢途茫茫</span>
@@ -734,6 +742,10 @@
               <button class="mood-btn" data-mood="bad">
                 <div id="moodIconBad"></div>
                 <span class="text-xs mt-1">破爛心情</span>
+              </button>
+              <button class="mood-btn" data-mood="bullying">
+                <div id="moodIconBullying"></div>
+                <span class="text-xs mt-1">職場霸凌</span>
               </button>
             </div>
           </div>
@@ -856,7 +868,7 @@
             <div class="flex items-center text-blue-700">
               <i class="fas fa-wifi-slash mr-2 text-blue-500"></i>
               <span>離線也能使用</span>
-            </div>
+          </div>
             <div class="flex items-center text-blue-700">
               <i class="fas fa-expand mr-2 text-blue-500"></i>
               <span>全螢幕沉浸體驗</span>
@@ -864,9 +876,9 @@
             <div class="flex items-center text-blue-700">
               <i class="fas fa-home mr-2 text-blue-500"></i>
               <span>主畫面快速啟動</span>
+          </div>
             </div>
           </div>
-        </div>
 
         <!-- 安裝指引 -->
         <div class="space-y-4">
@@ -882,7 +894,7 @@
                 <div class="flex-1">
                   <span>點擊底部的分享按鈕</span>
                   <i class="fas fa-share ml-2 text-blue-500"></i>
-                </div>
+        </div>
               </div>
               <div class="flex items-start gap-3">
                 <span class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">2</span>
@@ -982,13 +994,13 @@
             <label for="iosPwaDontShow" class="text-sm text-gray-600">
               下次不再顯示此提示
             </label>
-          </div>
-          <button
+        </div>
+        <button
             class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-105"
-            onclick="handleIosPwaClose()"
-          >
+          onclick="handleIosPwaClose()"
+        >
             <i class="fas fa-check mr-2"></i>我知道了
-          </button>
+        </button>
         </div>
       </div>
     </div>

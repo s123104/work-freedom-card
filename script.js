@@ -82,7 +82,7 @@ function initializeApplication() {
 
 // --- 強制更新檢查機制 ---
 function checkForceUpdate() {
-  const currentVersion = "v10";
+  const currentVersion = "v11";
   const lastVersion = localStorage.getItem("app_version");
 
   if (lastVersion !== currentVersion) {
@@ -255,7 +255,7 @@ const ACHIEVEMENT_DEFINITIONS = {
   },
   rainbow_collector: {
     name: "彩虹收集者",
-    description: "一天內體驗所有5種心情",
+    description: "一天內體驗所有6種心情",
     icon: '<i class="ri-rainbow-line text-pink-500"></i>',
     category: "心情",
     condition: (data) => data.rainbowDay,
@@ -293,6 +293,7 @@ const moodIcons = {
   annoying: `<svg viewBox="0 0 24 24" class="w-8 h-8 mx-auto stroke-current text-indigo-600"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM8 9l8 6M8 15L16 9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
   stuck: `<svg viewBox="0 0 24 24" class="w-8 h-8 mx-auto stroke-current text-gray-600"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM9 12h6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
   bad: `<svg viewBox="0 0 24 24" class="w-8 h-8 mx-auto stroke-current text-green-600"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM8 14s2-3 4-3 4 3 4 3M9 9h.01M15 9h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg>`,
+  bullying: `<svg viewBox="0 0 24 24" class="w-8 h-8 mx-auto stroke-current text-orange-600"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM8 8h8M8 12h8M8 16h8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M16 8l2-2M16 16l2 2M8 8l-2-2M8 16l-2 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
 };
 
 // --- 心情顏色配置 ---
@@ -302,6 +303,7 @@ const moodColors = {
   annoying: { bg: "rgba(99, 102, 241, 0.2)", border: "#6366f1" },
   stuck: { bg: "rgba(107, 114, 128, 0.2)", border: "#6b7280" },
   bad: { bg: "rgba(34, 197, 94, 0.2)", border: "#22c55e" },
+  bullying: { bg: "rgba(234, 88, 12, 0.2)", border: "#ea580c" },
 };
 
 // --- 擴充後的厭世指數關鍵字庫 ---
@@ -642,7 +644,7 @@ function checkRainbowDay(date) {
       moods.add(data.mood);
     }
   });
-  return moods.size >= 5; // 需要包含所有5種心情：money, burnout, annoying, stuck, bad
+  return moods.size >= 6; // 需要包含所有6種心情：money, burnout, annoying, stuck, bad, bullying
 }
 
 function showAchievementNotification(achievements) {
@@ -1334,6 +1336,7 @@ function updateProgress() {
     annoying: 0,
     stuck: 0,
     bad: 0,
+    bullying: 0,
   };
 
   Array.from(filledDates.values()).forEach((d) => {
@@ -1350,13 +1353,15 @@ function updateProgress() {
     1
   )}%`;
 
-  // 更新五種心情的統計
+  // 更新六種心情的統計
   document.getElementById("moneyMoodCount").textContent = moodCounts.money;
   document.getElementById("burnoutMoodCount").textContent = moodCounts.burnout;
   document.getElementById("annoyingMoodCount").textContent =
     moodCounts.annoying;
   document.getElementById("stuckMoodCount").textContent = moodCounts.stuck;
   document.getElementById("badMoodCount").textContent = moodCounts.bad;
+  document.getElementById("bullyingMoodCount").textContent =
+    moodCounts.bullying;
 
   document.getElementById("progressCircle").style.strokeDasharray = `${
     percentage * 3.39292
@@ -1398,6 +1403,8 @@ function updateRecentRecords() {
         return '<svg viewBox="0 0 24 24" class="w-8 h-8 mx-auto stroke-current text-gray-600"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM8 12h8M12 8v8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg>';
       case "bad":
         return '<svg viewBox="0 0 24 24" class="w-8 h-8 mx-auto stroke-current text-green-600"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM8 14s2-3 4-3 4 3 4 3M9 9h.01M15 9h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg>';
+      case "bullying":
+        return '<svg viewBox="0 0 24 24" class="w-8 h-8 mx-auto stroke-current text-orange-600"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM8 8h8M8 12h8M8 16h8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M16 8l2-2M16 16l2 2M8 8l-2-2M8 16l-2 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>';
       case "good":
         return '<i class="fas fa-smile text-primary-500"></i>';
       default:
@@ -1586,6 +1593,13 @@ function initChart() {
           fill: true,
           tension: 0.4,
         },
+        {
+          label: "職場霸凌",
+          borderColor: moodColors.bullying.border,
+          backgroundColor: moodColors.bullying.bg,
+          fill: true,
+          tension: 0.4,
+        },
       ],
     },
     options: {
@@ -1641,6 +1655,7 @@ function updateChart() {
   const annoyingData = [];
   const stuckData = [];
   const badData = [];
+  const bullyingData = [];
 
   for (let i = 13; i >= 0; i--) {
     const d = new Date();
@@ -1652,7 +1667,8 @@ function updateChart() {
       burnout = 0,
       annoying = 0,
       stuck = 0,
-      bad = 0;
+      bad = 0,
+      bullying = 0;
 
     filledDates.forEach((data) => {
       if (data.date === ds) {
@@ -1672,6 +1688,9 @@ function updateChart() {
           case "bad":
             bad++;
             break;
+          case "bullying":
+            bullying++;
+            break;
         }
       }
     });
@@ -1681,6 +1700,7 @@ function updateChart() {
     annoyingData.push(annoying);
     stuckData.push(stuck);
     badData.push(bad);
+    bullyingData.push(bullying);
   }
 
   dailyChart.data.labels = labels;
@@ -1689,6 +1709,7 @@ function updateChart() {
   dailyChart.data.datasets[2].data = annoyingData;
   dailyChart.data.datasets[3].data = stuckData;
   dailyChart.data.datasets[4].data = badData;
+  dailyChart.data.datasets[5].data = bullyingData;
   dailyChart.update();
 }
 
@@ -2039,6 +2060,7 @@ function getMoodDisplayName(mood) {
     annoying: "鳥事一堆",
     stuck: "缺乏成長",
     bad: "破爛心情",
+    bullying: "職場霸凌",
   };
   return moodNames[mood] || mood;
 }
