@@ -772,6 +772,46 @@ textarea {
   }
 }
 
+@keyframes dove-fly-4 {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(-250px, -150px) rotate(-20deg);
+    opacity: 0;
+  }
+}
+
+@keyframes dove-fly-5 {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(300px, 100px) rotate(25deg);
+    opacity: 0;
+  }
+}
+
+@keyframes dove-fly-6 {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(-200px, 150px) rotate(-30deg);
+    opacity: 0;
+  }
+}
+
+@keyframes dove-fly-7 {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(150px, -200px) rotate(10deg);
+    opacity: 0;
+  }
+}
+
 /* 成就通知滑入動畫 */
 @keyframes slide-in-right {
   0% {

@@ -79,6 +79,10 @@ function loadExistingData() {
       const parsedData = JSON.parse(savedData);
       if (parsedData.dates && Array.isArray(parsedData.dates)) {
         parsedData.dates.forEach(([index, data]) => {
+          // 數據遷移：將舊的「爛日子」轉換為「身心俱疲」
+          if (data.mood === "bad" || data.mood === "爛日子") {
+            data.mood = "burnout";
+          }
           filledDates.set(index, data);
         });
       }
@@ -128,7 +132,7 @@ const ACHIEVEMENT_DEFINITIONS = {
   },
   money_lover: {
     name: "賺錢狂魔",
-    description: "連續5天選擇金錢心情",
+    description: "累積5天選擇金錢心情",
     icon: '<i class="fas fa-coins text-yellow-500"></i>',
     category: "心情",
     condition: (data) => data.consecutiveMoney >= 5,
@@ -164,7 +168,7 @@ const ACHIEVEMENT_DEFINITIONS = {
   },
   weekend_warrior: {
     name: "週末戰士",
-    description: "連續4個週末都有填寫",
+    description: "累積4個週末都有填寫",
     icon: '<i class="fas fa-umbrella-beach text-cyan-500"></i>',
     category: "堅持",
     condition: (data) => data.weekendStreak >= 4,
@@ -191,7 +195,7 @@ const ACHIEVEMENT_DEFINITIONS = {
   },
   persistence_master: {
     name: "堅持大師",
-    description: "連續30天填寫",
+    description: "累積30天填寫",
     icon: '<i class="fas fa-trophy text-yellow-600"></i>',
     category: "堅持",
     condition: (data) => data.consecutiveDays >= 30,
@@ -2064,22 +2068,24 @@ function createRainbowEffect() {
 }
 
 function createFreedomBurst() {
-  // 創建白鴿效果
-  for (let i = 0; i < 8; i++) {
+  // 創建白鴿飛翔效果 - 增加數量和持續時間
+  for (let i = 0; i < 15; i++) {
     setTimeout(() => {
       const dove = document.createElement("div");
       dove.className = "dove-particle fixed pointer-events-none z-50";
-      dove.innerHTML = '<i class="fas fa-dove text-white text-2xl"></i>';
+      dove.innerHTML = '<i class="fas fa-dove text-white text-3xl"></i>';
       dove.style.cssText = `
-        left: 50%;
-        top: 50%;
+        left: ${20 + Math.random() * 60}%;
+        top: ${20 + Math.random() * 60}%;
         transform: translate(-50%, -50%);
-        animation: dove-fly-${i % 4} 4s ease-out forwards;
-        filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
+        animation: dove-fly-${i % 8} ${
+        4 + Math.random() * 3
+      }s ease-out forwards;
+        filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.9));
       `;
       document.body.appendChild(dove);
-      setTimeout(() => dove.remove(), 4000);
-    }, i * 200);
+      setTimeout(() => dove.remove(), 8000);
+    }, i * 300);
   }
 
   // 創建自由文字效果
@@ -2088,11 +2094,129 @@ function createFreedomBurst() {
     "freedom-text fixed inset-0 flex items-center justify-center pointer-events-none z-50";
   freedomText.innerHTML = `
     <div class="text-4xl sm:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 animate-pulse text-center px-4">
-      <i class="fas fa-party-horn mr-2"></i>自由啦！<i class="fas fa-party-horn ml-2"></i>
+      <i class="fas fa-party-horn mr-2"></i>恭喜自由啦！<i class="fas fa-party-horn ml-2"></i>
     </div>
   `;
   document.body.appendChild(freedomText);
-  setTimeout(() => freedomText.remove(), 3000);
+  setTimeout(() => freedomText.remove(), 5000);
+
+  // 創建20秒大型煙火慶祝效果
+  createMegaFireworks();
+}
+
+function createMegaFireworks() {
+  const colors = [
+    "#ff6b6b",
+    "#4ecdc4",
+    "#45b7d1",
+    "#96ceb4",
+    "#feca57",
+    "#ff9ff3",
+    "#54a0ff",
+    "#5f27cd",
+    "#00d2d3",
+    "#ff9f43",
+    "#10ac84",
+    "#ee5a24",
+    "#0abde3",
+    "#feca57",
+    "#ff6348",
+  ];
+
+  let fireworkCount = 0;
+  const maxFireworks = 100; // 20秒內發射100發煙火
+
+  const fireworkInterval = setInterval(() => {
+    if (fireworkCount >= maxFireworks) {
+      clearInterval(fireworkInterval);
+      return;
+    }
+
+    // 隨機位置發射煙火
+    const x = Math.random() * window.innerWidth;
+    const y =
+      Math.random() * (window.innerHeight * 0.7) + window.innerHeight * 0.1;
+
+    createMegaFireworkBurst(
+      x,
+      y,
+      colors[Math.floor(Math.random() * colors.length)]
+    );
+    fireworkCount++;
+  }, 200); // 每200ms發射一發
+
+  // 20秒後停止
+  setTimeout(() => {
+    clearInterval(fireworkInterval);
+  }, 20000);
+}
+
+function createMegaFireworkBurst(x, y, color) {
+  const particleCount = 25 + Math.random() * 15; // 25-40個粒子
+
+  for (let i = 0; i < particleCount; i++) {
+    const particle = document.createElement("div");
+    particle.className =
+      "mega-firework-particle fixed pointer-events-none z-40";
+    particle.style.cssText = `
+      left: ${x}px;
+      top: ${y}px;
+      width: 6px;
+      height: 6px;
+      background: ${color};
+      border-radius: 50%;
+      box-shadow: 0 0 10px ${color}, 0 0 20px ${color}, 0 0 30px ${color};
+    `;
+
+    const angle = (Math.PI * 2 * i) / particleCount;
+    const velocity = 100 + Math.random() * 100;
+    const vx = Math.cos(angle) * velocity;
+    const vy = Math.sin(angle) * velocity;
+
+    particle.animate(
+      [
+        {
+          transform: "translate(0, 0) scale(1)",
+          opacity: 1,
+        },
+        {
+          transform: `translate(${vx}px, ${vy + 200}px) scale(0)`,
+          opacity: 0,
+        },
+      ],
+      {
+        duration: 1500 + Math.random() * 1000,
+        easing: "cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+      }
+    ).onfinish = () => particle.remove();
+
+    document.body.appendChild(particle);
+  }
+
+  // 添加爆炸音效視覺反饋
+  const flash = document.createElement("div");
+  flash.className = "firework-flash fixed pointer-events-none z-39";
+  flash.style.cssText = `
+    left: ${x - 50}px;
+    top: ${y - 50}px;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, ${color}88 0%, transparent 70%);
+    border-radius: 50%;
+  `;
+
+  flash.animate(
+    [
+      { transform: "scale(0)", opacity: 1 },
+      { transform: "scale(3)", opacity: 0 },
+    ],
+    {
+      duration: 300,
+      easing: "ease-out",
+    }
+  ).onfinish = () => flash.remove();
+
+  document.body.appendChild(flash);
 }
 
 // --- 彩蛋功能 ---
