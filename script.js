@@ -37,6 +37,9 @@ function initializeApplication() {
   try {
     console.log("開始初始化應用程式...");
 
+    // 檢查並執行強制更新
+    checkForceUpdate();
+
     // 確保全域變數正確初始化
     if (typeof window.filledDates === "undefined") {
       window.filledDates = new Map();
@@ -69,6 +72,104 @@ function initializeApplication() {
   } catch (error) {
     console.error("應用程式初始化失敗:", error);
   }
+}
+
+// --- 強制更新檢查機制 ---
+function checkForceUpdate() {
+  const currentVersion = "v10";
+  const lastVersion = localStorage.getItem("app_version");
+
+  if (lastVersion !== currentVersion) {
+    console.log(`檢測到版本更新: ${lastVersion} → ${currentVersion}`);
+
+    // 清除所有快取
+    if ("caches" in window) {
+      caches.keys().then((cacheNames) => {
+        cacheNames.forEach((cacheName) => {
+          if (cacheName.includes("work-freedom-card")) {
+            console.log("清除快取:", cacheName);
+            caches.delete(cacheName);
+          }
+        });
+      });
+    }
+
+    // 執行數據遷移
+    performDataMigration();
+
+    // 更新版本記錄
+    localStorage.setItem("app_version", currentVersion);
+
+    // 顯示更新通知並強制重新載入頁面（僅在非首次載入時）
+    if (lastVersion && lastVersion !== currentVersion) {
+      showUpdateNotification();
+      setTimeout(() => {
+        window.location.reload(true);
+      }, 2000);
+    }
+  }
+}
+
+// --- 數據遷移函數 ---
+function performDataMigration() {
+  console.log("執行數據遷移...");
+
+  try {
+    const savedData = localStorage.getItem(STORAGE_KEY);
+    if (savedData) {
+      const parsedData = JSON.parse(savedData);
+      let migrationCount = 0;
+
+      if (parsedData.dates && Array.isArray(parsedData.dates)) {
+        parsedData.dates.forEach(([index, data]) => {
+          // 數據遷移：將舊的心情格式轉換
+          if (
+            data.mood === "bad" ||
+            data.mood === "爛日子" ||
+            data.mood === "good"
+          ) {
+            const oldMood = data.mood;
+            if (data.mood === "good") {
+              data.mood = "burnout"; // 將綠色格子改為紅色身心俱疲
+            } else {
+              data.mood = "burnout"; // 將爛日子改為身心俱疲
+            }
+            migrationCount++;
+            console.log(`遷移數據: ${oldMood} → ${data.mood}`);
+          }
+        });
+
+        // 保存遷移後的數據
+        if (migrationCount > 0) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(parsedData));
+          console.log(`完成 ${migrationCount} 筆數據遷移`);
+        }
+      }
+    }
+  } catch (error) {
+    console.error("數據遷移失敗:", error);
+  }
+}
+
+// --- 顯示更新通知 ---
+function showUpdateNotification() {
+  // 創建通知元素
+  const notification = document.createElement("div");
+  notification.innerHTML = `
+    <div class="fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 animate-bounce">
+      <i class="fas fa-sync-alt animate-spin"></i>
+      <span class="font-medium">檢測到新版本，正在更新快取...</span>
+    </div>
+  `;
+
+  document.body.appendChild(notification);
+
+  // 2秒後移除通知
+  setTimeout(() => {
+    if (notification.parentNode) {
+      notification.parentNode.removeChild(notification);
+    }
+  }, 1800);
 }
 
 // --- 安全的資料載入程序 ---
@@ -1461,6 +1562,13 @@ function initChart() {
     console.warn("Chart.js unavailable");
     return;
   }
+
+  // 如果圖表已存在，先銷毀它
+  if (dailyChart) {
+    dailyChart.destroy();
+    dailyChart = null;
+  }
+
   dailyChart = new Chart(ctx, {
     type: "line",
     data: {
@@ -1616,6 +1724,8 @@ function openModal(modalId) {
       modal.classList.add("flex");
     } else {
       modal.classList.add("show");
+      // 移除 aria-hidden 以符合無障礙標準
+      modal.removeAttribute("aria-hidden");
     }
   }
 }
@@ -1629,6 +1739,8 @@ function closeModal(modalId) {
       modal.classList.add("hidden");
     } else {
       modal.classList.remove("show");
+      // 重新設置 aria-hidden 以符合無障礙標準
+      modal.setAttribute("aria-hidden", "true");
     }
   }
 }

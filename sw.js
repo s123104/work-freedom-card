@@ -6,7 +6,7 @@
  * 📝 摘要：社畜解放卡 PWA Service Worker
  */
 
-const CACHE_NAME = "work-freedom-card-v9";
+const CACHE_NAME = "work-freedom-card-v10";
 const urlsToCache = [
   "./",
   "./index.html",
@@ -26,6 +26,9 @@ const urlsToCache = [
 
 // 安裝事件
 self.addEventListener("install", (event) => {
+  // 強制跳過等待，立即激活新的 Service Worker
+  self.skipWaiting();
+
   event.waitUntil(
     caches
       .open(CACHE_NAME)
@@ -42,16 +45,22 @@ self.addEventListener("install", (event) => {
 // 激活事件
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            console.log("Service Worker: 清除舊緩存", cacheName);
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
+    caches
+      .keys()
+      .then((cacheNames) => {
+        return Promise.all(
+          cacheNames.map((cacheName) => {
+            if (cacheName !== CACHE_NAME) {
+              console.log("Service Worker: 清除舊緩存", cacheName);
+              return caches.delete(cacheName);
+            }
+          })
+        );
+      })
+      .then(() => {
+        // 強制接管所有客戶端
+        return self.clients.claim();
+      })
   );
 });
 
