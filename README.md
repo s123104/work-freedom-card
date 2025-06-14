@@ -3,19 +3,19 @@
 - 📦 模組：社畜解放卡 - 離職集點進度追蹤器
 - 🕒 最後更新：2025-06-15T03:04:02+08:00
 - 🧑‍💻 作者/更新者：@s123104
-- 🔢 版本：v2.4.0
-- 📝 摘要：新增第 6 個心情分類「職場霸凌」，調整佈局為電腦 3 列手機 2 列
+- 🔢 版本：v2.4.1
+- 📝 摘要：完全開放 SEO 優化，添加 Google Search Console 驗證，最大化搜尋引擎可見性
 -
-- 🎯 影響範圍：心情系統、UI 佈局、統計顯示、圖表配置、成就系統
-- ✅ 測試狀態：已完成功能測試
-- 🔒 安全考量：向後兼容，新增心情類型不影響現有數據
-- 📊 效能影響：新增第 6 種心情狀態統計和圖表數據
-- 🏛️ 架構決策：擴展心情分類系統，優化響應式佈局
+- 🎯 影響範圍：SEO 優化、搜尋引擎索引、爬蟲政策、網站可見性
+- ✅ 測試狀態：已完成 SEO 測試和驗證
+- 🔒 安全考量：完全開放爬蟲訪問，提升網站曝光度
+- 📊 效能影響：優化搜尋引擎索引效率，提升發現性
+- 🏛️ 架構決策：採用完全開放的 SEO 策略，歡迎所有合法爬蟲
   \*/
 
 # 🎯 社畜解放卡 - 離職集點進度追蹤器
 
-[![Version](https://img.shields.io/badge/version-v2.4.0-blue.svg)](https://github.com/s123104/work-freedom-card)
+[![Version](https://img.shields.io/badge/version-v2.4.1-blue.svg)](https://github.com/s123104/work-freedom-card)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/s123104/work-freedom-card/blob/main/LICENSE)
 [![PWA](https://img.shields.io/badge/PWA-enabled-brightgreen.svg)](https://s123104.github.io/work-freedom-card/)
 

@@ -12,6 +12,59 @@
 
 ---
 
+## [v2.4.1] - 2025-06-15
+
+### 🔍 SEO 深度優化
+
+#### 🌐 搜尋引擎完全開放策略
+
+- **Google Search Console 驗證**：添加 HTML meta 標籤和驗證文件
+- **完全開放 robots.txt**：移除所有限制，歡迎所有合法爬蟲
+- **爬蟲延遲優化**：主要搜尋引擎設定 1 秒延遲，SEO 工具 5 秒延遲
+- **檔案類型開放**：允許索引所有 JS、CSS、圖片、文檔檔案
+
+#### 📊 Meta 標籤最佳化
+
+- **Google Analytics 4**：添加 gtag.js 追蹤代碼準備
+- **機器人指令**：設定 max-image-preview:large, max-snippet:-1
+- **地理標籤**：添加 geo.region=TW, geo.country=Taiwan
+- **語言標籤**：明確標示 language=zh-TW
+- **關鍵字擴展**：新增「職場霸凌、六大心情分類」關鍵字
+
+#### 🗺️ Sitemap 全面更新
+
+- **頁面覆蓋率提升**：新增測試頁面、樣式檔案、腳本檔案
+- **更新頻率優化**：主頁改為每日更新，文檔改為每日更新
+- **優先級調整**：CHANGELOG.md 提升至 0.8 優先級
+- **時間戳更新**：所有頁面更新至最新修改時間
+
+### 🤖 AI 爬蟲友善化
+
+#### 🔓 完全開放政策
+
+- **AI 訓練數據貢獻**：歡迎 GPTBot、ClaudeBot、PerplexityBot
+- **學術研究支援**：開放 archive.org、Wayback Machine
+- **社交媒體優化**：支援 Facebook、Twitter、LinkedIn 爬蟲
+- **SEO 工具整合**：開放 SemrushBot、AhrefsBot、MJ12bot
+
+#### 📈 搜尋引擎優化
+
+- **多引擎支援**：Google、Bing、Yahoo、DuckDuckGo、百度、Yandex
+- **索引效率提升**：減少爬蟲延遲，提高索引速度
+- **內容發現性**：最大化網站在搜尋結果中的可見性
+- **國際化準備**：支援多國搜尋引擎爬蟲
+
+### 🔧 技術改進
+
+#### 💻 版本管理
+
+- **版本號升級**：v2.4.1，內部版本 v12
+- **文檔同步更新**：README.md、CHANGELOG.md、manifest.json
+- **時間戳統一**：所有檔案使用統一的更新時間
+- **SEO 狀態追蹤**：建立完整的 SEO 優化記錄
+
+---
+
 ## [v2.4.0] - 2025-06-15
 
 ### ✨ 新增功能

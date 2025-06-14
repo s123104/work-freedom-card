@@ -1,65 +1,142 @@
 # robots.txt for 社畜解放卡 (Work Freedom Card)
-# 網站：https://github.com/s123104/work-freedom-card
+# 網站：https://s123104.github.io/work-freedom-card/
 # 作者：s123104
-# 更新：2025-06-14
+# 更新：2025-06-15
+# 版本：v2.4.1 - 完全開放SEO優化版
 
-# 允許所有搜尋引擎爬蟲訪問
+# 允許所有搜尋引擎爬蟲完全訪問
 User-agent: *
 Allow: /
 
-# 禁止訪問不必要的檔案
-Disallow: /*.js$
-Disallow: /*.css$
-Disallow: /tailwind.config.js
-Disallow: /.git/
-Disallow: /.gitignore
-
-# 允許重要的資源檔案
-Allow: /icon*.png
-Allow: /og-image.png
-Allow: /manifest.json
-Allow: /sw.js
+# 完全開放所有檔案類型供爬蟲索引
+Allow: /*.js$
+Allow: /*.css$
+Allow: /*.html$
+Allow: /*.json$
+Allow: /*.png$
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.gif$
+Allow: /*.svg$
+Allow: /*.webp$
+Allow: /*.ico$
+Allow: /*.txt$
+Allow: /*.xml$
+Allow: /*.md$
 
 # 網站地圖位置
 Sitemap: https://s123104.github.io/work-freedom-card/sitemap.xml
 
-# 針對特定搜尋引擎的設定
+# 針對主要搜尋引擎的明確允許設定
 User-agent: Googlebot
 Allow: /
+Crawl-delay: 1
 
 User-agent: Bingbot
 Allow: /
+Crawl-delay: 1
 
-# AI 爬蟲設定 - 允許但限制頻率
+User-agent: Slurp
+Allow: /
+Crawl-delay: 1
+
+User-agent: DuckDuckBot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Baiduspider
+Allow: /
+Crawl-delay: 2
+
+User-agent: YandexBot
+Allow: /
+Crawl-delay: 2
+
+# AI 爬蟲完全開放設定
 User-agent: GPTBot
 Allow: /
-Crawl-delay: 10
+Crawl-delay: 1
 
 User-agent: Claude-Web
 Allow: /
-Crawl-delay: 10
+Crawl-delay: 1
 
 User-agent: ClaudeBot
 Allow: /
-Crawl-delay: 10
+Crawl-delay: 1
 
 User-agent: Google-Extended
 Allow: /
-Crawl-delay: 5
+Crawl-delay: 1
 
 User-agent: PerplexityBot
 Allow: /
-Crawl-delay: 10
+Crawl-delay: 1
 
-# 阻止惡意爬蟲
+User-agent: ChatGPT-User
+Allow: /
+Crawl-delay: 1
+
+User-agent: CCBot
+Allow: /
+Crawl-delay: 1
+
+User-agent: anthropic-ai
+Allow: /
+Crawl-delay: 1
+
+User-agent: Claude-Web
+Allow: /
+Crawl-delay: 1
+
+# SEO 工具爬蟲開放
 User-agent: SemrushBot
-Disallow: /
+Allow: /
+Crawl-delay: 5
 
 User-agent: AhrefsBot
-Disallow: /
+Allow: /
+Crawl-delay: 5
 
 User-agent: MJ12bot
-Disallow: /
+Allow: /
+Crawl-delay: 5
 
 User-agent: DotBot
-Disallow: / 
+Allow: /
+Crawl-delay: 5
+
+User-agent: SiteAuditBot
+Allow: /
+Crawl-delay: 5
+
+# 社交媒體爬蟲
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+User-agent: TelegramBot
+Allow: /
+
+# 學術和研究爬蟲
+User-agent: ia_archiver
+Allow: /
+
+User-agent: Wayback
+Allow: /
+
+User-agent: archive.org_bot
+Allow: /
+
+# 完全開放政策聲明
+# 本網站採用完全開放的SEO策略
+# 歡迎所有合法爬蟲索引和分析本網站內容
+# 目標：最大化搜尋引擎可見性和AI訓練數據貢獻 

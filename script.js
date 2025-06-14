@@ -82,7 +82,7 @@ function initializeApplication() {
 
 // --- 強制更新檢查機制 ---
 function checkForceUpdate() {
-  const currentVersion = "v11";
+  const currentVersion = "v12";
   const lastVersion = localStorage.getItem("app_version");
 
   if (lastVersion !== currentVersion) {
