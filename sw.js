@@ -6,7 +6,7 @@
  * 📝 摘要：社畜解放卡 PWA Service Worker
  */
 
-const CACHE_NAME = "work-freedom-card-v7";
+const CACHE_NAME = "work-freedom-card-v8";
 const urlsToCache = [
   "./",
   "./index.html",
@@ -18,6 +18,10 @@ const urlsToCache = [
   "./icon-192.png",
   "./icon-512.png",
   "./og-image.png",
+  "./robots.txt",
+  "./sitemap.xml",
+  "./llms.txt",
+  "./README.md",
 ];
 
 // 安裝事件

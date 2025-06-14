@@ -1,9 +1,9 @@
 <!--
   📦 模組：社畜解放卡
-  🕒 最後更新：2025-06-14T20:40:26+08:00
+  🕒 最後更新：2025-06-14T20:58:34+08:00
   🧑‍💻 作者/更新者：@s123104
-  🔢 版本：v1.7.0
-  📝 摘要：移除圖標白色背景，優化PWA安裝指引排版和圖標
+  🔢 版本：v2.0.0
+  📝 摘要：完整專案重構、深度SEO優化、創建llms.txt和sitemap.xml
 -->
 <!DOCTYPE html>
 <html lang="zh-TW">
@@ -15,48 +15,52 @@
     />
 
     <!-- SEO: 基本 Meta 標籤 -->
-    <title>社畜解放卡 - 你的職場生存壓力計</title>
+    <title>社畜解放卡 - 職場壓力管理工具 | 離職集點卡 | 厭世指數分析</title>
     <meta
       name="description"
-      content="記錄每日職場心情與鳥事，集滿離職點數，邁向自由！提供厭世指數分析、數據匯出與 AI 洞察，是你最佳的職場壓力管理工具。"
+      content="社畜解放卡是免費開源的職場壓力管理工具！記錄每日職場心情與鳥事，集滿100點離職點數邁向自由。提供厭世指數分析、AI洞察建議、成就系統，支援PWA離線使用。幫助上班族管理工作壓力，追蹤職涯發展。"
     />
     <meta
       name="keywords"
-      content="社畜解放卡, 離職, 集點卡, 職場壓力, 工作心情, 厭世, 加班, 慣老闆, PWA, 前端工具, AI分析"
+      content="社畜解放卡, 離職集點卡, 職場壓力管理, 工作心情記錄, 厭世指數, 上班族工具, 職場生存, 離職計畫, 工作壓力, 職涯規劃, PWA應用, 免費工具, 開源專案, AI分析, 心理健康, 職場厭世, 工作倦怠, 離職準備, 職場情緒, 壓力追蹤"
     />
-    <link rel="canonical" href="https://github.com/s123104/work-freedom-card" />
+    <link rel="canonical" href="https://s123104.github.io/work-freedom-card/" />
 
     <!-- SEO: Open Graph (for Facebook, LinkedIn, etc.) -->
-    <meta property="og:title" content="社畜解放卡 - 你的職場生存壓力計" />
+    <meta property="og:title" content="社畜解放卡 - 職場壓力管理工具 | 離職集點卡" />
     <meta
       property="og:description"
-      content="記錄每日職場心情與鳥事，集滿離職點數，邁向自由！提供厭世指數分析與 AI 洞察。"
+      content="免費開源的職場壓力管理工具！記錄每日職場心情與鳥事，集滿100點離職點數邁向自由。提供厭世指數分析、AI洞察建議、成就系統，支援PWA離線使用。"
     />
     <meta property="og:type" content="website" />
     <meta
       property="og:url"
-      content="https://github.com/s123104/work-freedom-card"
+      content="https://s123104.github.io/work-freedom-card/"
     />
     <meta
       property="og:image"
-      content="./og-image.png"
+      content="https://s123104.github.io/work-freedom-card/og-image.png"
     />
-    <!-- 建議您在此路徑放置一張 1200x630 的預覽圖 -->
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="社畜解放卡 - 職場壓力管理工具介面預覽" />
     <meta property="og:site_name" content="社畜解放卡" />
     <meta property="og:locale" content="zh_TW" />
 
     <!-- SEO: Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="社畜解放卡 - 你的職場生存壓力計" />
+    <meta name="twitter:title" content="社畜解放卡 - 職場壓力管理工具 | 離職集點卡" />
     <meta
       name="twitter:description"
-      content="記錄每日職場心情與鳥事，集滿離職點數，邁向自由！提供厭世指數分析與 AI 洞察。"
+      content="免費開源的職場壓力管理工具！記錄每日職場心情與鳥事，集滿100點離職點數邁向自由。提供厭世指數分析、AI洞察建議、成就系統，支援PWA離線使用。"
     />
     <meta
       name="twitter:image"
-      content="./og-image.png"
+      content="https://s123104.github.io/work-freedom-card/og-image.png"
     />
-    <!-- 建議您在此路徑放置一張適合 Twitter 的預覽圖 -->
+    <meta name="twitter:image:alt" content="社畜解放卡 - 職場壓力管理工具介面預覽" />
+    <meta name="twitter:creator" content="@s123104" />
+    <meta name="twitter:site" content="@s123104" />
 
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#3da35d" />
@@ -77,15 +81,63 @@
         "@context": "https://schema.org",
         "@type": "WebApplication",
         "name": "社畜解放卡",
-        "description": "記錄每日職場心情與鳥事，集滿離職點數，邁向自由！提供厭世指數分析、數據匯出與 AI 洞察，是你最佳的職場壓力管理工具。",
-        "applicationCategory": "ProductivityApplication",
-        "operatingSystem": "Web",
-        "url": "https://github.com/s123104/work-freedom-card",
-        "offers": { "@type": "Offer", "price": "0" },
+        "alternateName": ["離職集點卡", "職場壓力管理工具", "Work Freedom Card"],
+        "description": "免費開源的職場壓力管理工具！記錄每日職場心情與鳥事，集滿100點離職點數邁向自由。提供厭世指數分析、AI洞察建議、成就系統，支援PWA離線使用。幫助上班族管理工作壓力，追蹤職涯發展。",
+        "applicationCategory": ["ProductivityApplication", "HealthApplication", "UtilitiesApplication"],
+        "operatingSystem": ["Web", "iOS", "Android", "Windows", "macOS", "Linux"],
+        "url": "https://s123104.github.io/work-freedom-card/",
+        "downloadUrl": "https://s123104.github.io/work-freedom-card/",
+        "installUrl": "https://s123104.github.io/work-freedom-card/",
+        "screenshot": "https://s123104.github.io/work-freedom-card/og-image.png",
+        "image": "https://s123104.github.io/work-freedom-card/icon-512.png",
+        "author": {
+          "@type": "Person",
+          "name": "s123104",
+          "url": "https://github.com/s123104"
+        },
+        "creator": {
+          "@type": "Person", 
+          "name": "s123104",
+          "url": "https://github.com/s123104"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "s123104",
+          "url": "https://github.com/s123104"
+        },
+        "offers": { 
+          "@type": "Offer", 
+          "price": "0",
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock"
+        },
+        "license": "https://opensource.org/licenses/MIT",
+        "softwareVersion": "1.7.0",
+        "datePublished": "2025-01-01",
+        "dateModified": "2025-06-14T20:40:26+08:00",
+        "keywords": "社畜解放卡, 離職集點卡, 職場壓力管理, 工作心情記錄, 厭世指數, 上班族工具, 職場生存, 離職計畫, PWA應用, 免費工具, 開源專案",
+        "inLanguage": "zh-TW",
+        "isAccessibleForFree": true,
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "softwareRequirements": "Web Browser",
+        "memoryRequirements": "1MB",
+        "storageRequirements": "5MB",
+        "featureList": [
+          "離職集點系統",
+          "心情記錄分類", 
+          "厭世指數分析",
+          "成就系統",
+          "AI分析匯出",
+          "PWA離線支援",
+          "數據隱私保護",
+          "響應式設計"
+        ],
         "aggregateRating": {
           "@type": "AggregateRating",
           "ratingValue": "4.9",
-          "reviewCount": "258"
+          "reviewCount": "258",
+          "bestRating": "5",
+          "worstRating": "1"
         }
       }
     </script>
@@ -416,9 +468,20 @@
       <p class="text-sm sm:text-base mb-3 font-handwrite-4">
         人生苦短，別浪費在不喜歡的地方。
       </p>
-      <p class="text-xs opacity-75 mb-4">
-        © 2025 離職集點卡. All Rights Reserved.
-      </p>
+      <div class="text-xs opacity-75 mb-4 space-y-2">
+        <p>© 2025 社畜解放卡. All Rights Reserved.</p>
+        <p class="flex items-center justify-center gap-2">
+          <i class="fab fa-github"></i>
+          開源專案：
+          <a href="https://github.com/s123104/work-freedom-card" target="_blank" class="text-primary-700 hover:text-primary-800 underline">
+            github.com/s123104/work-freedom-card
+          </a>
+        </p>
+        <p class="text-xs">
+          作者 <a href="https://github.com/s123104" target="_blank" class="text-primary-700 hover:text-primary-800 underline">@s123104</a> 
+          - 免費使用，歡迎 Fork 和貢獻
+        </p>
+      </div>
     </footer>
 
     <!-- Share Button -->
@@ -451,9 +514,9 @@
           <div class="flex items-center justify-center gap-2 text-sm text-gray-600">
             <i class="fas fa-user-circle"></i>
             <span>作者：</span>
-            <a href="https://threads.net/@azlif_1224" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1">
+            <a href="https://threads.net/@azlife_1224" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1">
               <i class="fa-brands fa-threads text-sm"></i>
-              azlif_1224
+              azlife_1224
             </a>
           </div>
         </div>

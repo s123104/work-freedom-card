@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <!-- 主頁 -->
+  <url>
+    <loc>https://s123104.github.io/work-freedom-card/</loc>
+    <lastmod>2025-06-14T20:40:26+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    
+    <!-- 主要圖片 -->
+    <image:image>
+      <image:loc>https://s123104.github.io/work-freedom-card/og-image.png</image:loc>
+      <image:title>社畜解放卡 - 職場壓力管理工具</image:title>
+      <image:caption>記錄每日職場心情與鳥事，集滿離職點數，邁向自由！</image:caption>
+    </image:image>
+    
+    <image:image>
+      <image:loc>https://s123104.github.io/work-freedom-card/icon.png</image:loc>
+      <image:title>社畜解放卡應用圖標</image:title>
+      <image:caption>社畜解放卡PWA應用程式圖標</image:caption>
+    </image:image>
+    
+    <image:image>
+      <image:loc>https://s123104.github.io/work-freedom-card/icon-192.png</image:loc>
+      <image:title>社畜解放卡圖標 192x192</image:title>
+      <image:caption>社畜解放卡PWA圖標，適用於Android設備</image:caption>
+    </image:image>
+    
+    <image:image>
+      <image:loc>https://s123104.github.io/work-freedom-card/icon-512.png</image:loc>
+      <image:title>社畜解放卡圖標 512x512</image:title>
+      <image:caption>社畜解放卡PWA高解析度圖標</image:caption>
+    </image:image>
+  </url>
+  
+  <!-- PWA Manifest -->
+  <url>
+    <loc>https://s123104.github.io/work-freedom-card/manifest.json</loc>
+    <lastmod>2025-06-14T20:40:26+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Service Worker -->
+  <url>
+    <loc>https://s123104.github.io/work-freedom-card/sw.js</loc>
+    <lastmod>2025-06-14T20:40:26+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- 文檔檔案 -->
+  <url>
+    <loc>https://s123104.github.io/work-freedom-card/README.md</loc>
+    <lastmod>2025-06-14T20:40:26+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://s123104.github.io/work-freedom-card/CHANGELOG.md</loc>
+    <lastmod>2025-06-14T20:40:26+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://s123104.github.io/work-freedom-card/LICENSE</loc>
+    <lastmod>2025-06-14T20:40:26+08:00</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <!-- AI 爬蟲指引 -->
+  <url>
+    <loc>https://s123104.github.io/work-freedom-card/llms.txt</loc>
+    <lastmod>2025-06-14T20:40:26+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- 爬蟲指引 -->
+  <url>
+    <loc>https://s123104.github.io/work-freedom-card/robots.txt</loc>
+    <lastmod>2025-06-14T20:40:26+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+</urlset> 

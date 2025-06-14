@@ -1,0 +1,65 @@
+# robots.txt for 社畜解放卡 (Work Freedom Card)
+# 網站：https://github.com/s123104/work-freedom-card
+# 作者：s123104
+# 更新：2025-06-14
+
+# 允許所有搜尋引擎爬蟲訪問
+User-agent: *
+Allow: /
+
+# 禁止訪問不必要的檔案
+Disallow: /*.js$
+Disallow: /*.css$
+Disallow: /tailwind.config.js
+Disallow: /.git/
+Disallow: /.gitignore
+
+# 允許重要的資源檔案
+Allow: /icon*.png
+Allow: /og-image.png
+Allow: /manifest.json
+Allow: /sw.js
+
+# 網站地圖位置
+Sitemap: https://s123104.github.io/work-freedom-card/sitemap.xml
+
+# 針對特定搜尋引擎的設定
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# AI 爬蟲設定 - 允許但限制頻率
+User-agent: GPTBot
+Allow: /
+Crawl-delay: 10
+
+User-agent: Claude-Web
+Allow: /
+Crawl-delay: 10
+
+User-agent: ClaudeBot
+Allow: /
+Crawl-delay: 10
+
+User-agent: Google-Extended
+Allow: /
+Crawl-delay: 5
+
+User-agent: PerplexityBot
+Allow: /
+Crawl-delay: 10
+
+# 阻止惡意爬蟲
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: / 

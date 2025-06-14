@@ -1,91 +1,77 @@
 <!--
   📦 模組：社畜解放卡
-  🕒 最後更新：2025-06-14T20:40:26+08:00
+  🕒 最後更新：2025-06-14T20:58:34+08:00
   🧑‍💻 作者/更新者：@s123104
-  🔢 版本：v1.7.0
-  📝 摘要：移除圖標白色背景，優化PWA安裝指引排版和圖標
+  🔢 版本：v2.0.0
+  📝 摘要：完整專案重構、深度SEO優化、創建llms.txt和sitemap.xml
 -->
+
+# 社畜解放卡 - 職場壓力管理工具
 
 <div align="center">
 
-# 🪪 社畜解放卡 | Work Freedom Card
+![社畜解放卡](./og-image.png)
 
-[![GitHub license](https://img.shields.io/github/license/s123104/work-freedom-card)](https://github.com/s123104/work-freedom-card/blob/master/LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/s123104/work-freedom-card)](https://github.com/s123104/work-freedom-card/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/s123104/work-freedom-card)](https://github.com/s123104/work-freedom-card/network)
-[![PWA Ready](https://img.shields.io/badge/PWA-ready-brightgreen.svg)](https://github.com/s123104/work-freedom-card)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/s123104/work-freedom-card/pulls)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/s123104/work-freedom-card/blob/main/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/s123104/work-freedom-card.svg)](https://github.com/s123104/work-freedom-card/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/s123104/work-freedom-card.svg)](https://github.com/s123104/work-freedom-card/network)
+[![PWA](https://img.shields.io/badge/PWA-enabled-brightgreen.svg)](https://s123104.github.io/work-freedom-card/)
 
-<img src="https://s123104.github.io/web/og-image.png" alt="社畜解放卡預覽" width="600px">
+**免費開源的職場壓力管理工具**
 
-> 一張卡，記下你的每一次職場厭世  
-> 一個 App，為你紀錄通往自由的 100 步
+記錄每日職場心情與鳥事，集滿 100 點離職點數邁向自由！
 
-[🚀 立即體驗](https://s123104.github.io/work-freedom-card) | [📱 安裝教學](#-pwa-安裝教學) | [📖 說明文件](#-專案簡介) | [🤝 貢獻指南](#-貢獻指南)
+[🚀 立即使用](https://s123104.github.io/work-freedom-card/) | [📖 使用指南](#使用指南) | [🛠️ 安裝說明](#安裝說明) | [🤝 貢獻指南](#貢獻指南)
 
 </div>
 
----
+## ✨ 核心功能
 
-## 📌 專案簡介
+### 🎯 離職集點系統
 
-**《社畜解放卡》**是一款支援 PWA 的開源前端工具，結合每日心情紀錄、離職點數收集、厭世指數分析與 AI 洞察建議，幫助你掌握職場情緒、倒數自由之日。
+- **100 點集滿離職**：每次記錄職場負面事件獲得點數
+- **四大心情分類**：錢途茫茫、身心俱疲、鳥事一堆、缺乏成長
+- **智能點數計算**：根據事件嚴重程度自動分配點數
 
-### ✨ 主要特色
+### 📊 厭世指數分析
 
-- 🔄 **無需後端**：純前端實現，一個 HTML 檔案即可運行
-- 🔒 **隱私至上**：所有資料存於本地，不上傳任何資訊
-- 📊 **數據視覺化**：直觀圖表展示你的職場情緒趨勢
-- 🏆 **成就系統**：10 種隱藏成就，記錄你的離職之路
-- 🤖 **AI 整合**：一鍵匯出資料至 AI 助手進行職涯分析
-- 📱 **跨平台 PWA**：可安裝於各種裝置，支援離線使用
+- **即時數據統計**：自動計算總厭世指數和平均值
+- **趨勢圖表顯示**：視覺化呈現心情變化趨勢
+- **壓力來源分析**：識別主要厭世來源並提供改善建議
 
----
+### 🏆 成就系統
 
-## 🖼️ 功能特色
+- **10 種離職成就**：從「初來乍到」到「自由鳥人」
+- **進度追蹤**：實時顯示成就解鎖進度
+- **激勵機制**：透過成就系統增加使用動機
 
-- ✅ **離職集點**：記錄每日職場心情，集滿 100 點即可「畢業」
-- 🔥 **心情分類**：錢途茫茫(黃)、身心俱疲(紅)、鳥事一堆(藍紫)、缺乏成長(灰)
-- 💬 **事件記錄**：支援文字輸入與常見事件快速鍵
-- 📊 **厭世指數分析**：自動計算厭世指數，分析主要厭世來源
-- 🏷️ **厭世來源分頁**：三排五列網格布局，支持分頁瀏覽
-- 🏆 **成就系統**：解鎖 10 種不同的離職成就，記錄你的職場生存之路
-- 📈 **圖表趨勢**：視覺化你的離職進度和心情趨勢
-- 🤖 **AI Prompt 匯出**：一鍵生成 AI 提示詞，可直接貼到 ChatGPT 等 AI 工具進行深度分析
-- 📲 **PWA 支援**：可安裝到手機主畫面，離線使用
+### 🤖 AI 分析匯出
 
----
+- **一鍵生成提示詞**：自動整理數據生成 AI 分析提示
+- **多平台支援**：支援 ChatGPT、Claude、Gemini、Grok
+- **個人化建議**：獲得專業的職涯發展建議
 
-## 🧑‍💻 技術堆疊
+### 📱 PWA 技術支援
 
-| 技術                        | 說明                                      |
-| --------------------------- | ----------------------------------------- |
-| `HTML5 + CSS3 + JavaScript` | 單一檔案設計，純前端                      |
-| `Tailwind CSS`              | 用於樣式快速開發與響應式設計              |
-| `Chart.js`                  | 用於每日趨勢圖表視覺化                    |
-| `Font Awesome`              | 圖示與 UX 增強                            |
-| `LocalStorage`              | 儲存使用者資料，支援離線使用              |
-| `PWA`                       | Progressive Web App，支援安裝與全螢幕使用 |
-| `Service Worker`            | 實現離線功能與資源快取                    |
-| `Web Manifest`              | 提供完整 PWA 安裝體驗                     |
-| `JSON-LD`                   | 支援 SEO 結構化資料                       |
-| `AI Export`                 | 一鍵產出完整 JSON 資料與專屬分析指令      |
+- **離線使用**：無網路環境下正常運作
+- **安裝至桌面**：支援 iOS、Android、Windows 等平台
+- **原生體驗**：媲美原生應用的使用體驗
 
----
+## 🎨 技術特色
 
-## 📦 安裝與使用
+- **🔒 隱私保護**：所有資料存於本地，不上傳任何個人資訊
+- **📱 響應式設計**：完美適配手機、平板、桌面等各種裝置
+- **⚡ 純前端實現**：HTML5 + CSS3 + JavaScript，無需後端
+- **🎯 SEO 優化**：完整的搜尋引擎優化，支援社群分享
+- **🌐 PWA 標準**：Service Worker + Web Manifest 完整實現
 
-### 方式一：直接使用線上版
+## 🚀 快速開始
 
-訪問 [https://s123104.github.io/work-freedom-card](https://s123104.github.io/work-freedom-card) 即可開始使用。
+### 線上使用
 
-### 方式二：部署到自己的 GitHub Pages
+直接訪問：[https://s123104.github.io/work-freedom-card/](https://s123104.github.io/work-freedom-card/)
 
-1. Fork [本專案](https://github.com/s123104/work-freedom-card)
-2. 將內容放入你的 GitHub Pages 資料夾，如 `username.github.io/work-freedom-card`
-3. 開啟 GitHub Pages（Settings → Pages → 選取分支）
-
-### 方式三：本機使用
+### 本地部署
 
 ```bash
 # 克隆專案
@@ -94,140 +80,147 @@ git clone https://github.com/s123104/work-freedom-card.git
 # 進入專案目錄
 cd work-freedom-card
 
-# 直接在瀏覽器中打開
-open index.html  # macOS
+# 啟動本地服務器（任選一種）
+python -m http.server 8000
 # 或
-start index.html  # Windows
+npx serve .
+# 或
+php -S localhost:8000
+
+# 瀏覽器訪問
+open http://localhost:8000
 ```
 
-> 無需任何建置工具，打開 `index.html` 即可使用。
+## 📖 使用指南
 
----
+### 基本操作
 
-## 📱 PWA 安裝教學
+1. **記錄心情**：點擊格子標記日期，長按記錄詳細事件
+2. **選擇分類**：選擇對應的心情分類（錢途茫茫、身心俱疲等）
+3. **查看統計**：即時查看厭世指數和趨勢分析
+4. **解鎖成就**：達成條件自動解鎖相應成就
 
-### iOS (Safari) 安裝步驟
+### 進階功能
 
-1. 使用 Safari 開啟 [社畜解放卡](https://s123104.github.io/work-freedom-card)
-2. 點擊底部「分享」按鈕 <img src="https://developer.apple.com/design/human-interface-guidelines/foundations/app-icons/images/app-icon-main_2x.png" width="20">
-3. 向上滑動，選擇「加入主畫面」
-4. 點擊右上角「加入」完成安裝
+- **AI 分析**：點擊「AI 分析匯出」生成專業分析提示詞
+- **數據分享**：使用分享功能與朋友分享進度
+- **PWA 安裝**：點擊瀏覽器提示安裝至設備
 
-### Android (Chrome) 安裝步驟
+## 🛠️ 安裝說明
 
-1. 使用 Chrome 開啟 [社畜解放卡](https://s123104.github.io/work-freedom-card)
-2. 等待系統提示或點擊右上角「⋮」→「安裝應用程式」
-3. 點擊「安裝」確認
+### PWA 安裝
 
-**離線使用**：安裝 PWA 後，即使在沒有網路的情況下也能正常使用所有功能！
+#### 📱 iOS (Safari)
 
----
+1. 點擊底部分享按鈕 📤
+2. 向下滑動找到「加入主畫面」
+3. 點擊「新增」完成安裝
 
-## 🏆 成就系統
+#### 🤖 Android (Chrome)
 
-解鎖各種隱藏成就，記錄你的離職之路！目前包含 10 種成就：
+1. 點擊右上角三點選單 ⋮
+2. 選擇「安裝應用程式」
+3. 點擊「安裝」完成
 
-| 成就名稱     | 解鎖條件                   |
-| ------------ | -------------------------- |
-| 第一步       | 記錄第一個厭世事件         |
-| 小有成就     | 記錄 10 個厭世事件         |
-| 半路出家     | 記錄 50 個厭世事件         |
-| 自由之路     | 集滿 100 點，準備離職！    |
-| 極度厭世     | 厭世指數超過 100           |
-| 錢途茫茫     | 記錄 10 次「錢途茫茫」心情 |
-| 身心俱疲     | 記錄 10 次「身心俱疲」心情 |
-| 鳥事專家     | 記錄 10 次「鳥事一堆」心情 |
-| 永遠原地踏步 | 記錄 10 次「缺乏成長」心情 |
-| 創意無限     | 創建 5 個自訂爛事標籤      |
+#### 💻 桌面版 (Chrome/Edge)
 
----
+1. 點擊網址列右側的安裝圖示 ⬇️
+2. 點擊「安裝」
+3. 應用程式將出現在應用程式列表中
 
-## 📤 匯出分析用 AI Prompt
+## 🎯 目標用戶
 
-內建 GPT / Claude 分析格式，點擊「匯出至 AI」即可生成完整 Prompt，適用於：
+- **職場工作者**：需要管理工作壓力的上班族
+- **轉職考慮者**：正在考慮離職或轉職的員工
+- **心理健康關注者**：重視心理健康的個人
+- **數據分析愛好者**：喜歡透過數據了解自己的用戶
 
-- ChatGPT
-- Claude.ai
-- Gemini
-- 任何支援 JSON 輸入的 LLM
+## 🌟 使用場景
 
-生成的 Prompt 包含：
+- **每日心情記錄**：下班後記錄當天職場心情
+- **壓力趨勢分析**：週期性檢視工作壓力變化
+- **離職決策參考**：透過數據分析是否該離職
+- **職涯規劃討論**：與 AI 助手討論職業發展
 
-- 完整的職場心情記錄（JSON 格式）
-- 分析指引（模式識別、壓力源分析、趨勢洞察等）
-- 離職建議與職涯改善方向
+## 📊 專案統計
 
----
-
-## 🔒 資料安全與隱私
-
-- **本地儲存**：所有資料僅存於瀏覽器的 `localStorage`，不會上傳至任何伺服器
-- **無追蹤**：不包含任何分析或追蹤程式碼
-- **資料控制**：提供一鍵清除功能，使用者完全掌控自己的資料
-- **開源透明**：程式碼完全開源，歡迎檢視與貢獻
-
----
-
-## 💡 延伸應用建議
-
-| 模組               | 說明                                   |
-| ------------------ | -------------------------------------- |
-| `工作壓力排行榜`   | 匿名分享厭世指數，生成共感牆           |
-| `主管地獄指數`     | 統計每位主管被抱怨次數與關鍵字         |
-| `匿名週報生成器`   | 自動整理職場日誌，生成 PDF or Markdown |
-| `Slack / Line Bot` | 每日提醒記錄心情與爛事                 |
-
----
-
-## 🧑‍🎨 設計理念
-
-- **無需登入**：匿名使用，降低使用門檻
-- **單一檔案**：極簡架構，方便部署與分享
-- **數據驅動**：用數據轉化情緒，用幽默記錄痛苦
-- **實用主義**：不靠後端，也能有完整互動與 AI 整合
-
----
+- **開發語言**：HTML5, CSS3, JavaScript
+- **框架工具**：Tailwind CSS, Chart.js, Font Awesome
+- **檔案大小**：< 2MB（包含所有資源）
+- **支援瀏覽器**：Chrome, Firefox, Safari, Edge
+- **支援平台**：iOS, Android, Windows, macOS, Linux
 
 ## 🤝 貢獻指南
 
-歡迎貢獻程式碼、提出建議或回報問題！
+歡迎所有形式的貢獻！
+
+### 如何貢獻
 
 1. Fork 本專案
-2. 創建你的功能分支 (`git checkout -b feature/amazing-feature`)
-3. 提交你的更改 (`git commit -m 'Add some amazing feature'`)
-4. 推送到分支 (`git push origin feature/amazing-feature`)
+2. 創建功能分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
 5. 開啟 Pull Request
 
----
+### 貢獻類型
 
-## 📜 版本歷史
+- 🐛 Bug 修復
+- ✨ 新功能開發
+- 📝 文檔改進
+- 🎨 UI/UX 優化
+- 🌐 多語言支援
+- 🔧 性能優化
 
-查看 [CHANGELOG.md](https://github.com/s123104/work-freedom-card/blob/master/CHANGELOG.md) 了解完整版本歷史。
+## 📄 授權條款
 
----
-
-## 📚 授權條款
-
-MIT License. 歡迎自由使用、改作、部署與分享，只需保留作者資訊。
+本專案採用 [MIT License](LICENSE) 授權。
 
 ```
-© 2025 s123104 (https://github.com/s123104)
+MIT License
 
-本專案開源並採用 MIT 授權，您可以自由 fork、修改、重新發佈
-但請在明顯處標註原作者或附上 GitHub 來源連結 🙌
+Copyright (c) 2025 s123104
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 ```
 
----
+## 🔗 相關連結
 
-## 🧙‍♂️ 關於作者
+- **專案首頁**：[https://s123104.github.io/work-freedom-card/](https://s123104.github.io/work-freedom-card/)
+- **GitHub 倉庫**：[https://github.com/s123104/work-freedom-card](https://github.com/s123104/work-freedom-card)
+- **問題回報**：[GitHub Issues](https://github.com/s123104/work-freedom-card/issues)
+- **功能建議**：[GitHub Discussions](https://github.com/s123104/work-freedom-card/discussions)
 
-由 [@s123104](https://github.com/s123104) 精神燃燒製作  
-如果你也在倒數離職，我們就是朋友 ☕💼🧠
+## 📞 聯絡資訊
+
+- **作者**：[@s123104](https://github.com/s123104)
+- **Email**：透過 GitHub Issues 聯絡
+- **社群**：歡迎在 GitHub Discussions 參與討論
+
+## 🙏 致謝
+
+感謝所有為本專案做出貢獻的開發者和使用者！
+
+特別感謝：
+
+- [Tailwind CSS](https://tailwindcss.com/) - 優秀的 CSS 框架
+- [Chart.js](https://www.chartjs.org/) - 強大的圖表庫
+- [Font Awesome](https://fontawesome.com/) - 豐富的圖標庫
+- [Google Fonts](https://fonts.google.com/) - 美觀的字體
 
 ---
 
 <div align="center">
 
-> 社畜解放卡 —— 紀錄你的厭世日常，分析你的職涯趨勢，找到屬於你的自由之路。
+**如果這個專案對你有幫助，請給個 ⭐ Star 支持一下！**
+
+Made with ❤️ by [@s123104](https://github.com/s123104)
 
 </div>
