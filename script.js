@@ -80,25 +80,13 @@ function initializeApplication() {
   }
 }
 
-// --- 強制更新檢查機制 ---
+// --- PWA 自動更新系統 ---
 function checkForceUpdate() {
-  const currentVersion = "v13";
+  const currentVersion = "v14";
   const lastVersion = localStorage.getItem("app_version");
 
   if (lastVersion !== currentVersion) {
     console.log(`檢測到版本更新: ${lastVersion} → ${currentVersion}`);
-
-    // 清除所有快取
-    if ("caches" in window) {
-      caches.keys().then((cacheNames) => {
-        cacheNames.forEach((cacheName) => {
-          if (cacheName.includes("work-freedom-card")) {
-            console.log("清除快取:", cacheName);
-            caches.delete(cacheName);
-          }
-        });
-      });
-    }
 
     // 執行數據遷移
     performDataMigration();
@@ -106,42 +94,291 @@ function checkForceUpdate() {
     // 更新版本記錄
     localStorage.setItem("app_version", currentVersion);
 
-    // 顯示更新通知並強制重新載入頁面（僅在非首次載入時）
+    // 顯示更新通知（僅在非首次載入時）
     if (lastVersion && lastVersion !== currentVersion) {
-      showUpdateNotification();
-      setTimeout(() => {
-        window.location.reload(true);
-      }, 2000);
+      showMigrationNotification();
     }
   }
 }
 
-// --- 數據遷移函數 ---
-function performDataMigration() {
-  console.log("執行數據遷移：將 good 轉換為 bad");
+// --- Service Worker 更新管理 ---
+let swRegistration = null;
+let isUpdateAvailable = false;
 
-  let migrationCount = 0;
+async function initServiceWorker() {
+  if (!("serviceWorker" in navigator)) {
+    console.log("此瀏覽器不支援 Service Worker");
+    return;
+  }
 
-  // 遍歷所有已填充的數據
-  filledDates.forEach((data, index) => {
-    if (data.mood === "good") {
-      // 將 good 轉換為 bad
-      data.mood = "bad";
-      migrationCount++;
-      console.log(`遷移索引 ${index}: good -> bad`);
+  try {
+    // 註冊 Service Worker
+    swRegistration = await navigator.serviceWorker.register("/sw.js", {
+      scope: "/",
+      updateViaCache: "none", // 禁用 SW 文件的 HTTP 緩存
+    });
+
+    console.log("Service Worker 註冊成功:", swRegistration);
+
+    // 監聽 SW 更新
+    swRegistration.addEventListener("updatefound", handleServiceWorkerUpdate);
+
+    // 監聽來自 SW 的消息
+    navigator.serviceWorker.addEventListener(
+      "message",
+      handleServiceWorkerMessage
+    );
+
+    // 定期檢查更新（每 30 秒）
+    setInterval(() => {
+      if (swRegistration) {
+        swRegistration.update();
+      }
+    }, 30000);
+
+    // 頁面可見性改變時檢查更新
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden && swRegistration) {
+        swRegistration.update();
+      }
+    });
+
+    // 檢查是否有等待中的 SW
+    if (swRegistration.waiting) {
+      handleServiceWorkerUpdate();
+    }
+  } catch (error) {
+    console.error("Service Worker 註冊失敗:", error);
+  }
+}
+
+// 處理 Service Worker 更新
+function handleServiceWorkerUpdate() {
+  const installingWorker = swRegistration.installing;
+  if (!installingWorker) return;
+
+  installingWorker.addEventListener("statechange", () => {
+    if (installingWorker.state === "installed") {
+      if (navigator.serviceWorker.controller) {
+        // 有新版本可用
+        isUpdateAvailable = true;
+        showUpdatePrompt();
+      } else {
+        // 首次安裝
+        console.log("Service Worker 首次安裝完成");
+        showInstallNotification();
+      }
     }
   });
+}
 
-  if (migrationCount > 0) {
-    console.log(`數據遷移完成，共遷移 ${migrationCount} 筆記錄`);
-    // 保存遷移後的數據
-    saveData();
+// 處理來自 Service Worker 的消息
+function handleServiceWorkerMessage(event) {
+  const { type, version, internalVersion, message } = event.data;
 
-    // 顯示遷移通知
-    showMigrationNotification(migrationCount);
-  } else {
-    console.log("無需遷移的數據");
+  switch (type) {
+    case "SW_INSTALLED":
+      console.log(
+        `Service Worker 安裝完成 - 版本: ${version} (${internalVersion})`
+      );
+      break;
+
+    case "SW_ACTIVATED":
+      console.log(
+        `Service Worker 已激活 - 版本: ${version} (${internalVersion})`
+      );
+      break;
+
+    case "FORCE_UPDATE_REQUIRED":
+      console.log("強制更新要求:", message);
+      showForceUpdatePrompt(version, message);
+      break;
+
+    case "FORCE_RELOAD":
+      console.log("強制重新載入頁面");
+      window.location.reload();
+      break;
+
+    default:
+      console.log("收到未知 SW 消息:", event.data);
   }
+}
+
+// 顯示更新提示
+function showUpdatePrompt() {
+  const notification = document.createElement("div");
+  notification.id = "update-prompt";
+  notification.innerHTML = `
+    <div class="fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-4 rounded-lg shadow-lg max-w-sm mx-4">
+      <div class="flex items-center gap-3">
+        <i class="fas fa-download animate-pulse text-xl"></i>
+        <div class="flex-1">
+          <div class="font-bold text-sm">新版本可用！</div>
+          <div class="text-xs opacity-90 mt-1">點擊更新以獲得最新功能</div>
+        </div>
+      </div>
+      <div class="flex gap-2 mt-3">
+        <button id="update-btn" class="flex-1 bg-white text-blue-600 px-3 py-1 rounded text-sm font-medium hover:bg-gray-100 transition-colors">
+          <i class="fas fa-sync-alt mr-1"></i>立即更新
+        </button>
+        <button id="dismiss-btn" class="px-3 py-1 border border-white/30 rounded text-sm hover:bg-white/10 transition-colors">
+          稍後
+        </button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(notification);
+
+  // 更新按鈕事件
+  document.getElementById("update-btn").addEventListener("click", () => {
+    applyUpdate();
+  });
+
+  // 稍後按鈕事件
+  document.getElementById("dismiss-btn").addEventListener("click", () => {
+    removeUpdatePrompt();
+    // 5 分鐘後再次提醒
+    setTimeout(() => {
+      if (isUpdateAvailable) {
+        showUpdatePrompt();
+      }
+    }, 5 * 60 * 1000);
+  });
+}
+
+// 顯示強制更新提示
+function showForceUpdatePrompt(version, message) {
+  const notification = document.createElement("div");
+  notification.id = "force-update-prompt";
+  notification.innerHTML = `
+    <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999] p-4">
+      <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+        <div class="text-center">
+          <div class="text-3xl mb-4">🚀</div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">重要更新</h3>
+          <p class="text-gray-600 mb-4">${message}</p>
+          <p class="text-sm text-gray-500 mb-6">版本: ${version}</p>
+          <button id="force-update-btn" class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-600 transition-colors">
+            <i class="fas fa-download mr-2"></i>立即更新
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(notification);
+
+  document.getElementById("force-update-btn").addEventListener("click", () => {
+    applyUpdate();
+  });
+}
+
+// 應用更新
+async function applyUpdate() {
+  try {
+    removeUpdatePrompt();
+    showUpdatingNotification();
+
+    if (swRegistration && swRegistration.waiting) {
+      // 通知 SW 跳過等待
+      swRegistration.waiting.postMessage({ type: "SKIP_WAITING" });
+    }
+
+    // 清除所有緩存
+    if ("caches" in window) {
+      const cacheNames = await caches.keys();
+      const deletePromises = cacheNames
+        .filter((name) => name.startsWith("work-freedom-card-"))
+        .map((name) => caches.delete(name));
+      await Promise.all(deletePromises);
+    }
+
+    // 等待一下讓 SW 完成激活
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  } catch (error) {
+    console.error("更新失敗:", error);
+    showUpdateErrorNotification();
+  }
+}
+
+// 移除更新提示
+function removeUpdatePrompt() {
+  const prompts = [
+    document.getElementById("update-prompt"),
+    document.getElementById("force-update-prompt"),
+  ];
+  prompts.forEach((prompt) => {
+    if (prompt && prompt.parentNode) {
+      prompt.parentNode.removeChild(prompt);
+    }
+  });
+}
+
+// 顯示正在更新通知
+function showUpdatingNotification() {
+  const notification = document.createElement("div");
+  notification.id = "updating-notification";
+  notification.innerHTML = `
+    <div class="fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 py-4 rounded-lg shadow-lg">
+      <div class="flex items-center gap-3">
+        <i class="fas fa-sync-alt animate-spin text-xl"></i>
+        <span class="font-medium">正在更新應用程式...</span>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(notification);
+}
+
+// 顯示安裝通知
+function showInstallNotification() {
+  const notification = document.createElement("div");
+  notification.innerHTML = `
+    <div class="fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 py-4 rounded-lg shadow-lg animate-bounce">
+      <div class="flex items-center gap-3">
+        <i class="fas fa-check-circle text-xl"></i>
+        <span class="font-medium">應用程式已成功安裝！</span>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(notification);
+
+  setTimeout(() => {
+    if (notification.parentNode) {
+      notification.parentNode.removeChild(notification);
+    }
+  }, 3000);
+}
+
+// 顯示更新錯誤通知
+function showUpdateErrorNotification() {
+  const notification = document.createElement("div");
+  notification.innerHTML = `
+    <div class="fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-4 rounded-lg shadow-lg">
+      <div class="flex items-center gap-3">
+        <i class="fas fa-exclamation-triangle text-xl"></i>
+        <span class="font-medium">更新失敗，請重新整理頁面</span>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(notification);
+
+  setTimeout(() => {
+    if (notification.parentNode) {
+      notification.parentNode.removeChild(notification);
+    }
+  }, 5000);
+}
+
+// --- 數據遷移函數 ---
+function performDataMigration() {
+  console.log("數據遷移功能已完成，無需進一步遷移");
+  // 數據遷移功能已完成，保留此函數以避免錯誤
 }
 
 // --- 顯示更新通知 ---
@@ -1448,8 +1685,6 @@ function updateRecentRecords() {
         return '<svg viewBox="0 0 24 24" class="w-8 h-8 mx-auto stroke-current text-green-600"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM8 14s2-3 4-3 4 3 4 3M9 9h.01M15 9h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg>';
       case "bullying":
         return '<svg viewBox="0 0 24 24" class="w-8 h-8 mx-auto stroke-current text-orange-600"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM8 8h8M8 12h8M8 16h8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M16 8l2-2M16 16l2 2M8 8l-2-2M8 16l-2 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>';
-      case "good":
-        return '<i class="fas fa-smile text-primary-500"></i>';
       default:
         return '<i class="fas fa-circle text-gray-400"></i>';
     }
@@ -2008,6 +2243,8 @@ function generateAIPrompt() {
     burnout: 0,
     annoying: 0,
     stuck: 0,
+    bad: 0,
+    bullying: 0,
   };
 
   records.forEach((record) => {
@@ -2051,6 +2288,8 @@ function generateAIPrompt() {
         burnout: moodDistribution.burnout,
         annoying: moodDistribution.annoying,
         stuck: moodDistribution.stuck,
+        bad: moodDistribution.bad,
+        bullying: moodDistribution.bullying,
       },
       recentEntries,
       timeRange,
@@ -2075,10 +2314,12 @@ function generateAIPrompt() {
 - 總厭世指數：${totalBurnout}
 - 平均厭世指數：${averageBurnout}
 - 心情分布：
-  - 薪資福利困擾：${moodDistribution.money} 次
+  - 錢途茫茫：${moodDistribution.money} 次
   - 身心俱疲：${moodDistribution.burnout} 次  
   - 鳥事一堆：${moodDistribution.annoying} 次
   - 缺乏成長：${moodDistribution.stuck} 次
+  - 破爛心情：${moodDistribution.bad} 次
+  - 職場霸凌：${moodDistribution.bullying} 次
 
 ## 詳細數據
 \`\`\`json
@@ -2568,6 +2809,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 初始化應用程式
   initializeApplication();
+
+  // 初始化 Service Worker（最高優先級）
+  initServiceWorker();
 
   // 設置事件監聽器
   setupEventListeners();
