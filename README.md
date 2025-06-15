@@ -1,6 +1,6 @@
 # 🎯 社畜解放卡 - 離職集點進度追蹤器
 
-[![Version](https://img.shields.io/badge/version-v2.4.1-blue.svg)](https://github.com/s123104/work-freedom-card)
+[![Version](https://img.shields.io/badge/version-v2.4.2-blue.svg)](https://github.com/s123104/work-freedom-card)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/s123104/work-freedom-card/blob/main/LICENSE)
 [![PWA](https://img.shields.io/badge/PWA-enabled-brightgreen.svg)](https://s123104.github.io/work-freedom-card/)
 

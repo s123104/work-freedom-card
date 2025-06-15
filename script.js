@@ -82,7 +82,7 @@ function initializeApplication() {
 
 // --- 強制更新檢查機制 ---
 function checkForceUpdate() {
-  const currentVersion = "v12";
+  const currentVersion = "v13";
   const lastVersion = localStorage.getItem("app_version");
 
   if (lastVersion !== currentVersion) {
@@ -118,8 +118,30 @@ function checkForceUpdate() {
 
 // --- 數據遷移函數 ---
 function performDataMigration() {
-  console.log("數據遷移已停用，保持原始數據格式");
-  // 移除所有遷移邏輯，保持數據原樣
+  console.log("執行數據遷移：將 good 轉換為 bad");
+
+  let migrationCount = 0;
+
+  // 遍歷所有已填充的數據
+  filledDates.forEach((data, index) => {
+    if (data.mood === "good") {
+      // 將 good 轉換為 bad
+      data.mood = "bad";
+      migrationCount++;
+      console.log(`遷移索引 ${index}: good -> bad`);
+    }
+  });
+
+  if (migrationCount > 0) {
+    console.log(`數據遷移完成，共遷移 ${migrationCount} 筆記錄`);
+    // 保存遷移後的數據
+    saveData();
+
+    // 顯示遷移通知
+    showMigrationNotification(migrationCount);
+  } else {
+    console.log("無需遷移的數據");
+  }
 }
 
 // --- 顯示更新通知 ---
@@ -141,6 +163,27 @@ function showUpdateNotification() {
       notification.parentNode.removeChild(notification);
     }
   }, 1800);
+}
+
+// --- 顯示遷移通知 ---
+function showMigrationNotification(count) {
+  // 創建通知元素
+  const notification = document.createElement("div");
+  notification.innerHTML = `
+    <div class="fixed top-20 left-1/2 transform -translate-x-1/2 z-[9999] bg-gradient-to-r from-green-500 to-blue-600 text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 animate-pulse">
+      <i class="fas fa-database"></i>
+      <span class="font-medium">數據遷移完成！已更新 ${count} 筆記錄</span>
+    </div>
+  `;
+
+  document.body.appendChild(notification);
+
+  // 3秒後移除通知
+  setTimeout(() => {
+    if (notification.parentNode) {
+      notification.parentNode.removeChild(notification);
+    }
+  }, 3000);
 }
 
 // --- 安全的資料載入程序 ---
@@ -894,7 +937,7 @@ function handleQuickMark(index, cell) {
     const data = {
       date: toLocalDateStr(today),
       displayDate: `${today.getMonth() + 1}/${today.getDate()}`,
-      mood: "good",
+      mood: "bad",
       description: "",
       timestamp: today.toISOString(),
       fontStyle:
@@ -934,7 +977,7 @@ function animateCell(cell) {
 function fillCell(cell, data) {
   cell.className =
     "grid-cell aspect-square cursor-pointer flex items-center justify-center text-center relative filled";
-  if (data.mood !== "good") cell.classList.add(`mood-${data.mood}`);
+  if (data.mood !== "bad") cell.classList.add(`mood-${data.mood}`);
   cell.innerHTML = `<span class="date-text ${
     data.fontStyle ||
     handwriteFonts[Math.floor(Math.random() * handwriteFonts.length)]
@@ -1039,7 +1082,7 @@ function openEventModal(index) {
   document.getElementById("eventDescription").value = data
     ? data.description || ""
     : "";
-  setMood(data ? data.mood : "money");
+  setMood(data ? data.mood : "bad");
 
   // 正確顯示模態窗：移除 hidden，添加 flex 和居中類
   modal.classList.remove("hidden");
