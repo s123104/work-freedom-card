@@ -1670,44 +1670,73 @@ function updateRecentRecords() {
     return;
   }
 
-  // 定義心情圖標映射
+  // 使用正確的心情圖標映射
   const getMoodIcon = (mood) => {
-    switch (mood) {
-      case "money":
-        return '<svg viewBox="0 0 24 24" class="w-8 h-8 mx-auto stroke-current text-yellow-600"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM9 15s1.5-2 3-2 3 2 3 2M9 9h.01M15 9h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg>';
-      case "burnout":
-        return '<svg viewBox="0 0 24 24" class="w-8 h-8 mx-auto stroke-current text-red-600"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM9 15s1.5-2 3-2 3 2 3 2M9 9h.01M15 9h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg>';
-      case "annoying":
-        return '<svg viewBox="0 0 24 24" class="w-8 h-8 mx-auto stroke-current text-purple-600"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM10 8l4 4m0-4l-4 4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg>';
-      case "stuck":
-        return '<svg viewBox="0 0 24 24" class="w-8 h-8 mx-auto stroke-current text-gray-600"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM8 12h8M12 8v8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg>';
-      case "bad":
-        return '<svg viewBox="0 0 24 24" class="w-8 h-8 mx-auto stroke-current text-green-600"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM8 14s2-3 4-3 4 3 4 3M9 9h.01M15 9h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg>';
-      case "bullying":
-        return '<svg viewBox="0 0 24 24" class="w-8 h-8 mx-auto stroke-current text-orange-600"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM8 8h8M8 12h8M8 16h8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M16 8l2-2M16 16l2 2M8 8l-2-2M8 16l-2 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>';
-      default:
-        return '<i class="fas fa-circle text-gray-400"></i>';
-    }
+    return moodIcons[mood] || '<i class="fas fa-circle text-gray-400"></i>';
+  };
+
+  // 心情名稱映射
+  const getMoodName = (mood) => {
+    const moodNames = {
+      money: "錢途茫茫",
+      burnout: "身心俱疲",
+      annoying: "鳥事一堆",
+      stuck: "缺乏成長",
+      bad: "破爛心情",
+      bullying: "職場霸凌",
+    };
+    return moodNames[mood] || "未知心情";
+  };
+
+  // 獲取厭世分數顏色
+  const getScoreColor = (score) => {
+    if (score >= 8) return "bg-red-100 text-red-700";
+    if (score >= 5) return "bg-orange-100 text-orange-700";
+    if (score >= 3) return "bg-yellow-100 text-yellow-700";
+    return "bg-green-100 text-green-700";
   };
 
   container.innerHTML = records
-    .map(
-      (r) => `
-      <div class="flex items-start gap-3 p-3 bg-white/50 rounded-xl">
-        <div class="text-2xl pt-1">
-          ${getMoodIcon(r.mood)}
+    .map((r, index) => {
+      const recordIndex = Array.from(filledDates.entries()).find(
+        ([key, value]) => value === r
+      )?.[0];
+      return `
+        <div class="record-item flex items-start gap-3 p-3 bg-white/50 rounded-xl hover:bg-white/70 transition-colors group relative">
+          <div class="text-2xl pt-1 flex-shrink-0">
+            ${getMoodIcon(r.mood)}
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-start justify-between gap-2 mb-1">
+              <h4 class="text-sm font-medium text-neutral-700">${getMoodName(
+                r.mood
+              )}</h4>
+              <button 
+                class="record-edit-btn" 
+                onclick="editRecord(${recordIndex})"
+                title="編輯記錄"
+                aria-label="編輯記錄"
+              >
+                <i class="fas fa-edit"></i>
+              </button>
+            </div>
+            <div class="record-content text-sm text-neutral-600 leading-relaxed mb-2">
+              ${r.description || "快速標記"}
+            </div>
+            <div class="flex items-center justify-between">
+              <p class="text-xs text-neutral-400">
+                ${new Date(r.timestamp).toLocaleDateString("zh-TW")}
+              </p>
+              <span class="record-score ${getScoreColor(
+                r.annoyanceIndex || 0
+              )}">
+                ${r.annoyanceIndex || 0} 分
+              </span>
+            </div>
+          </div>
         </div>
-        <div class="flex-1">
-          <p class="text-sm text-neutral-600 leading-relaxed">
-            ${r.description || "快速標記"}
-          </p>
-          <p class="text-xs text-neutral-400 mt-1">
-            ${new Date(r.timestamp).toLocaleDateString("zh-TW")}
-          </p>
-        </div>
-      </div>
-    `
-    )
+      `;
+    })
     .join("");
 }
 
@@ -2846,6 +2875,14 @@ document.addEventListener("DOMContentLoaded", function () {
   // 安排每日更新
   scheduleDailyUpdate();
 
+  // 設置編輯描述欄位的即時更新事件監聽器
+  const editDescriptionField = document.getElementById("editEventDescription");
+  if (editDescriptionField) {
+    editDescriptionField.addEventListener("input", (e) => {
+      updateEditAnnoyanceScore(e.target.value);
+    });
+  }
+
   console.log("應用程式初始化完成");
 });
 
@@ -2871,4 +2908,141 @@ function setupTouchOptimization() {
   // 針對 iOS 的額外優化
   document.body.style.webkitOverflowScrolling = "touch";
   document.body.style.touchAction = "pan-y";
+}
+
+// --- 編輯記錄功能 ---
+let currentEditingIndex = null;
+
+function editRecord(index) {
+  currentEditingIndex = index;
+  const record = filledDates.get(index);
+
+  if (!record) {
+    console.error("找不到要編輯的記錄");
+    return;
+  }
+
+  // 填入表單資料
+  document.getElementById("editEventDate").value = record.date;
+  document.getElementById("editEventDescription").value =
+    record.description || "";
+
+  // 更新厭世分數顯示
+  updateEditAnnoyanceScore(record.description || "");
+
+  // 渲染編輯模態窗的心情圖標
+  renderEditMoodIcons();
+
+  // 設置選中的心情
+  document.querySelectorAll(".edit-mood-btn").forEach((btn) => {
+    const isSelected = btn.dataset.mood === record.mood;
+    btn.classList.toggle("selected", isSelected);
+  });
+
+  // 開啟模態窗
+  openModal("editRecordModal");
+}
+
+function renderEditMoodIcons() {
+  Object.keys(moodIcons).forEach((mood) => {
+    const iconContainer = document.querySelector(
+      `[data-mood="${mood}"] .edit-mood-icon`
+    );
+    if (iconContainer) {
+      iconContainer.innerHTML = moodIcons[mood];
+    }
+  });
+
+  // 設置事件監聽器
+  document.querySelectorAll(".edit-mood-btn").forEach((btn) => {
+    btn.onclick = () => setEditMood(btn.dataset.mood);
+  });
+}
+
+function setEditMood(mood) {
+  document.querySelectorAll(".edit-mood-btn").forEach((btn) => {
+    const isSelected = btn.dataset.mood === mood;
+    btn.classList.toggle("selected", isSelected);
+  });
+}
+
+function updateEditAnnoyanceScore(text) {
+  const score = calculateAnnoyanceIndex(text);
+  const scoreElement = document.getElementById("editAnnoyanceScore");
+  if (scoreElement) {
+    scoreElement.textContent = `${score} 分`;
+    scoreElement.className = `record-score ${getEditScoreColor(score)}`;
+  }
+}
+
+function getEditScoreColor(score) {
+  if (score >= 8) return "bg-red-100 text-red-700";
+  if (score >= 5) return "bg-orange-100 text-orange-700";
+  if (score >= 3) return "bg-yellow-100 text-yellow-700";
+  return "bg-green-100 text-green-700";
+}
+
+function saveEditedRecord() {
+  if (currentEditingIndex === null) {
+    console.error("沒有正在編輯的記錄");
+    return;
+  }
+
+  try {
+    // 獲取選中的心情
+    const selectedMoodBtn = document.querySelector(".edit-mood-btn.selected");
+    if (!selectedMoodBtn) {
+      alert("請選擇一種心情分類！");
+      return;
+    }
+
+    // 獲取表單資料
+    const description = document
+      .getElementById("editEventDescription")
+      .value.trim();
+    const score = calculateAnnoyanceIndex(description);
+
+    // 獲取原始記錄
+    const originalRecord = filledDates.get(currentEditingIndex);
+
+    // 創建更新的記錄
+    const updatedRecord = {
+      ...originalRecord,
+      mood: selectedMoodBtn.dataset.mood,
+      description: description,
+      annoyanceIndex: score,
+      timestamp: new Date().toISOString(), // 更新編輯時間
+    };
+
+    // 更新記錄
+    filledDates.set(currentEditingIndex, updatedRecord);
+
+    // 更新對應的格子
+    const cellElement = document.querySelector(
+      `[data-index="${currentEditingIndex}"]`
+    );
+    if (cellElement) {
+      fillCell(cellElement, updatedRecord);
+    }
+
+    // 儲存資料
+    saveData();
+
+    // 更新所有統計資料
+    updateAllStats();
+
+    // 關閉模態窗
+    closeModal("editRecordModal");
+    currentEditingIndex = null;
+
+    // 顯示成功訊息
+    if (score > 0) {
+      showAnnoyanceFeedback(score);
+    }
+
+    console.log("記錄編輯完成");
+  } catch (error) {
+    console.error("編輯記錄失敗:", error);
+    alert("編輯失敗：" + error.message);
+  }
 }

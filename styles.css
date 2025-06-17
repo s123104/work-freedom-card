@@ -1151,3 +1151,163 @@ main.container {
 * {
   -webkit-overflow-scrolling: touch;
 }
+
+/* Share button styles */
+.share-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.share-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.share-btn:hover {
+  transform: scale(1.02);
+}
+
+.share-btn--copy {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+}
+
+.share-btn--copy:hover {
+  background: #e5e7eb;
+}
+
+.share-btn--threads {
+  background: #1a1a1a;
+  color: white;
+}
+
+.share-btn--threads:hover {
+  background: #333;
+}
+
+.share-btn--twitter {
+  background: #1da1f2;
+  color: white;
+}
+
+.share-btn--twitter:hover {
+  background: #0d8bd9;
+}
+
+.share-btn--line {
+  background: #00b900;
+  color: white;
+}
+
+.share-btn--line:hover {
+  background: #00a000;
+}
+
+/* Edit Record Modal Styles */
+.edit-mood-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 0.5rem;
+  border: 2px solid transparent;
+  border-radius: 1rem;
+  background: #f9fafb;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 80px;
+}
+
+.edit-mood-btn:hover {
+  background: #f3f4f6;
+  border-color: #e5e7eb;
+}
+
+.edit-mood-btn.selected {
+  background: #e5e7eb;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.edit-mood-icon {
+  width: 2rem;
+  height: 2rem;
+  margin-bottom: 0.25rem;
+}
+
+.edit-mood-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Record item edit button */
+.record-edit-btn {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+  border: none;
+  cursor: pointer;
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+.record-edit-btn:hover {
+  background: rgba(59, 130, 246, 0.2);
+}
+
+.record-item:hover .record-edit-btn {
+  opacity: 1;
+}
+
+/* Improved scrollbar for recent records */
+#recentRecords::-webkit-scrollbar {
+  width: 6px;
+}
+
+#recentRecords::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+#recentRecords::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+}
+
+#recentRecords::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Record content preview */
+.record-content {
+  max-height: 3rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-height: 1.5;
+}
+
+.record-score {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  white-space: nowrap;
+}

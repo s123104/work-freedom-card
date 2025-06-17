@@ -494,7 +494,7 @@
           >
             <i class="fas fa-history mr-2 text-primary-600"></i>近期記錄
           </h3>
-          <div id="recentRecords" class="space-y-3 max-h-64 overflow-y-auto">
+          <div id="recentRecords" class="space-y-3 max-h-80 overflow-y-auto pr-2">
             <p class="text-neutral-500 text-center py-8">
               <i class="fas fa-inbox text-3xl mb-2 block"></i>尚無記錄
             </p>
@@ -576,6 +576,96 @@
           </button>
           <button id="shareToLineBtn" class="share-btn share-btn--line">
             <i class="fab fa-line"></i>LINE
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Record Modal -->
+    <div id="editRecordModal" class="generic-modal" aria-hidden="true" role="dialog">
+      <div class="modal-box max-w-md">
+        <button
+          class="close-btn"
+          aria-label="關閉"
+          onclick="closeModal('editRecordModal')"
+        >
+          ×
+        </button>
+        
+        <h3 class="text-xl font-bold text-center mb-4">
+          <i class="fas fa-edit text-primary-600 mr-2"></i>編輯記錄
+        </h3>
+        
+        <form id="editRecordForm" class="space-y-4">
+          <div>
+            <label for="editEventDate" class="block text-sm font-medium text-neutral-700 mb-2">日期</label>
+            <input
+              type="date"
+              id="editEventDate"
+              readonly
+              class="w-full border-gray-300 rounded-lg bg-gray-50 cursor-not-allowed"
+            />
+          </div>
+          
+          <div>
+            <label for="editMoodSelect" class="block text-sm font-medium text-neutral-700 mb-2">心情 (離職六大原因)</label>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2" id="editMoodButtons">
+              <button type="button" class="edit-mood-btn" data-mood="money">
+                <div class="edit-mood-icon"></div>
+                <span class="text-xs mt-1">錢途茫茫</span>
+              </button>
+              <button type="button" class="edit-mood-btn" data-mood="burnout">
+                <div class="edit-mood-icon"></div>
+                <span class="text-xs mt-1">身心俱疲</span>
+              </button>
+              <button type="button" class="edit-mood-btn" data-mood="annoying">
+                <div class="edit-mood-icon"></div>
+                <span class="text-xs mt-1">鳥事一堆</span>
+              </button>
+              <button type="button" class="edit-mood-btn" data-mood="stuck">
+                <div class="edit-mood-icon"></div>
+                <span class="text-xs mt-1">缺乏成長</span>
+              </button>
+              <button type="button" class="edit-mood-btn" data-mood="bad">
+                <div class="edit-mood-icon"></div>
+                <span class="text-xs mt-1">破爛心情</span>
+              </button>
+              <button type="button" class="edit-mood-btn" data-mood="bullying">
+                <div class="edit-mood-icon"></div>
+                <span class="text-xs mt-1">職場霸凌</span>
+              </button>
+            </div>
+          </div>
+          
+          <div>
+            <label for="editEventDescription" class="block text-sm font-medium text-neutral-700 mb-2">事件描述</label>
+            <textarea
+              id="editEventDescription"
+              rows="3"
+              placeholder="今天發生了什麼鳥事？"
+              class="w-full border-gray-300 rounded-lg"
+            ></textarea>
+            <div class="mt-2 flex items-center justify-between text-xs">
+              <span class="text-gray-500">厭世指數：</span>
+              <span id="editAnnoyanceScore" class="bg-red-100 text-red-700 px-2 py-1 rounded-full font-medium">0 分</span>
+            </div>
+          </div>
+        </form>
+        
+        <div class="flex gap-3 mt-6">
+          <button
+            type="button"
+            onclick="closeModal('editRecordModal')"
+            class="flex-1 bg-neutral-200 text-neutral-700 py-3 rounded-xl"
+          >
+            取消
+          </button>
+          <button
+            type="button"
+            onclick="saveEditedRecord()"
+            class="flex-1 bg-primary-500 text-white py-3 rounded-xl"
+          >
+            儲存
           </button>
         </div>
       </div>
