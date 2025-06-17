@@ -1,20 +1,20 @@
 /**
  * 📦 模組：Service Worker - PWA 自動更新系統
- * 🕒 最後更新：2025-06-15T23:15:35+08:00
+ * 🕒 最後更新：2025-06-18T15:30:00+08:00
  * 🧑‍💻 作者/更新者：@s123104
- * 🔢 版本：v2.4.2
- * 📝 摘要：強化版 Service Worker，支援版本控制和強制更新
+ * 🔢 版本：v2.1.0
+ * 📝 摘要：智能PWA模態窗重構、系統自動檢測、近期記錄UI優化、編輯功能完善
  *
- * 🎯 影響範圍：PWA 緩存策略、自動更新機制
- * ✅ 測試狀態：已完成強制更新測試
- * 🔒 安全考量：HTTPS 限制、版本驗證
- * 📊 效能影響：優化緩存策略，支援離線使用
- * 🏛️ 架構決策：採用 stale-while-revalidate 策略
+ * 🎯 影響範圍：PWA 緩存策略、自動更新機制、智能安裝指引
+ * ✅ 測試狀態：已完成PWA模態窗和記錄編輯功能測試
+ * 🔒 安全考量：HTTPS 限制、版本驗證、系統檢測安全
+ * 📊 效能影響：優化緩存策略，支援離線使用，智能裝置檢測
+ * 🏛️ 架構決策：採用 stale-while-revalidate 策略，智能PWA引導
  */
 
 // 版本控制 - 每次更新必須修改此版本號
-const VERSION = "v2.4.2";
-const INTERNAL_VERSION = "v14"; // 內部版本，用於強制更新檢測
+const VERSION = "v2.1.0";
+const INTERNAL_VERSION = "v15"; // 內部版本，用於強制更新檢測
 const CACHE_NAME = `work-freedom-card-${VERSION}`;
 const DYNAMIC_CACHE_NAME = `dynamic-cache-${VERSION}`;
 const APP_VERSION_KEY = "app_version_sw";

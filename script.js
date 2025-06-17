@@ -705,8 +705,10 @@ function checkAndShowPwaPrompt() {
     window.matchMedia("(display-mode: standalone)").matches ||
     window.navigator.standalone;
   const optOut = localStorage.getItem("iosPwaPromptOptOut");
+
   if (isIOS && !isInStandaloneMode && optOut !== "true") {
     if (!localStorage.getItem("iosPwaPromptShown")) {
+      setupSmartPwaModal();
       openModal("iosPwaModal");
       localStorage.setItem("iosPwaPromptShown", "true");
     }
@@ -715,10 +717,254 @@ function checkAndShowPwaPrompt() {
     window.addEventListener("beforeinstallprompt", (e) => {
       e.preventDefault();
       deferredPrompt = e;
-      const installPrompt = document.getElementById("installPrompt");
-      installPrompt.classList.remove("hidden");
-      installPrompt.onclick = installPWA;
+
+      // 顯示自定義安裝提示
+      if (optOut !== "true") {
+        setupSmartPwaModal();
+        openModal("iosPwaModal");
+      }
     });
+  }
+}
+
+// 智能PWA模態窗設置
+function setupSmartPwaModal() {
+  const deviceInfo = detectUserDevice();
+  generateInstallationInstructions(deviceInfo);
+  setupPrimaryInstallButton(deviceInfo);
+}
+
+// 檢測用戶設備和瀏覽器
+function detectUserDevice() {
+  const userAgent = navigator.userAgent.toLowerCase();
+  const platform = navigator.platform.toLowerCase();
+
+  const isIOS = /ipad|iphone|ipod/.test(userAgent) && !window.MSStream;
+  const isAndroid = /android/.test(userAgent);
+  const isMac = /mac/.test(platform);
+  const isWindows = /win/.test(platform);
+  const isLinux = /linux/.test(platform) && !isAndroid;
+
+  const isChrome = /chrome/.test(userAgent) && !/edg/.test(userAgent);
+  const isEdge = /edg/.test(userAgent);
+  const isSafari = /safari/.test(userAgent) && !/chrome/.test(userAgent);
+  const isFirefox = /firefox/.test(userAgent);
+
+  return {
+    platform: {
+      isIOS,
+      isAndroid,
+      isMac,
+      isWindows,
+      isLinux,
+      isMobile: isIOS || isAndroid,
+      isDesktop: !isIOS && !isAndroid,
+    },
+    browser: {
+      isChrome,
+      isEdge,
+      isSafari,
+      isFirefox,
+      name: isChrome
+        ? "Chrome"
+        : isEdge
+        ? "Edge"
+        : isSafari
+        ? "Safari"
+        : isFirefox
+        ? "Firefox"
+        : "Unknown",
+    },
+    supportsInstall: isChrome || isEdge || (isSafari && isIOS),
+  };
+}
+
+// 生成安裝指引
+function generateInstallationInstructions(deviceInfo) {
+  const container = document.getElementById("installationInstructions");
+  let instructions = "";
+
+  if (deviceInfo.platform.isIOS && deviceInfo.browser.isSafari) {
+    instructions = generateIOSInstructions();
+  } else if (deviceInfo.platform.isAndroid && deviceInfo.browser.isChrome) {
+    instructions = generateAndroidInstructions();
+  } else if (
+    deviceInfo.platform.isDesktop &&
+    (deviceInfo.browser.isChrome || deviceInfo.browser.isEdge)
+  ) {
+    instructions = generateDesktopInstructions(deviceInfo.browser.name);
+  } else {
+    instructions = generateGenericInstructions(deviceInfo);
+  }
+
+  container.innerHTML = instructions;
+}
+
+// iOS Safari 安裝指引
+function generateIOSInstructions() {
+  return `
+    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-200 shadow-sm">
+      <h3 class="font-bold text-blue-900 mb-4 flex items-center text-lg">
+        <i class="fab fa-apple mr-3 text-blue-600"></i>iPhone / iPad 安裝步驟
+      </h3>
+      <div class="space-y-4">
+        <div class="flex items-start gap-4">
+          <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold">1</div>
+          <div class="flex-1">
+            <p class="text-blue-800 font-medium mb-1">點擊底部分享按鈕</p>
+            <p class="text-blue-600 text-sm">在 Safari 瀏覽器底部找到 <i class="fas fa-share mx-1 text-blue-500"></i> 分享圖示並點擊</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold">2</div>
+          <div class="flex-1">
+            <p class="text-blue-800 font-medium mb-1">選擇「加入主畫面」</p>
+            <p class="text-blue-600 text-sm">向下滑動選單，找到 <i class="fas fa-plus-square mx-1 text-green-500"></i> 「加入主畫面」選項</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold">3</div>
+          <div class="flex-1">
+            <p class="text-blue-800 font-medium mb-1">完成安裝</p>
+            <p class="text-blue-600 text-sm">點擊右上角「新增」按鈕 <i class="fas fa-check-circle mx-1 text-green-500"></i> 完成安裝</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// Android Chrome 安裝指引
+function generateAndroidInstructions() {
+  return `
+    <div class="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-2xl border border-green-200 shadow-sm">
+      <h3 class="font-bold text-green-900 mb-4 flex items-center text-lg">
+        <i class="fab fa-android mr-3 text-green-600"></i>Android 安裝步驟
+      </h3>
+      <div class="space-y-4">
+        <div class="flex items-start gap-4">
+          <div class="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold">1</div>
+          <div class="flex-1">
+            <p class="text-green-800 font-medium mb-1">點擊選單按鈕</p>
+            <p class="text-green-600 text-sm">點擊瀏覽器右上角的 <i class="fas fa-ellipsis-v mx-1 text-green-500"></i> 三點選單</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold">2</div>
+          <div class="flex-1">
+            <p class="text-green-800 font-medium mb-1">選擇安裝選項</p>
+            <p class="text-green-600 text-sm">找到 <i class="fas fa-download mx-1 text-green-500"></i> 「安裝應用程式」或「加到主畫面」</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold">3</div>
+          <div class="flex-1">
+            <p class="text-green-800 font-medium mb-1">確認安裝</p>
+            <p class="text-green-600 text-sm">點擊「安裝」確認 <i class="fas fa-check-circle mx-1 text-green-500"></i> 應用程式將出現在主畫面</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// 桌面版安裝指引
+function generateDesktopInstructions(browserName) {
+  return `
+    <div class="bg-gradient-to-r from-purple-50 to-indigo-50 p-6 rounded-2xl border border-purple-200 shadow-sm">
+      <h3 class="font-bold text-purple-900 mb-4 flex items-center text-lg">
+        <i class="fas fa-desktop mr-3 text-purple-600"></i>桌面版 ${browserName} 安裝步驟
+      </h3>
+      <div class="space-y-4">
+        <div class="flex items-start gap-4">
+          <div class="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold">1</div>
+          <div class="flex-1">
+            <p class="text-purple-800 font-medium mb-1">尋找安裝圖示</p>
+            <p class="text-purple-600 text-sm">在網址列右側找到 <i class="fas fa-plus-circle mx-1 text-purple-500"></i> 安裝圖示</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold">2</div>
+          <div class="flex-1">
+            <p class="text-purple-800 font-medium mb-1">點擊安裝</p>
+            <p class="text-purple-600 text-sm">點擊圖示，然後選擇 <i class="fas fa-download mx-1 text-purple-500"></i> 「安裝」</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold">3</div>
+          <div class="flex-1">
+            <p class="text-purple-800 font-medium mb-1">完成安裝</p>
+            <p class="text-purple-600 text-sm">應用程式將出現在開始選單 <i class="fas fa-check-circle mx-1 text-purple-500"></i> 或應用程式列表中</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// 通用安裝指引
+function generateGenericInstructions(deviceInfo) {
+  let platformText = deviceInfo.platform.isMobile ? "手機" : "電腦";
+  let browserText = deviceInfo.browser.name || "您的瀏覽器";
+
+  return `
+    <div class="bg-gradient-to-r from-gray-50 to-slate-50 p-6 rounded-2xl border border-gray-200 shadow-sm">
+      <h3 class="font-bold text-gray-900 mb-4 flex items-center text-lg">
+        <i class="fas fa-globe mr-3 text-gray-600"></i>${platformText} (${browserText}) 安裝說明
+      </h3>
+      <div class="text-gray-700 space-y-3">
+        <p class="text-sm leading-relaxed">
+          您的 ${browserText} 瀏覽器可能支援 PWA 安裝功能。請尋找以下安裝選項：
+        </p>
+        <ul class="space-y-2 text-sm list-disc list-inside text-gray-600 ml-4">
+          <li>網址列中的安裝圖示 <i class="fas fa-plus-circle mx-1"></i></li>
+          <li>瀏覽器選單中的「安裝應用程式」選項</li>
+          <li>「加到主畫面」或「加到桌面」選項</li>
+        </ul>
+      </div>
+    </div>
+  `;
+}
+
+// 設置主要安裝按鈕
+function setupPrimaryInstallButton(deviceInfo) {
+  const btn = document.getElementById("primaryInstallBtn");
+  const text = document.getElementById("primaryInstallText");
+
+  if (deferredPrompt) {
+    text.textContent = "立即安裝";
+    btn.onclick = () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === "accepted") {
+            handleIosPwaClose();
+          }
+          deferredPrompt = null;
+        });
+      }
+    };
+  } else if (deviceInfo.supportsInstall) {
+    text.textContent = "我知道了";
+    btn.onclick = handleIosPwaClose;
+  } else {
+    text.textContent = "繼續使用";
+    btn.onclick = handleIosPwaClose;
+  }
+}
+
+// 處理主要安裝動作
+function handlePrimaryInstallAction() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === "accepted") {
+        handleIosPwaClose();
+      }
+      deferredPrompt = null;
+    });
+  } else {
+    handleIosPwaClose();
   }
 }
 

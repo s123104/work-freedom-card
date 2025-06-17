@@ -1311,3 +1311,105 @@ main.container {
   border-radius: 9999px;
   white-space: nowrap;
 }
+
+/* Enhanced Recent Records Container */
+#recentRecords {
+  /* 修正捲軸問題：確保有足夠的 padding-bottom */
+  padding-bottom: 1rem;
+  /* 確保容器高度計算正確 */
+  box-sizing: border-box;
+  /* 改善滾動行為 */
+  scroll-behavior: smooth;
+  /* 在手機上啟用慣性滾動 */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 確保最後一個記錄項目有足夠的下邊距 */
+#recentRecords .record-item:last-child {
+  margin-bottom: 0.75rem;
+}
+
+/* PWA Modal Enhancements */
+.modal-box {
+  /* 確保模態窗內容可以完整顯示 */
+  max-height: 95vh;
+  padding-bottom: 2rem;
+}
+
+/* 智能 PWA 模態窗樣式 */
+#iosPwaModal .modal-box {
+  /* 增強模態窗的視覺效果 */
+  backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+}
+
+/* PWA 模態窗內的安裝步驟卡片動畫 */
+#installationInstructions > div {
+  animation: slideInUp 0.5s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* PWA 模態窗按鈕增強效果 */
+#primaryInstallBtn {
+  position: relative;
+  overflow: hidden;
+}
+
+#primaryInstallBtn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+#primaryInstallBtn:hover::before {
+  left: 100%;
+}
+
+/* 響應式設計改進 */
+@media (max-width: 640px) {
+  #recentRecords {
+    /* 在小螢幕上確保更好的觸控滾動 */
+    max-height: 20rem;
+    padding-bottom: 1.5rem;
+  }
+
+  #iosPwaModal .modal-box {
+    max-height: 90vh;
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+}
+
+/* 高度優化 */
+@media (max-height: 600px) {
+  #recentRecords {
+    max-height: 15rem;
+  }
+
+  #iosPwaModal .modal-box {
+    max-height: 85vh;
+    padding: 1rem;
+  }
+}

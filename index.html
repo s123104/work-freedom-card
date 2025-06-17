@@ -1,9 +1,9 @@
 <!--
   📦 模組：社畜解放卡
-  🕒 最後更新：2025-06-14T20:58:34+08:00
+  🕒 最後更新：2025-06-18T15:30:00+08:00
   🧑‍💻 作者/更新者：@s123104
-  🔢 版本：v2.0.0
-  📝 摘要：完整專案重構、深度SEO優化、創建llms.txt和sitemap.xml
+  🔢 版本：v2.1.0
+  📝 摘要：智能PWA模態窗重構、系統自動檢測、近期記錄UI優化、編輯功能完善
 -->
 <!DOCTYPE html>
 <html lang="zh-TW">
@@ -138,9 +138,9 @@
           "availability": "https://schema.org/InStock"
         },
         "license": "https://opensource.org/licenses/MIT",
-        "softwareVersion": "2.4.2",
+        "softwareVersion": "2.1.0",
         "datePublished": "2025-01-01",
-                  "dateModified": "2025-06-15T03:04:02+08:00",
+        "dateModified": "2025-06-18T15:30:00+08:00",
         "keywords": "社畜解放卡, 離職集點卡, 職場壓力管理, 工作心情記錄, 厭世指數, 上班族工具, 職場生存, 離職計畫, PWA應用, 免費工具, 開源專案",
         "inLanguage": "zh-TW",
         "isAccessibleForFree": true,
@@ -948,14 +948,14 @@
       </div>
     </div>
     <div id="installPrompt" class="hidden"></div>
-    <!-- PWA 安裝指引模態窗 -->
+    <!-- Smart PWA Installation Modal -->
     <div
       id="iosPwaModal"
       class="generic-modal"
       aria-hidden="true"
       role="dialog"
     >
-      <div class="modal-box max-w-2xl max-h-[90vh] overflow-y-auto">
+      <div class="modal-box max-w-3xl max-h-[95vh] overflow-y-auto">
         <button
           class="close-btn"
           aria-label="關閉"
@@ -963,161 +963,105 @@
         >
           ×
         </button>
-        <div class="text-center mb-6">
-          <h3 class="text-2xl font-bold text-primary-800 mb-2">
-            <i class="fas fa-mobile-alt mr-2 text-primary-600"></i>安裝至主畫面
-          </h3>
-          <p class="text-gray-600">
-            將「社畜解放卡」安裝到您的設備，享受原生App體驗！
+        
+        <!-- Header Section -->
+        <div class="text-center mb-8">
+          <div class="mb-6">
+            <div class="w-20 h-20 mx-auto bg-gradient-to-br from-primary-500 to-accent-500 rounded-2xl flex items-center justify-center mb-4 shadow-lg">
+              <i class="fas fa-mobile-alt text-3xl text-white"></i>
+            </div>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-bold text-primary-800 mb-3">
+            安裝社畜解放卡
+          </h2>
+          <p class="text-gray-600 text-sm sm:text-base leading-relaxed max-w-md mx-auto">
+            將應用程式安裝到您的設備，享受更好的使用體驗！
           </p>
         </div>
 
-        <!-- 安裝好處 -->
-        <div class="mb-6 bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-200">
-          <h4 class="font-bold text-blue-800 mb-3 flex items-center">
-            <i class="fas fa-star mr-2"></i>安裝好處
-          </h4>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-            <div class="flex items-center text-blue-700">
-              <i class="fas fa-rocket mr-2 text-blue-500"></i>
-              <span>更快的載入速度</span>
+        <!-- Benefits Section -->
+        <div class="mb-8 bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 p-6 rounded-2xl border border-blue-100 shadow-sm">
+          <h3 class="font-bold text-blue-900 mb-5 flex items-center text-lg">
+            <i class="fas fa-star mr-3 text-yellow-500"></i>安裝優勢
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="flex items-center gap-3 text-blue-800">
+              <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-rocket text-blue-600 text-sm"></i>
+              </div>
+              <span class="text-sm font-medium">更快的載入速度</span>
             </div>
-            <div class="flex items-center text-blue-700">
-              <i class="fas fa-wifi-slash mr-2 text-blue-500"></i>
-              <span>離線也能使用</span>
-          </div>
-            <div class="flex items-center text-blue-700">
-              <i class="fas fa-expand mr-2 text-blue-500"></i>
-              <span>全螢幕沉浸體驗</span>
+            <div class="flex items-center gap-3 text-blue-800">
+              <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-wifi-slash text-green-600 text-sm"></i>
+              </div>
+              <span class="text-sm font-medium">離線也能使用</span>
             </div>
-            <div class="flex items-center text-blue-700">
-              <i class="fas fa-home mr-2 text-blue-500"></i>
-              <span>主畫面快速啟動</span>
-          </div>
+            <div class="flex items-center gap-3 text-blue-800">
+              <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-expand text-purple-600 text-sm"></i>
+              </div>
+              <span class="text-sm font-medium">全螢幕沉浸體驗</span>
             </div>
-          </div>
-
-        <!-- 安裝指引 -->
-        <div class="space-y-4">
-          <!-- iOS Safari -->
-          <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
-            <h5 class="font-bold text-gray-800 mb-3 flex items-center">
-              <i class="fab fa-apple mr-2 text-gray-600"></i>
-              iPhone / iPad (Safari)
-            </h5>
-            <div class="space-y-2 text-sm">
-              <div class="flex items-start gap-3">
-                <span class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">1</span>
-                <div class="flex-1">
-                  <span>點擊底部的分享按鈕</span>
-                  <i class="fas fa-share ml-2 text-blue-500"></i>
-        </div>
+            <div class="flex items-center gap-3 text-blue-800">
+              <div class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-home text-orange-600 text-sm"></i>
               </div>
-              <div class="flex items-start gap-3">
-                <span class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">2</span>
-                <div class="flex-1">
-                  <span>向下滑動找到「加入主畫面」</span>
-                  <i class="fas fa-plus-square ml-2 text-green-500"></i>
-                </div>
-              </div>
-              <div class="flex items-start gap-3">
-                <span class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">3</span>
-                <div class="flex-1">
-                  <span>點擊右上角「新增」完成安裝</span>
-                  <i class="fas fa-check-circle ml-2 text-green-500"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Android Chrome -->
-          <div class="bg-green-50 p-4 rounded-xl border border-green-200">
-            <h5 class="font-bold text-gray-800 mb-3 flex items-center">
-              <i class="fab fa-android mr-2 text-green-600"></i>
-              Android (Chrome)
-            </h5>
-            <div class="space-y-2 text-sm">
-              <div class="flex items-start gap-3">
-                <span class="bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">1</span>
-                <div class="flex-1">
-                  <span>點擊右上角三點選單</span>
-                  <i class="fas fa-ellipsis-v ml-2 text-green-500"></i>
-                </div>
-              </div>
-              <div class="flex items-start gap-3">
-                <span class="bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">2</span>
-                <div class="flex-1">
-                  <span>選擇「安裝應用程式」或「加到主畫面」</span>
-                  <i class="fas fa-download ml-2 text-green-500"></i>
-                </div>
-              </div>
-              <div class="flex items-start gap-3">
-                <span class="bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">3</span>
-                <div class="flex-1">
-                  <span>確認安裝，應用程式將出現在主畫面</span>
-                  <i class="fas fa-check-circle ml-2 text-green-500"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Desktop Chrome/Edge -->
-          <div class="bg-purple-50 p-4 rounded-xl border border-purple-200">
-            <h5 class="font-bold text-gray-800 mb-3 flex items-center">
-              <i class="fas fa-desktop mr-2 text-purple-600"></i>
-              桌面版 (Chrome / Edge)
-            </h5>
-            <div class="space-y-2 text-sm">
-              <div class="flex items-start gap-3">
-                <span class="bg-purple-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">1</span>
-                <div class="flex-1">
-                  <span>尋找網址列右側的安裝圖示</span>
-                  <i class="fas fa-plus-circle ml-2 text-purple-500"></i>
-                </div>
-              </div>
-              <div class="flex items-start gap-3">
-                <span class="bg-purple-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">2</span>
-                <div class="flex-1">
-                  <span>點擊圖示，然後選擇「安裝」</span>
-                  <i class="fas fa-download ml-2 text-purple-500"></i>
-                </div>
-              </div>
-              <div class="flex items-start gap-3">
-                <span class="bg-purple-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">3</span>
-                <div class="flex-1">
-                  <span>應用程式將出現在開始選單或應用程式列表</span>
-                  <i class="fas fa-check-circle ml-2 text-purple-500"></i>
-                </div>
-              </div>
+              <span class="text-sm font-medium">主畫面快速啟動</span>
             </div>
           </div>
         </div>
 
-        <!-- 提示訊息 -->
-        <div class="mt-6 bg-yellow-50 p-4 rounded-xl border border-yellow-200">
+        <!-- Dynamic Installation Instructions -->
+        <div id="installationInstructions" class="space-y-5 mb-6">
+          <!-- Instructions will be dynamically generated based on user's device -->
+        </div>
+
+        <!-- Universal Fallback Section -->
+        <div id="universalInstructions" class="mb-8 bg-amber-50 p-5 rounded-xl border border-amber-200">
           <div class="flex items-start gap-3">
-            <i class="fas fa-lightbulb text-yellow-600 mt-1"></i>
-            <div class="text-sm text-yellow-800">
-              <p class="font-semibold mb-1">小提示：</p>
-              <p>如果沒有看到安裝選項，請確保您使用的是最新版本的瀏覽器。某些瀏覽器可能不支援PWA安裝功能。</p>
+            <i class="fas fa-lightbulb text-amber-600 mt-0.5 text-lg"></i>
+            <div class="text-sm text-amber-800 flex-1">
+              <p class="font-semibold mb-2">💡 找不到安裝選項？</p>
+              <ul class="space-y-1 list-disc list-inside text-amber-700 leading-relaxed">
+                <li>確保使用最新版本的瀏覽器</li>
+                <li>某些瀏覽器可能不支援 PWA 安裝</li>
+                <li>您仍可以正常使用網頁版本</li>
+                <li>建議使用 Chrome、Safari 或 Edge 瀏覽器</li>
+              </ul>
             </div>
           </div>
         </div>
 
-        <!-- 底部按鈕 -->
-        <div class="mt-6 space-y-3">
-          <div class="flex items-center justify-center gap-2">
-            <input type="checkbox" id="iosPwaDontShow" class="w-4 h-4 text-blue-600" />
-            <label for="iosPwaDontShow" class="text-sm text-gray-600">
+        <!-- Bottom Actions -->
+        <div class="space-y-4">
+          <div class="flex items-center justify-center gap-3 text-sm">
+            <input 
+              type="checkbox" 
+              id="iosPwaDontShow" 
+              class="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500 focus:ring-2"
+            />
+            <label for="iosPwaDontShow" class="text-gray-600 cursor-pointer select-none">
               下次不再顯示此提示
             </label>
-        </div>
-        <button
-            class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-105"
-          onclick="handleIosPwaClose()"
-        >
-            <i class="fas fa-check mr-2"></i>我知道了
-        </button>
+          </div>
+          
+          <div class="flex gap-3">
+            <button 
+              class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 px-6 rounded-xl font-medium transition-all duration-200"
+              onclick="handleIosPwaClose()"
+            >
+              稍後再說
+            </button>
+            <button 
+              id="primaryInstallBtn"
+              class="flex-1 bg-gradient-to-r from-primary-500 to-accent-500 hover:from-primary-600 hover:to-accent-600 text-white py-3 px-6 rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
+              onclick="handlePrimaryInstallAction()"
+            >
+              <i class="fas fa-download mr-2"></i>
+              <span id="primaryInstallText">我知道了</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
