@@ -1,0 +1,98 @@
+{
+  "budget": [
+    {
+      "path": "/*",
+      "timings": [
+        {
+          "metric": "first-contentful-paint",
+          "budget": 1800
+        },
+        {
+          "metric": "largest-contentful-paint",
+          "budget": 2500
+        },
+        {
+          "metric": "first-input-delay",
+          "budget": 100
+        },
+        {
+          "metric": "cumulative-layout-shift",
+          "budget": 0.1
+        },
+        {
+          "metric": "total-blocking-time",
+          "budget": 300
+        }
+      ],
+      "resourceSizes": [
+        {
+          "resourceType": "script",
+          "budget": 150000
+        },
+        {
+          "resourceType": "stylesheet",
+          "budget": 25000
+        },
+        {
+          "resourceType": "image",
+          "budget": 500000
+        },
+        {
+          "resourceType": "media",
+          "budget": 1000000
+        },
+        {
+          "resourceType": "font",
+          "budget": 100000
+        },
+        {
+          "resourceType": "document",
+          "budget": 50000
+        },
+        {
+          "resourceType": "total",
+          "budget": 2000000
+        }
+      ],
+      "resourceCounts": [
+        {
+          "resourceType": "script",
+          "budget": 10
+        },
+        {
+          "resourceType": "stylesheet",
+          "budget": 5
+        },
+        {
+          "resourceType": "image",
+          "budget": 20
+        },
+        {
+          "resourceType": "font",
+          "budget": 3
+        },
+        {
+          "resourceType": "third-party",
+          "budget": 5
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "preset": "desktop",
+    "throttling": {
+      "rttMs": 40,
+      "throughputKbps": 10240,
+      "cpuSlowdownMultiplier": 1
+    },
+    "emulatedFormFactor": "desktop"
+  },
+  "assertions": {
+    "categories": {
+      "performance": ["error", { "minScore": 0.9 }],
+      "accessibility": ["error", { "minScore": 0.9 }],
+      "best-practices": ["error", { "minScore": 0.9 }],
+      "seo": ["error", { "minScore": 0.9 }]
+    }
+  }
+}

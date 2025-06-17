@@ -1,0 +1,209 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# SEO與AEO優化規範
+
+## 核心關鍵字策略
+
+### 主要關鍵字
+- 社畜解放卡（主品牌詞）
+- 離職集點卡（原品牌詞，保持覆蓋）
+- 職場壓力管理工具
+- 工作心情記錄App
+- 厭世指數分析
+- 社畜集點卡
+
+### 長尾關鍵字
+- 上班族壓力管理免費工具
+- 職場霸凌記錄軟體
+- 離職準備計畫工具
+- 工作倦怠自我檢測
+- 職場生存指南APP
+- 社畜解放離職計畫
+
+### 語意關聯詞
+- 職場厭世、工作壓力、職業倦怠
+- 心理健康、情緒管理、壓力追蹤
+- PWA應用、免費工具、開源專案
+- 離線使用、隱私保護、數據安全
+
+## Meta標籤優化標準
+
+### Title標籤規範
+```html
+<!-- 主頁標題 -->
+<title>社畜解放卡 - 免費職場壓力管理工具 | 離職集點追蹤器</title>
+
+<!-- 功能頁面標題格式 -->
+<title>[功能名稱] - 社畜解放卡 | [相關關鍵字]</title>
+```
+
+### Description標籤要求
+- 長度控制在150-160字符
+- 必須包含主要關鍵字
+- 呼籲行動(CTA)明確
+- 突出獨特價值主張
+
+```html
+<meta name="description" content="社畜解放卡是免費開源的職場壓力管理工具！支援六大心情分類記錄每日職場心情與鳥事，集滿100點離職點數邁向自由。提供厭世指數分析、AI洞察建議、成就系統，支援PWA離線使用。">
+```
+
+### Keywords標籤規範
+```html
+<meta name="keywords" content="社畜解放卡,離職集點卡,職場壓力管理,工作心情記錄,厭世指數,上班族工具,職場生存,離職計畫,PWA應用,免費工具,開源專案,社畜集點,職場霸凌,工作倦怠">
+```
+
+## 結構化資料優化
+
+### Schema.org標準實作
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "社畜解放卡",
+  "alternateName": ["離職集點卡", "職場壓力管理工具"],
+  "description": "免費開源的職場壓力管理工具，幫助社畜記錄工作心情，追蹤離職進度",
+  "applicationCategory": "ProductivityApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+```
+
+### FAQ結構化資料
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "社畜解放卡是什麼？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "社畜解放卡是一個免費的PWA應用程式，幫助職場工作者記錄每日工作心情..."
+      }
+    }
+  ]
+}
+```
+
+## 內容優化策略
+
+### 標題結構(H1-H6)
+```html
+<h1>社畜解放卡 - 職場壓力管理工具</h1>
+<h2>六大心情分類記錄系統</h2>
+<h3>錢途茫茫 - 薪資發展問題</h3>
+<h4>如何記錄薪資相關厭世事件</h4>
+```
+
+### 關鍵字密度控制
+- 主關鍵字密度：1-2%
+- 相關關鍵字密度：0.5-1%
+- 避免關鍵字堆砌
+- 自然語言優先
+
+### 內部連結策略
+- 建立話題集群(Topic Cluster)
+- 使用描述性錨點文字
+- 相關功能頁面互相連結
+- 麵包屑導航完整
+
+## AEO (Answer Engine Optimization) 策略
+
+### 語音搜尋優化
+- 使用自然語言問答格式
+- 優化長尾關鍵字
+- 建立FAQ區塊
+- 提供直接答案
+
+### 特色摘要優化
+```html
+<!-- 結構化問答 -->
+<div class="faq-item">
+  <h3>如何使用社畜解放卡記錄職場心情？</h3>
+  <p>使用社畜解放卡記錄職場心情非常簡單：1. 點擊心情格子 2. 選擇對應心情分類 3. 記錄具體事件 4. 系統自動計算厭世指數</p>
+</div>
+```
+
+### 本地SEO優化
+```html
+<meta name="geo.region" content="TW">
+<meta name="geo.country" content="Taiwan">
+<meta name="language" content="zh-TW">
+```
+
+## 技術SEO要求
+
+### 頁面載入速度
+- Core Web Vitals達標
+- LCP < 2.5秒
+- FID < 100ms
+- CLS < 0.1
+
+### 行動裝置優化
+- 響應式設計必須完美
+- 觸控友善的UI元素
+- 適當的字體大小
+- 快速的點擊回應
+
+### PWA SEO考量
+```html
+<!-- PWA相關meta標籤 -->
+<meta name="theme-color" content="#3da35d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="./manifest.json">
+```
+
+## 內容行銷整合
+
+### 內容主題規劃
+- 職場生存技巧
+- 壓力管理方法
+- 離職準備指南
+- 心理健康建議
+- 職涯發展策略
+
+### 社群媒體優化
+```html
+<!-- Open Graph優化 -->
+<meta property="og:title" content="社畜解放卡 - 職場壓力管理工具">
+<meta property="og:description" content="免費開源的職場壓力管理工具">
+<meta property="og:image" content="og-image.png">
+<meta property="og:type" content="website">
+```
+
+## 競爭分析策略
+
+### 關鍵字競爭分析
+- 監控競爭對手關鍵字排名
+- 分析SERP特徵
+- 發現關鍵字空隙
+- 優化長尾關鍵字
+
+### 內容差異化
+- 強調免費開源特色
+- 突出隱私保護優勢
+- 展示PWA技術先進性
+- 提供AI分析功能
+
+## 效果測量指標
+
+### 必須追蹤的指標
+- 有機流量成長率
+- 關鍵字排名位置
+- 頁面停留時間
+- 跳出率
+- 轉換率(PWA安裝)
+
+### SEO工具整合
+- Google Search Console
+- Google Analytics 4
+- PageSpeed Insights
+- Rich Results Test
+- Mobile-Friendly Test

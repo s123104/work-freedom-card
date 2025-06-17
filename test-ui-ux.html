@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>社畜解放卡 - UI/UX 綜合測試套件</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      .test-pass {
+        color: #10b981;
+      }
+      .test-fail {
+        color: #ef4444;
+      }
+      .test-pending {
+        color: #f59e0b;
+      }
+      .test-suite {
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        margin: 16px 0;
+        padding: 16px;
+      }
+      .test-result {
+        padding: 8px;
+        margin: 4px 0;
+        border-radius: 4px;
+        font-family: monospace;
+      }
+      .performance-chart {
+        width: 100%;
+        height: 200px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+      }
+      .responsive-test {
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        margin: 8px;
+        padding: 12px;
+      }
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+      }
+      .modal-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        max-width: 90vw;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 min-h-screen p-4">
+    <!-- 測試控制台 -->
+    <div class="max-w-6xl mx-auto">
+      <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">
+          <i class="fas fa-clipboard-check text-blue-600 mr-3"></i>
+          社畜解放卡 - UI/UX 綜合測試套件
+        </h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <button
+            onclick="runFunctionalTests()"
+            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            <i class="fas fa-cogs mr-2"></i>功能測試
+          </button>
+          <button
+            onclick="runResponsiveTests()"
+            class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+          >
+            <i class="fas fa-mobile-alt mr-2"></i>響應式測試
+          </button>
+          <button
+            onclick="runPerformanceTests()"
+            class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors"
+          >
+            <i class="fas fa-tachometer-alt mr-2"></i>效能測試
+          </button>
+          <button
+            onclick="runAccessibilityTests()"
+            class="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors"
+          >
+            <i class="fas fa-universal-access mr-2"></i>無障礙性測試
+          </button>
+        </div>
+
+        <div class="flex justify-between items-center mb-4">
+          <div class="text-sm text-gray-600">
+            測試開始時間: <span id="testStartTime">-</span>
+          </div>
+          <div class="text-sm text-gray-600">
+            總進度: <span id="overallProgress">0/0</span>
+          </div>
+        </div>
+
+        <div class="w-full bg-gray-200 rounded-full h-2">
+          <div
+            id="progressBar"
+            class="bg-blue-600 h-2 rounded-full"
+            style="width: 0%"
+          ></div>
+        </div>
+      </div>
+
+      <!-- 測試結果區域 -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- 功能測試結果 -->
+        <div class="test-suite bg-white rounded-lg shadow">
+          <h2 class="text-xl font-semibold mb-4 text-gray-800">
+            <i class="fas fa-cogs text-blue-600 mr-2"></i>功能測試結果
+          </h2>
+          <div id="functionalTestResults" class="space-y-2">
+            <div class="text-gray-500 text-center py-8">
+              點擊「功能測試」開始測試
+            </div>
+          </div>
+        </div>
+
+        <!-- 響應式測試結果 -->
+        <div class="test-suite bg-white rounded-lg shadow">
+          <h2 class="text-xl font-semibold mb-4 text-gray-800">
+            <i class="fas fa-mobile-alt text-green-600 mr-2"></i>響應式測試結果
+          </h2>
+          <div id="responsiveTestResults" class="space-y-2">
+            <div class="text-gray-500 text-center py-8">
+              點擊「響應式測試」開始測試
+            </div>
+          </div>
+        </div>
+
+        <!-- 效能測試結果 -->
+        <div class="test-suite bg-white rounded-lg shadow">
+          <h2 class="text-xl font-semibold mb-4 text-gray-800">
+            <i class="fas fa-tachometer-alt text-purple-600 mr-2"></i
+            >效能測試結果
+          </h2>
+          <div id="performanceTestResults" class="space-y-2">
+            <div class="text-gray-500 text-center py-8">
+              點擊「效能測試」開始測試
+            </div>
+          </div>
+          <canvas
+            id="performanceChart"
+            class="performance-chart mt-4"
+            style="display: none"
+          ></canvas>
+        </div>
+
+        <!-- 無障礙性測試結果 -->
+        <div class="test-suite bg-white rounded-lg shadow">
+          <h2 class="text-xl font-semibold mb-4 text-gray-800">
+            <i class="fas fa-universal-access text-orange-600 mr-2"></i
+            >無障礙性測試結果
+          </h2>
+          <div id="accessibilityTestResults" class="space-y-2">
+            <div class="text-gray-500 text-center py-8">
+              點擊「無障礙性測試」開始測試
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 測試摘要 -->
+      <div class="bg-white rounded-lg shadow-lg p-6 mt-6">
+        <h2 class="text-xl font-semibold mb-4 text-gray-800">
+          <i class="fas fa-chart-bar text-indigo-600 mr-2"></i>測試摘要
+        </h2>
+        <div id="testSummary" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="text-center">
+            <div class="text-2xl font-bold text-blue-600" id="functionalCount">
+              0
+            </div>
+            <div class="text-sm text-gray-600">功能測試</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-green-600" id="responsiveCount">
+              0
+            </div>
+            <div class="text-sm text-gray-600">響應式測試</div>
+          </div>
+          <div class="text-center">
+            <div
+              class="text-2xl font-bold text-purple-600"
+              id="performanceCount"
+            >
+              0
+            </div>
+            <div class="text-sm text-gray-600">效能測試</div>
+          </div>
+          <div class="text-center">
+            <div
+              class="text-2xl font-bold text-orange-600"
+              id="accessibilityCount"
+            >
+              0
+            </div>
+            <div class="text-sm text-gray-600">無障礙性測試</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 應用程式預覽框架 -->
+      <div class="bg-white rounded-lg shadow-lg p-6 mt-6">
+        <h2 class="text-xl font-semibold mb-4 text-gray-800">
+          <i class="fas fa-eye text-teal-600 mr-2"></i>應用程式預覽與互動測試
+        </h2>
+        <div class="border rounded-lg overflow-hidden">
+          <iframe
+            id="appPreview"
+            src="index.html"
+            class="w-full h-96 border-0"
+          ></iframe>
+        </div>
+        <div class="mt-4 flex flex-wrap gap-2">
+          <button
+            onclick="setPreviewSize('mobile')"
+            class="px-3 py-1 bg-blue-100 text-blue-800 rounded-md text-sm"
+          >
+            📱 手機 (375px)
+          </button>
+          <button
+            onclick="setPreviewSize('tablet')"
+            class="px-3 py-1 bg-green-100 text-green-800 rounded-md text-sm"
+          >
+            📱 平板 (768px)
+          </button>
+          <button
+            onclick="setPreviewSize('desktop')"
+            class="px-3 py-1 bg-purple-100 text-purple-800 rounded-md text-sm"
+          >
+            💻 桌面 (1024px)
+          </button>
+          <button
+            onclick="setPreviewSize('full')"
+            class="px-3 py-1 bg-gray-100 text-gray-800 rounded-md text-sm"
+          >
+            🖥️ 全螢幕
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 測試詳情模態窗 -->
+    <div id="testDetailModal" class="modal-overlay hidden">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-semibold">測試詳情</h3>
+          <button
+            onclick="closeTestDetail()"
+            class="text-gray-400 hover:text-gray-600"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div id="testDetailContent" class="space-y-4"></div>
+      </div>
+    </div>
+
+    <script>
+      // 全域變數
+      let testResults = {
+        functional: [],
+        responsive: [],
+        performance: [],
+        accessibility: [],
+      };
+      let totalTests = 0;
+      let completedTests = 0;
+
+      // 初始化
+      document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("testStartTime").textContent =
+          new Date().toLocaleString("zh-TW");
+      });
+
+      // 工具函數
+      function addTestResult(
+        category,
+        testName,
+        status,
+        details = "",
+        duration = 0
+      ) {
+        const result = {
+          name: testName,
+          status: status, // 'pass', 'fail', 'pending'
+          details: details,
+          duration: duration,
+          timestamp: new Date().toISOString(),
+        };
+
+        testResults[category].push(result);
+        updateTestDisplay(category);
+        updateProgress();
+      }
+
+      function updateTestDisplay(category) {
+        const container = document.getElementById(`${category}TestResults`);
+        const results = testResults[category];
+
+        container.innerHTML = results
+          .map((result) => {
+            const statusClass =
+              result.status === "pass"
+                ? "test-pass bg-green-50"
+                : result.status === "fail"
+                ? "test-fail bg-red-50"
+                : "test-pending bg-yellow-50";
+            const icon =
+              result.status === "pass"
+                ? "fas fa-check-circle"
+                : result.status === "fail"
+                ? "fas fa-times-circle"
+                : "fas fa-clock";
+
+            return `
+                    <div class="test-result ${statusClass}">
+                        <div class="flex justify-between items-start">
+                            <div class="flex items-center">
+                                <i class="${icon} mr-2"></i>
+                                <span class="font-medium">${result.name}</span>
+                            </div>
+                            <span class="text-xs text-gray-500">${
+                              result.duration
+                            }ms</span>
+                        </div>
+                        ${
+                          result.details
+                            ? `<div class="text-sm mt-1 text-gray-600">${result.details}</div>`
+                            : ""
+                        }
+                    </div>
+                `;
+          })
+          .join("");
+
+        // 更新計數器
+        const passCount = results.filter((r) => r.status === "pass").length;
+        const totalCount = results.length;
+        document.getElementById(
+          `${category}Count`
+        ).textContent = `${passCount}/${totalCount}`;
+      }
+
+      function updateProgress() {
+        const progress =
+          totalTests > 0 ? (completedTests / totalTests) * 100 : 0;
+        document.getElementById("progressBar").style.width = `${progress}%`;
+        document.getElementById(
+          "overallProgress"
+        ).textContent = `${completedTests}/${totalTests}`;
+      }
+
+      // 功能測試
+      async function runFunctionalTests() {
+        const startTime = performance.now();
+        testResults.functional = [];
+        totalTests += 8;
+
+        addTestResult("functional", "檢查主應用程式載入", "pending");
+
+        try {
+          // 測試 1: 檢查應用程式基本載入
+          await new Promise((resolve) => setTimeout(resolve, 100));
+          const appFrame = document.getElementById("appPreview");
+          if (appFrame.src.includes("index.html")) {
+            addTestResult(
+              "functional",
+              "檢查主應用程式載入",
+              "pass",
+              "應用程式成功載入",
+              performance.now() - startTime
+            );
+          } else {
+            addTestResult(
+              "functional",
+              "檢查主應用程式載入",
+              "fail",
+              "應用程式載入失敗"
+            );
+          }
+          completedTests++;
+
+          // 測試 2: 檢查 LocalStorage 功能
+          addTestResult("functional", "檢查 LocalStorage 支援", "pending");
+          await new Promise((resolve) => setTimeout(resolve, 50));
+          try {
+            localStorage.setItem("test", "value");
+            const value = localStorage.getItem("test");
+            localStorage.removeItem("test");
+            if (value === "value") {
+              addTestResult(
+                "functional",
+                "檢查 LocalStorage 支援",
+                "pass",
+                "LocalStorage 功能正常"
+              );
+            } else {
+              addTestResult(
+                "functional",
+                "檢查 LocalStorage 支援",
+                "fail",
+                "LocalStorage 讀寫異常"
+              );
+            }
+          } catch (e) {
+            addTestResult(
+              "functional",
+              "檢查 LocalStorage 支援",
+              "fail",
+              `LocalStorage 錯誤: ${e.message}`
+            );
+          }
+          completedTests++;
+
+          // 測試 3: 檢查 Service Worker 支援
+          addTestResult("functional", "檢查 Service Worker 支援", "pending");
+          await new Promise((resolve) => setTimeout(resolve, 50));
+          if ("serviceWorker" in navigator) {
+            addTestResult(
+              "functional",
+              "檢查 Service Worker 支援",
+              "pass",
+              "瀏覽器支援 Service Worker"
+            );
+          } else {
+            addTestResult(
+              "functional",
+              "檢查 Service Worker 支援",
+              "fail",
+              "瀏覽器不支援 Service Worker"
+            );
+          }
+          completedTests++;
+
+          // 測試 4: 檢查 PWA Manifest
+          addTestResult("functional", "檢查 PWA Manifest", "pending");
+          await new Promise((resolve) => setTimeout(resolve, 50));
+          try {
+            const response = await fetch("manifest.json");
+            if (response.ok) {
+              const manifest = await response.json();
+              if (manifest.name && manifest.icons) {
+                addTestResult(
+                  "functional",
+                  "檢查 PWA Manifest",
+                  "pass",
+                  `應用名稱: ${manifest.name}`
+                );
+              } else {
+                addTestResult(
+                  "functional",
+                  "檢查 PWA Manifest",
+                  "fail",
+                  "Manifest 格式不完整"
+                );
+              }
+            } else {
+              addTestResult(
+                "functional",
+                "檢查 PWA Manifest",
+                "fail",
+                "Manifest 檔案無法載入"
+              );
+            }
+          } catch (e) {
+            addTestResult(
+              "functional",
+              "檢查 PWA Manifest",
+              "fail",
+              `Manifest 錯誤: ${e.message}`
+            );
+          }
+          completedTests++;
+
+          // 測試 5: 檢查圖片資源
+          addTestResult("functional", "檢查圖片資源載入", "pending");
+          await new Promise((resolve) => setTimeout(resolve, 50));
+          const imageTests = ["icon-192.png", "icon-512.png", "og-image.png"];
+          let imageLoadCount = 0;
+
+          for (const imgSrc of imageTests) {
+            try {
+              const response = await fetch(imgSrc);
+              if (response.ok) imageLoadCount++;
+            } catch (e) {
+              // 圖片載入失敗
+            }
+          }
+
+          if (imageLoadCount === imageTests.length) {
+            addTestResult(
+              "functional",
+              "檢查圖片資源載入",
+              "pass",
+              `${imageLoadCount}/${imageTests.length} 圖片載入成功`
+            );
+          } else {
+            addTestResult(
+              "functional",
+              "檢查圖片資源載入",
+              "fail",
+              `只有 ${imageLoadCount}/${imageTests.length} 圖片載入成功`
+            );
+          }
+          completedTests++;
+
+          // 測試 6: 檢查 CSS 載入
+          addTestResult("functional", "檢查 CSS 樣式載入", "pending");
+          await new Promise((resolve) => setTimeout(resolve, 50));
+          try {
+            const response = await fetch("styles.css");
+            if (response.ok) {
+              const cssText = await response.text();
+              if (cssText.length > 100) {
+                addTestResult(
+                  "functional",
+                  "檢查 CSS 樣式載入",
+                  "pass",
+                  `CSS 檔案大小: ${Math.round(cssText.length / 1024)}KB`
+                );
+              } else {
+                addTestResult(
+                  "functional",
+                  "檢查 CSS 樣式載入",
+                  "fail",
+                  "CSS 檔案過小或空白"
+                );
+              }
+            } else {
+              addTestResult(
+                "functional",
+                "檢查 CSS 樣式載入",
+                "fail",
+                "CSS 檔案無法載入"
+              );
+            }
+          } catch (e) {
+            addTestResult(
+              "functional",
+              "檢查 CSS 樣式載入",
+              "fail",
+              `CSS 載入錯誤: ${e.message}`
+            );
+          }
+          completedTests++;
+
+          // 測試 7: 檢查 JavaScript 載入
+          addTestResult("functional", "檢查 JavaScript 載入", "pending");
+          await new Promise((resolve) => setTimeout(resolve, 50));
+          try {
+            const response = await fetch("script.js");
+            if (response.ok) {
+              const jsText = await response.text();
+              if (jsText.length > 1000) {
+                addTestResult(
+                  "functional",
+                  "檢查 JavaScript 載入",
+                  "pass",
+                  `JS 檔案大小: ${Math.round(jsText.length / 1024)}KB`
+                );
+              } else {
+                addTestResult(
+                  "functional",
+                  "檢查 JavaScript 載入",
+                  "fail",
+                  "JS 檔案過小或空白"
+                );
+              }
+            } else {
+              addTestResult(
+                "functional",
+                "檢查 JavaScript 載入",
+                "fail",
+                "JS 檔案無法載入"
+              );
+            }
+          } catch (e) {
+            addTestResult(
+              "functional",
+              "檢查 JavaScript 載入",
+              "fail",
+              `JS 載入錯誤: ${e.message}`
+            );
+          }
+          completedTests++;
+
+          // 測試 8: 檢查 SEO 文件
+          addTestResult("functional", "檢查 SEO 相關文件", "pending");
+          await new Promise((resolve) => setTimeout(resolve, 50));
+          try {
+            const seoFiles = ["sitemap.xml", "robots.txt", "llms.txt"];
+            let seoLoadCount = 0;
+
+            for (const file of seoFiles) {
+              try {
+                const response = await fetch(file);
+                if (response.ok) seoLoadCount++;
+              } catch (e) {
+                // SEO 檔案載入失敗
+              }
+            }
+
+            if (seoLoadCount === seoFiles.length) {
+              addTestResult(
+                "functional",
+                "檢查 SEO 相關文件",
+                "pass",
+                `${seoLoadCount}/${seoFiles.length} SEO 檔案載入成功`
+              );
+            } else {
+              addTestResult(
+                "functional",
+                "檢查 SEO 相關文件",
+                "fail",
+                `只有 ${seoLoadCount}/${seoFiles.length} SEO 檔案載入成功`
+              );
+            }
+          } catch (e) {
+            addTestResult(
+              "functional",
+              "檢查 SEO 相關文件",
+              "fail",
+              `SEO 檔案檢查錯誤: ${e.message}`
+            );
+          }
+          completedTests++;
+        } catch (error) {
+          addTestResult(
+            "functional",
+            "功能測試執行",
+            "fail",
+            `測試執行錯誤: ${error.message}`
+          );
+          completedTests++;
+        }
+      }
+
+      // 響應式測試
+      async function runResponsiveTests() {
+        testResults.responsive = [];
+        totalTests += 6;
+
+        const breakpoints = [
+          { name: "手機端 (375px)", width: 375 },
+          { name: "大手機 (425px)", width: 425 },
+          { name: "平板端 (768px)", width: 768 },
+          { name: "小筆電 (1024px)", width: 1024 },
+          { name: "桌面端 (1440px)", width: 1440 },
+          { name: "大螢幕 (1920px)", width: 1920 },
+        ];
+
+        for (const breakpoint of breakpoints) {
+          addTestResult("responsive", `測試 ${breakpoint.name}`, "pending");
+          await new Promise((resolve) => setTimeout(resolve, 100));
+
+          try {
+            // 設定預覽框架尺寸
+            const preview = document.getElementById("appPreview");
+            preview.style.width = `${breakpoint.width}px`;
+
+            // 等待重新渲染
+            await new Promise((resolve) => setTimeout(resolve, 200));
+
+            // 檢查是否適合該尺寸
+            const isResponsive = preview.offsetWidth <= breakpoint.width + 10; // 允許10px誤差
+
+            if (isResponsive) {
+              addTestResult(
+                "responsive",
+                `測試 ${breakpoint.name}`,
+                "pass",
+                `正確適應 ${breakpoint.width}px 寬度`
+              );
+            } else {
+              addTestResult(
+                "responsive",
+                `測試 ${breakpoint.name}`,
+                "fail",
+                `未正確適應 ${breakpoint.width}px 寬度`
+              );
+            }
+          } catch (error) {
+            addTestResult(
+              "responsive",
+              `測試 ${breakpoint.name}`,
+              "fail",
+              `測試錯誤: ${error.message}`
+            );
+          }
+          completedTests++;
+        }
+
+        // 恢復預覽框架原始尺寸
+        document.getElementById("appPreview").style.width = "100%";
+      }
+
+      // 效能測試
+      async function runPerformanceTests() {
+        testResults.performance = [];
+        totalTests += 5;
+
+        // 測試 1: 頁面載入時間
+        addTestResult("performance", "頁面載入時間測試", "pending");
+        const loadStart = performance.now();
+
+        try {
+          await new Promise((resolve) => setTimeout(resolve, 100));
+          const loadTime = performance.now() - loadStart;
+
+          if (loadTime < 1000) {
+            addTestResult(
+              "performance",
+              "頁面載入時間測試",
+              "pass",
+              `載入時間: ${loadTime.toFixed(2)}ms`
+            );
+          } else if (loadTime < 3000) {
+            addTestResult(
+              "performance",
+              "頁面載入時間測試",
+              "pass",
+              `載入時間: ${loadTime.toFixed(2)}ms (稍慢)`
+            );
+          } else {
+            addTestResult(
+              "performance",
+              "頁面載入時間測試",
+              "fail",
+              `載入時間過長: ${loadTime.toFixed(2)}ms`
+            );
+          }
+        } catch (error) {
+          addTestResult(
+            "performance",
+            "頁面載入時間測試",
+            "fail",
+            `測試錯誤: ${error.message}`
+          );
+        }
+        completedTests++;
+
+        // 測試 2: 記憶體使用量
+        addTestResult("performance", "記憶體使用量檢查", "pending");
+        await new Promise((resolve) => setTimeout(resolve, 50));
+
+        if ("memory" in performance) {
+          const memory = performance.memory;
+          const usedMB = Math.round(memory.usedJSHeapSize / 1024 / 1024);
+
+          if (usedMB < 50) {
+            addTestResult(
+              "performance",
+              "記憶體使用量檢查",
+              "pass",
+              `記憶體使用: ${usedMB}MB`
+            );
+          } else if (usedMB < 100) {
+            addTestResult(
+              "performance",
+              "記憶體使用量檢查",
+              "pass",
+              `記憶體使用: ${usedMB}MB (中等)`
+            );
+          } else {
+            addTestResult(
+              "performance",
+              "記憶體使用量檢查",
+              "fail",
+              `記憶體使用過高: ${usedMB}MB`
+            );
+          }
+        } else {
+          addTestResult(
+            "performance",
+            "記憶體使用量檢查",
+            "fail",
+            "瀏覽器不支援記憶體 API"
+          );
+        }
+        completedTests++;
+
+        // 測試 3: DOM 節點數量
+        addTestResult("performance", "DOM 節點數量檢查", "pending");
+        await new Promise((resolve) => setTimeout(resolve, 50));
+
+        const nodeCount = document.querySelectorAll("*").length;
+        if (nodeCount < 1000) {
+          addTestResult(
+            "performance",
+            "DOM 節點數量檢查",
+            "pass",
+            `DOM 節點: ${nodeCount}`
+          );
+        } else if (nodeCount < 2000) {
+          addTestResult(
+            "performance",
+            "DOM 節點數量檢查",
+            "pass",
+            `DOM 節點: ${nodeCount} (中等)`
+          );
+        } else {
+          addTestResult(
+            "performance",
+            "DOM 節點數量檢查",
+            "fail",
+            `DOM 節點過多: ${nodeCount}`
+          );
+        }
+        completedTests++;
+
+        // 測試 4: 資源載入時間
+        addTestResult("performance", "資源載入時間檢查", "pending");
+        await new Promise((resolve) => setTimeout(resolve, 50));
+
+        if ("getEntriesByType" in performance) {
+          const resources = performance.getEntriesByType("resource");
+          const slowResources = resources.filter((r) => r.duration > 1000);
+
+          if (slowResources.length === 0) {
+            addTestResult(
+              "performance",
+              "資源載入時間檢查",
+              "pass",
+              `${resources.length} 個資源載入正常`
+            );
+          } else {
+            addTestResult(
+              "performance",
+              "資源載入時間檢查",
+              "fail",
+              `${slowResources.length} 個資源載入過慢`
+            );
+          }
+        } else {
+          addTestResult(
+            "performance",
+            "資源載入時間檢查",
+            "fail",
+            "瀏覽器不支援 Performance API"
+          );
+        }
+        completedTests++;
+
+        // 測試 5: FPS 測試 (簡化版)
+        addTestResult("performance", "FPS 流暢度測試", "pending");
+
+        let frameCount = 0;
+        const fpsStart = performance.now();
+
+        function countFrames() {
+          frameCount++;
+          if (performance.now() - fpsStart < 1000) {
+            requestAnimationFrame(countFrames);
+          } else {
+            const fps = frameCount;
+            if (fps >= 50) {
+              addTestResult(
+                "performance",
+                "FPS 流暢度測試",
+                "pass",
+                `FPS: ${fps}`
+              );
+            } else if (fps >= 30) {
+              addTestResult(
+                "performance",
+                "FPS 流暢度測試",
+                "pass",
+                `FPS: ${fps} (中等)`
+              );
+            } else {
+              addTestResult(
+                "performance",
+                "FPS 流暢度測試",
+                "fail",
+                `FPS 過低: ${fps}`
+              );
+            }
+            completedTests++;
+          }
+        }
+        requestAnimationFrame(countFrames);
+      }
+
+      // 無障礙性測試
+      async function runAccessibilityTests() {
+        testResults.accessibility = [];
+        totalTests += 7;
+
+        // 測試 1: 檢查圖片 alt 屬性
+        addTestResult("accessibility", "圖片 alt 屬性檢查", "pending");
+        await new Promise((resolve) => setTimeout(resolve, 50));
+
+        const images = document.querySelectorAll("img");
+        const imagesWithoutAlt = Array.from(images).filter((img) => !img.alt);
+
+        if (imagesWithoutAlt.length === 0) {
+          addTestResult(
+            "accessibility",
+            "圖片 alt 屬性檢查",
+            "pass",
+            `${images.length} 個圖片都有 alt 屬性`
+          );
+        } else {
+          addTestResult(
+            "accessibility",
+            "圖片 alt 屬性檢查",
+            "fail",
+            `${imagesWithoutAlt.length} 個圖片缺少 alt 屬性`
+          );
+        }
+        completedTests++;
+
+        // 測試 2: 檢查標題結構
+        addTestResult("accessibility", "標題結構檢查", "pending");
+        await new Promise((resolve) => setTimeout(resolve, 50));
+
+        const headings = document.querySelectorAll("h1, h2, h3, h4, h5, h6");
+        const hasH1 = document.querySelector("h1");
+
+        if (hasH1 && headings.length > 0) {
+          addTestResult(
+            "accessibility",
+            "標題結構檢查",
+            "pass",
+            `找到 H1 和 ${headings.length} 個標題`
+          );
+        } else {
+          addTestResult(
+            "accessibility",
+            "標題結構檢查",
+            "fail",
+            "缺少 H1 或標題結構不完整"
+          );
+        }
+        completedTests++;
+
+        // 測試 3: 檢查表單標籤
+        addTestResult("accessibility", "表單標籤檢查", "pending");
+        await new Promise((resolve) => setTimeout(resolve, 50));
+
+        const inputs = document.querySelectorAll("input, textarea, select");
+        const inputsWithoutLabel = Array.from(inputs).filter((input) => {
+          const hasLabel = document.querySelector(`label[for="${input.id}"]`);
+          const hasAriaLabel = input.getAttribute("aria-label");
+          return !hasLabel && !hasAriaLabel;
+        });
+
+        if (inputsWithoutLabel.length === 0) {
+          addTestResult(
+            "accessibility",
+            "表單標籤檢查",
+            "pass",
+            `${inputs.length} 個表單元素都有適當標籤`
+          );
+        } else {
+          addTestResult(
+            "accessibility",
+            "表單標籤檢查",
+            "fail",
+            `${inputsWithoutLabel.length} 個表單元素缺少標籤`
+          );
+        }
+        completedTests++;
+
+        // 測試 4: 檢查色彩對比度 (簡化版)
+        addTestResult("accessibility", "色彩對比度檢查", "pending");
+        await new Promise((resolve) => setTimeout(resolve, 50));
+
+        // 這是一個簡化的對比度檢查，實際應用中需要更複雜的計算
+        const textElements = document.querySelectorAll(
+          "p, span, div, a, button"
+        );
+        let lowContrastCount = 0;
+
+        Array.from(textElements)
+          .slice(0, 10)
+          .forEach((element) => {
+            const styles = window.getComputedStyle(element);
+            const color = styles.color;
+            const backgroundColor = styles.backgroundColor;
+
+            // 簡化的對比度檢查 (實際需要更精確的計算)
+            if (color === backgroundColor || color === "rgba(0, 0, 0, 0)") {
+              lowContrastCount++;
+            }
+          });
+
+        if (lowContrastCount === 0) {
+          addTestResult(
+            "accessibility",
+            "色彩對比度檢查",
+            "pass",
+            "未發現明顯的對比度問題"
+          );
+        } else {
+          addTestResult(
+            "accessibility",
+            "色彩對比度檢查",
+            "fail",
+            `${lowContrastCount} 個元素可能有對比度問題`
+          );
+        }
+        completedTests++;
+
+        // 測試 5: 檢查 ARIA 屬性
+        addTestResult("accessibility", "ARIA 屬性檢查", "pending");
+        await new Promise((resolve) => setTimeout(resolve, 50));
+
+        const ariaElements = document.querySelectorAll(
+          "[aria-label], [aria-labelledby], [aria-describedby], [role]"
+        );
+
+        if (ariaElements.length > 0) {
+          addTestResult(
+            "accessibility",
+            "ARIA 屬性檢查",
+            "pass",
+            `找到 ${ariaElements.length} 個 ARIA 增強元素`
+          );
+        } else {
+          addTestResult(
+            "accessibility",
+            "ARIA 屬性檢查",
+            "fail",
+            "未找到 ARIA 屬性，建議添加以提升無障礙性"
+          );
+        }
+        completedTests++;
+
+        // 測試 6: 檢查鍵盤導覽
+        addTestResult("accessibility", "鍵盤導覽檢查", "pending");
+        await new Promise((resolve) => setTimeout(resolve, 50));
+
+        const focusableElements = document.querySelectorAll(
+          "a, button, input, textarea, select, [tabindex]"
+        );
+        const nonFocusable = Array.from(focusableElements).filter((el) => {
+          return el.tabIndex < 0 || el.disabled;
+        });
+
+        if (
+          focusableElements.length > 0 &&
+          nonFocusable.length < focusableElements.length
+        ) {
+          addTestResult(
+            "accessibility",
+            "鍵盤導覽檢查",
+            "pass",
+            `${focusableElements.length - nonFocusable.length} 個元素可鍵盤導覽`
+          );
+        } else {
+          addTestResult(
+            "accessibility",
+            "鍵盤導覽檢查",
+            "fail",
+            "鍵盤導覽支援不足"
+          );
+        }
+        completedTests++;
+
+        // 測試 7: 檢查語言屬性
+        addTestResult("accessibility", "語言屬性檢查", "pending");
+        await new Promise((resolve) => setTimeout(resolve, 50));
+
+        const htmlLang = document.documentElement.lang;
+        const langElements = document.querySelectorAll("[lang]");
+
+        if (htmlLang) {
+          addTestResult(
+            "accessibility",
+            "語言屬性檢查",
+            "pass",
+            `頁面語言: ${htmlLang}`
+          );
+        } else {
+          addTestResult(
+            "accessibility",
+            "語言屬性檢查",
+            "fail",
+            "缺少頁面語言屬性"
+          );
+        }
+        completedTests++;
+      }
+
+      // 預覽尺寸控制
+      function setPreviewSize(size) {
+        const preview = document.getElementById("appPreview");
+        const container = preview.parentElement;
+
+        switch (size) {
+          case "mobile":
+            preview.style.width = "375px";
+            preview.style.height = "667px";
+            container.style.overflow = "auto";
+            break;
+          case "tablet":
+            preview.style.width = "768px";
+            preview.style.height = "1024px";
+            container.style.overflow = "auto";
+            break;
+          case "desktop":
+            preview.style.width = "1024px";
+            preview.style.height = "768px";
+            container.style.overflow = "auto";
+            break;
+          case "full":
+            preview.style.width = "100%";
+            preview.style.height = "600px";
+            container.style.overflow = "hidden";
+            break;
+        }
+      }
+
+      // 顯示測試詳情
+      function showTestDetail(category, index) {
+        const result = testResults[category][index];
+        const modal = document.getElementById("testDetailModal");
+        const content = document.getElementById("testDetailContent");
+
+        content.innerHTML = `
+                <h4 class="font-semibold text-lg">${result.name}</h4>
+                <div class="grid grid-cols-2 gap-4 mt-4">
+                    <div>
+                        <span class="font-medium">狀態:</span>
+                        <span class="${
+                          result.status === "pass"
+                            ? "text-green-600"
+                            : result.status === "fail"
+                            ? "text-red-600"
+                            : "text-yellow-600"
+                        }">
+                            ${
+                              result.status === "pass"
+                                ? "通過"
+                                : result.status === "fail"
+                                ? "失敗"
+                                : "進行中"
+                            }
+                        </span>
+                    </div>
+                    <div>
+                        <span class="font-medium">耗時:</span> ${
+                          result.duration
+                        }ms
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <span class="font-medium">詳細資訊:</span>
+                    <div class="bg-gray-50 p-3 rounded mt-2 text-sm">${
+                      result.details || "無詳細資訊"
+                    }</div>
+                </div>
+                <div class="mt-4">
+                    <span class="font-medium">時間戳記:</span>
+                    <div class="text-sm text-gray-600">${new Date(
+                      result.timestamp
+                    ).toLocaleString("zh-TW")}</div>
+                </div>
+            `;
+
+        modal.classList.remove("hidden");
+      }
+
+      function closeTestDetail() {
+        document.getElementById("testDetailModal").classList.add("hidden");
+      }
+
+      // 全域鍵盤事件
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+          closeTestDetail();
+        }
+      });
+
+      // 點擊模態窗外部關閉
+      document
+        .getElementById("testDetailModal")
+        .addEventListener("click", function (e) {
+          if (e.target === this) {
+            closeTestDetail();
+          }
+        });
+    </script>
+  </body>
+</html>

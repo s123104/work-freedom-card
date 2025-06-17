@@ -9,35 +9,51 @@
 # 授權：MIT License
 
 ## 網站概述
-社畜解放卡是一款開源的職場壓力管理工具，幫助用戶記錄每日職場心情與事件，透過集點系統追蹤離職進度，提供厭世指數分析與AI洞察建議。
+社畜解放卡是一款免費開源的職場壓力管理PWA工具，幫助職場工作者記錄每日工作心情與鳥事，透過100點集點系統追蹤離職進度。支援六大心情分類、厭世指數分析、成就系統與AI洞察建議。
 
-## 核心功能
-- 離職集點系統：記錄職場負面事件，集滿100點邁向自由
-- 心情分類：錢途茫茫、身心俱疲、鳥事一堆、缺乏成長四大類別
-- 厭世指數分析：自動計算並分析主要壓力來源
-- 成就系統：10種離職成就，記錄職場生存之路
-- AI分析匯出：一鍵生成AI提示詞，支援ChatGPT、Claude等
-- PWA支援：可安裝至手機，支援離線使用
+重要特色：
 
-## 技術特色
-- 純前端實現：HTML5 + CSS3 + JavaScript
-- 無需後端：所有資料存於本地LocalStorage
-- 隱私保護：不上傳任何個人資料
-- 響應式設計：支援各種裝置尺寸
-- PWA技術：Service Worker + Web Manifest
+- **隱私優先**：所有資料存於本地，不上傳任何個人資訊
+- **PWA技術**：支援離線使用，可安裝至桌面，媲美原生應用體驗
+- **完全免費**：開源專案，無廣告、無付費功能、無資料收集
+- **多平台支援**：支援iOS、Android、Windows、macOS、Linux等所有主流平台
+- **AI整合**：提供AI分析匯出功能，支援ChatGPT、Claude、Gemini、Grok等主流AI服務
 
-## 目標用戶
-- 職場工作者
-- 面臨工作壓力的上班族
-- 考慮轉職或離職的員工
-- 關注心理健康的個人
+## 核心功能文檔
 
-## 使用場景
-- 記錄每日職場心情
-- 追蹤工作壓力變化
-- 分析離職動機
-- 生成職涯分析報告
-- 與AI助手討論職涯規劃
+- [使用者指南](index.html.md)：完整的功能介紹與使用教學
+- [六大心情分類系統](index.html.md#mood-categories)：錢途茫茫、身心俱疲、鳥事一堆、缺乏成長、破爛心情、職場霸凌
+- [厭世指數計算說明](index.html.md#annoyance-calculation)：智能文字分析演算法詳解
+- [成就系統介紹](index.html.md#achievement-system)：10種離職成就解鎖條件
+
+## 技術文檔
+
+- [PWA實作說明](index.html.md#pwa-features)：Service Worker、Web Manifest、離線功能實作
+- [資料結構設計](index.html.md#data-structure)：localStorage資料格式與安全性設計
+- [API參考文檔](index.html.md#api-reference)：核心JavaScript函數與事件處理
+- [開發環境設置](README.md)：本地開發與部署指南
+
+## 使用案例
+
+- [職場壓力管理流程](index.html.md#stress-management)：日常使用工作流程範例
+- [離職決策分析](index.html.md#resignation-analysis)：數據驅動的離職決策建議
+- [AI諮詢互動範例](index.html.md#ai-consultation)：使用AI分析功能獲得職涯建議
+- [團隊使用指南](index.html.md#team-usage)：企業內部壓力管理應用
+
+## 關鍵字與標籤
+
+關鍵詞：社畜解放卡、離職集點卡、職場壓力管理、工作心情記錄、厭世指數、上班族工具、職場生存、離職計畫、PWA應用、免費工具、開源專案、社畜集點、職場霸凌、工作倦怠、心理健康、職涯規劃
+
+技術標籤：PWA、Service Worker、localStorage、Chart.js、Tailwind CSS、JavaScript、HTML5、CSS3、離線應用、跨平台、響應式設計
+
+目標用戶：職場工作者、轉職考慮者、心理健康關注者、數據分析愛好者、人力資源專業人士、職涯顧問
+
+## Optional
+
+- [開發日誌](CHANGELOG.md)：版本更新記錄與功能演進歷史
+- [授權條款](LICENSE)：MIT開源授權詳細條款
+- [貢獻指南](README.md#contributing)：開源社群貢獻流程與規範
+- [SEO檢查清單](SEO-CHECKLIST.md)：搜尋引擎優化實作清單
 
 ## 內容政策
 本網站內容可用於：

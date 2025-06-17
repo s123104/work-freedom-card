@@ -1,0 +1,32 @@
+{
+  "cursor.rules": [
+    ".cursor/rules/base.mdc",
+    ".cursor/rules/quality.mdc",
+    ".cursor/rules/seo.mdc"
+  ],
+  "cursor.enableRulesLogging": true,
+  "cursor.rulesVersion": "2025.1.0",
+  "typescript.preferences.includePackageJsonAutoImports": "off",
+  "javascript.preferences.includePackageJsonAutoImports": "off",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.organizeImports": true
+  },
+  "files.associations": {
+    "*.mdc": "markdown"
+  },
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact"
+  },
+  "html.format.wrapAttributes": "force-aligned",
+  "css.validate": true,
+  "css.lint.unknownAtRules": "ignore",
+  "tailwindCSS.includeLanguages": {
+    "javascript": "javascript",
+    "html": "html"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    ["class:\\s*['\"]([^'\"]*)['\"]", "['\"]([^'\"]*)['\"]"]
+  ]
+}

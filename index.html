@@ -672,7 +672,8 @@
                   <span class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold" id="promptCharCount">0 字符</span>
                 </div>
               </div>
-              <textarea id="ai-prompt-output" readonly="" rows="12" placeholder="生成的提示詞將顯示在這裡..." class="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"></textarea>
+              <label for="ai-prompt-output" class="sr-only">AI 分析提示詞內容</label>
+              <textarea id="ai-prompt-output" readonly="" rows="12" placeholder="生成的提示詞將顯示在這裡..." class="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" aria-describedby="promptCharCount"></textarea>
               
               <!-- Action Buttons -->
               <div class="mt-4 space-y-3">

@@ -1,0 +1,162 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# 程式碼品質規範
+
+## 程式碼複雜度控制
+
+### 函數複雜度
+- 單一函數行數不得超過50行
+- 循環複雜度不得超過10
+- 巢狀層級不得超過4層
+- 參數數量不得超過5個
+
+### 檔案組織
+- 單一檔案行數建議不超過500行
+- 相關功能必須分組織織
+- 重複程式碼不得超過3%
+- 全域變數必須集中管理
+
+## 效能標準
+
+### JavaScript效能
+- 避免在迴圈中進行DOM操作
+- 使用事件委派處理大量元素
+- 適當使用防抖(debounce)和節流(throttle)
+- localStorage操作必須非同步化
+
+### CSS效能
+- 避免深層選擇器巢狀
+- 優先使用class選擇器
+- 最小化重排和重繪
+- 使用CSS contain屬性優化渲染
+
+### 圖片與資源
+- 圖片必須使用WebP格式
+- 圖片大小不得超過500KB
+- 使用適當的圖片尺寸
+- 實作延遲載入(lazy loading)
+
+## 程式碼風格
+
+### JavaScript風格
+```javascript
+// 好的範例
+function calculateMoodScore(events, mood) {
+  if (!events || !mood) {
+    return 0;
+  }
+  
+  return events
+    .filter(event => event.mood === mood)
+    .reduce((score, event) => score + event.points, 0);
+}
+
+// 避免的寫法
+function calc(e,m){var s=0;for(var i=0;i<e.length;i++){if(e[i].m==m)s+=e[i].p;}return s;}
+```
+
+### CSS風格
+```css
+/* 好的範例 */
+.mood-card {
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius);
+  background-color: var(--color-background);
+}
+
+.mood-card__title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+/* 避免的寫法 */
+.mood-card{display:flex;flex-direction:column;padding:16px;border-radius:8px;background:#fff;}
+```
+
+## 錯誤處理標準
+
+### 必須處理的錯誤
+- localStorage讀寫失敗
+- 網路請求超時
+- 檔案載入失敗
+- 用戶輸入驗證錯誤
+- PWA安裝失敗
+
+### 錯誤處理模式
+```javascript
+// 好的錯誤處理
+async function saveUserData(data) {
+  try {
+    const serializedData = JSON.stringify(data);
+    localStorage.setItem('userMoodData', serializedData);
+    
+    // 驗證儲存是否成功
+    const saved = localStorage.getItem('userMoodData');
+    if (!saved) {
+      throw new Error('儲存驗證失敗');
+    }
+    
+    return { success: true };
+  } catch (error) {
+    console.error('儲存用戶資料失敗:', error);
+    showErrorNotification('儲存失敗，請重試');
+    return { success: false, error: error.message };
+  }
+}
+```
+
+## 測試要求
+
+### 必須測試的功能
+- 心情記錄和儲存
+- 成就系統觸發
+- PWA安裝流程
+- 離線功能運作
+- 響應式佈局
+
+### 測試覆蓋率標準
+- 核心功能：90%以上
+- 一般功能：70%以上
+- UI互動：60%以上
+- 錯誤處理：80%以上
+
+## 安全性要求
+
+### 資料安全
+- 所有用戶資料僅存於本地
+- 敏感資料必須加密儲存
+- 禁止將用戶資料傳送至外部服務
+- 實作CSP(Content Security Policy)
+
+### 輸入驗證
+- 所有用戶輸入必須驗證
+- 防止XSS攻擊
+- 限制輸入長度和格式
+- 過濾危險字元
+
+## 文檔要求
+
+### 程式碼註解
+- 複雜邏輯必須註解
+- 公開函數必須包含JSDoc
+- 配置物件必須說明用途
+- 臨時解決方案必須標記TODO
+
+### 範例JSDoc格式
+```javascript
+/**
+ * 計算用戶的總厭世指數
+ * @param {Array<Object>} moodEvents - 心情事件陣列
+ * @param {number} days - 計算天數，預設為30天
+ * @returns {Object} 包含總分數和平均分數的物件
+ * @example
+ * const score = calculateAnnoyanceScore(events, 30);
+ * console.log(score.total, score.average);
+ */
+```

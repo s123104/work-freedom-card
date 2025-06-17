@@ -1,0 +1,101 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# 社畜解放卡基礎開發規範
+
+## 專案概述
+
+社畜解放卡是一個前端PWA應用，幫助職場工作者記錄工作心情並追蹤離職進度。使用純前端技術棧，注重用戶體驗和隱私保護。
+
+## 程式碼品質要求
+
+### 型別安全
+
+- JavaScript專案必須使用strict mode
+- 變數必須明確宣告，避免全域變數污染
+- 使用JSDoc註解提供型別提示
+
+### 命名規範
+
+- 變數和函數使用camelCase：`getUserData()`, `currentMood`
+- 常數使用UPPER_SNAKE_CASE：`MAX_POINTS`, `DEFAULT_MOODS`
+- CSS類別使用kebab-case：`mood-selector`, `achievement-badge`
+- 檔案名稱使用kebab-case：`mood-tracker.js`, `user-interface.css`
+
+### 錯誤處理
+
+- 函數開頭使用guard clauses進行早期返回
+- 使用try-catch包裝可能出錯的操作
+- localStorage操作必須包含錯誤處理
+- AJAX請求必須處理網路錯誤
+
+### 效能考量
+
+- 避免在事件監聽器中進行昂貴操作
+- 使用事件委派處理大量DOM元素
+- 圖片資源必須優化壓縮
+- CSS動畫優先使用transform和opacity
+
+## 程式碼結構
+
+### HTML結構
+
+- 使用語義化HTML5標籤
+- 必須包含完整的accessibility屬性
+- meta標籤必須完整包含SEO和PWA所需資訊
+- 使用有意義的id和class名稱
+
+### CSS規範
+
+- 使用Tailwind CSS utility classes優先
+- 自定義CSS必須遵循BEM命名規範
+- 響應式設計必須支援所有主流設備
+- 使用CSS Custom Properties進行主題管理
+
+### JavaScript架構
+
+- 使用模組化結構組織程式碼
+- 全域變數必須集中管理
+- 事件處理必須支援觸控設備
+- PWA功能必須優雅降級
+
+## SEO與無障礙性
+
+### SEO要求
+
+- 所有頁面必須包含完整的meta描述
+- 結構化資料必須使用Schema.org標準
+- 圖片必須包含有意義的alt屬性
+- 標題結構必須遵循H1-H6層級
+
+### 無障礙性標準
+
+- 遵循WCAG 2.1 AA標準
+- 所有互動元素必須支援鍵盤操作
+- 顏色對比度必須達到AA標準
+- 必須支援螢幕閱讀器
+
+## 禁止事項
+
+- 禁止使用console.log進入生產環境
+- 禁止硬編碼API端點或敏感資訊
+- 禁止略過錯誤處理
+- 禁止使用已棄用的Web API
+- 禁止提交未完成的TODO註解
+- 禁止使用內聯樣式（除非動態計算）
+
+## 測試要求
+
+- 所有新功能必須包含基本測試
+- 必須測試觸控設備上的使用體驗
+- 必須測試離線功能
+- 必須驗證PWA安裝流程
+
+## 版本控制
+
+- 提交訊息必須使用約定式提交格式
+- 每次提交必須包含相關的功能測試
+- 重大變更必須更新CHANGELOG.md
+- 版本號遵循語義化版本控制
